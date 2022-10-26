@@ -10,7 +10,9 @@ namespace BookStore.API.Data.Enities
         [MaxLength(256)]
         public string Username {get; set;}
         [MaxLength(256)]
-        public string Password {get; set;}
+        public byte[] PasswordHash {get; set;}
+        [MaxLength(256)]
+        public byte[] PasswordSalt {get; set;}
         [MaxLength(256)]
         public string Name {get; set;}
         [MaxLength(256)]

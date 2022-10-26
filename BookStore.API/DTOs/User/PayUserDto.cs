@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BookStore.API.DTOs
+namespace BookStore.API.DTOs.User
 {
     public class PayUserDto
     {

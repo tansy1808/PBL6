@@ -1,13 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BookStore.API.DTOs
+namespace BookStore.API.DTOs.User
 {
     public class AuthUserDto
     {
         [Required]
         [MaxLength(256)]
         public string Username {get; set;}
-
         [Required]
         [MaxLength(256)]
         public string Password {get; set;}
