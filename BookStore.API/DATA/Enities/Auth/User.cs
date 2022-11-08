@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BookStore.API.Data.Enities
+namespace BookStore.API.Data.Enities.Auth
 {
     public class User
     {

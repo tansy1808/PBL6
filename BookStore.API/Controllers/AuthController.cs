@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using BookStore.API.Data;
-using BookStore.API.Data.Enities;
+using BookStore.API.Data.Enities.Auth;
 using BookStore.API.DTOs.User;
 using BookStore.API.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authentication;
 namespace BookStore.API.Controllers
 {
 
-    [Route("api/[controller]")]
+    [Route("api/Auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -98,5 +98,8 @@ namespace BookStore.API.Controllers
                 return BadRequest();
             return Ok();
         }
+//        [Authorize]
+        [HttpGet]
+        public IActionResult Get() => Ok(_context.SetUser.ToList());
     }
 }

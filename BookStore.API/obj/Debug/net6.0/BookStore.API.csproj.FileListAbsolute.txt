@@ -60,3 +60,5 @@ D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\refint\BookStore.API.dll
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\BookStore.API.pdb
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\BookStore.API.genruntimeconfig.cache
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\ref\BookStore.API.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll

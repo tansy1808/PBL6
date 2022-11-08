@@ -1,5 +1,9 @@
+using System.Text;
 using BookStore.API.Data;
+using BookStore.API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -18,7 +22,20 @@ services.AddSwaggerGen();
 
 services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(connectionString));
-
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"]))
+        };
+    });
+services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 
@@ -26,8 +43,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FieldEngineerApi v1"));
+    app.UseSwaggerUI();
+    //c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FieldEngineerApi v1")
 }
+app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 

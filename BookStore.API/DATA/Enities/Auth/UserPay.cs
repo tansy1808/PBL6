@@ -1,7 +1,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace BookStore.API.Data.Enities
+namespace BookStore.API.Data.Enities.Auth
 {
     public class UserPay
     {
