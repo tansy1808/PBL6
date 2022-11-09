@@ -21,7 +21,5 @@ namespace BookStore.API.DTOs.Product
         public int Quantity {get; set;}
         [Required]
         public decimal discount {get; set;}
-        [Required]
-        public int IdCate {get; set;}
     }
 }

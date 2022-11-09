@@ -17,7 +17,7 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPost("AddBook")]
-        public IActionResult AddBook([FromForm] ProductDTOs productDTOs)
+        public IActionResult AddBook([FromForm] ProductDTOs productDTOs,[FromForm] CategoryDTOs categoryDTOs)
         {
             var products = new Products
             {
@@ -28,15 +28,15 @@ namespace BookStore.API.Controllers
                 price = productDTOs.price,
                 Quantity = productDTOs.Quantity,
                 discount = productDTOs.discount,
-                IdCate = productDTOs.IdCate
+                IdCate = categoryDTOs.Id
             };
             _context.SetProduct.Add(products);
             _context.SaveChanges();
 
-            return Ok(products.Name);
+            return Ok();
         }
         [HttpGet("{name}")]
-        public IActionResult GetFindBookByName( string name)
+        public IActionResult GetFindBookByName(string name)
         {
             try
             {
@@ -46,6 +46,17 @@ namespace BookStore.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+        [HttpGet("GetAll")]
+        public IActionResult GetAll() => Ok(_context.SetProduct.ToList());
+
+        [HttpPut("Update")]
+        public IActionResult UpdateBook([FromForm] ProductDTOs productDTOs)
+        {
+            var result = _context.Update(productDTOs);
+            if (result == null)
+                return BadRequest();
+            return Ok();
         }
     }
 }
