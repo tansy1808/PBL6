@@ -40,7 +40,21 @@ namespace BookStore.API.Controllers
         {
             try
             {
-                return  Ok(_context.SetProduct.Where(c=> c.Name.ToLower() == name.ToLower()).ToList());
+                //c=> c.Name.ToLower() == name.ToLower()
+                return  Ok(_context.SetProduct.Where(c => c.Name.Contains(name)).ToList());
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("Find/{category}")]
+        public IActionResult GetFindBookByCategory(int category)
+        {
+            try
+            {
+                //c=> c.Name.ToLower() == name.ToLower()
+                return  Ok(_context.SetProduct.Where(c => c.IdCate == category).ToList());
             }
             catch (BadHttpRequestException ex)
             {
@@ -56,6 +70,12 @@ namespace BookStore.API.Controllers
             var result = _context.Update(productDTOs);
             if (result == null)
                 return BadRequest();
+            return Ok();
+        }
+        [HttpDelete("Delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            
             return Ok();
         }
     }
