@@ -25,7 +25,7 @@ namespace BookStore.API.Controllers
         public IActionResult Register([FromForm] AuthUserDto authUserDto)
         {
             authUserDto.Username = authUserDto.Username.ToLower();
-            if (_context.SetUser.Any(u => u.Username == authUserDto.Username))
+            if (_context.Users.Any(u => u.Username == authUserDto.Username))
             {
                 return BadRequest("This username already exists!");
             }
@@ -41,7 +41,7 @@ namespace BookStore.API.Controllers
                 Contact = authUserDto.Contact,
                 RoleId = authUserDto.RoleId
             };
-            _context.SetUser.Add(user);
+            _context.Users.Add(user);
             _context.SaveChanges();
  
             var token = _tokenService.CreateToken(user.Username);
@@ -55,7 +55,7 @@ namespace BookStore.API.Controllers
                 UserId = payUserDto.UserId,
                 PayType = payUserDto.PayType
             };
-            _context.SetPay.Add(userpay);
+            _context.UserPays.Add(userpay);
             _context.SaveChanges();
 
             return Ok(userpay.UserId);
@@ -64,7 +64,7 @@ namespace BookStore.API.Controllers
         public IActionResult Login([FromForm] AuthUserLogin authUserDto)
         {
             authUserDto.Username = authUserDto.Username.ToLower();
-            var currentUser = _context.SetUser
+            var currentUser = _context.Users
                 .FirstOrDefault(u => u.Username == authUserDto.Username);          
             if (currentUser == null)
             {
@@ -100,6 +100,6 @@ namespace BookStore.API.Controllers
         }
 //        [Authorize]
         [HttpGet]
-        public IActionResult Get() => Ok(_context.SetUser.ToList());
+        public IActionResult Get() => Ok(_context.Users.ToList());
     }
 }

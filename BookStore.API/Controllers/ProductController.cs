@@ -24,13 +24,13 @@ namespace BookStore.API.Controllers
                 Name = productDTOs.Name,
                 Desc = productDTOs.Desc,
                 Image = productDTOs.Image,
-                feedback = productDTOs.feedback,
-                price = productDTOs.price,
+                Feedback = productDTOs.Feedback,
+                Frice = productDTOs.Price,
                 Quantity = productDTOs.Quantity,
-                discount = productDTOs.discount,
+                Discount = productDTOs.Discount,
                 IdCate = categoryDTOs.Id
             };
-            _context.SetProduct.Add(products);
+            _context.Products.Add(products);
             _context.SaveChanges();
 
             return Ok();
@@ -38,31 +38,15 @@ namespace BookStore.API.Controllers
         [HttpGet("{name}")]
         public IActionResult GetFindBookByName(string name)
         {
-            try
-            {
-                //c=> c.Name.ToLower() == name.ToLower()
-                return  Ok(_context.SetProduct.Where(c => c.Name.Contains(name)).ToList());
-            }
-            catch (BadHttpRequestException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return  Ok(_context.Products.Where(c => c.Name.Contains(name)).ToList());
         }
         [HttpGet("Find/{category}")]
         public IActionResult GetFindBookByCategory(int category)
         {
-            try
-            {
-                //c=> c.Name.ToLower() == name.ToLower()
-                return  Ok(_context.SetProduct.Where(c => c.IdCate == category).ToList());
-            }
-            catch (BadHttpRequestException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return  Ok(_context.Products.Where(c => c.IdCate == category).ToList());
         }
-        [HttpGet("GetAll")]
-        public IActionResult GetAll() => Ok(_context.SetProduct.ToList());
+        [HttpGet]
+        public IActionResult GetAll() => Ok(_context.Products.ToList());
 
         [HttpPut("Update")]
         public IActionResult UpdateBook([FromForm] ProductDTOs productDTOs)
@@ -72,7 +56,7 @@ namespace BookStore.API.Controllers
                 return BadRequest();
             return Ok();
         }
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             

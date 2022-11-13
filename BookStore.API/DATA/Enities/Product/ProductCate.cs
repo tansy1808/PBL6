@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookStore.API.Data.Enities.Product
 {
     public class ProductCate
     {
+        [Key]
         public int Id {get; set;}
-        public string categoryType {get; set;}
+        [Required]
+        [MaxLength(256)]
+        public string CategoryType {get; set;}
         public List<Products> products {get; set;}
         
     }

@@ -387,7 +387,7 @@ var spec =
           }
         }
       },
-      "/api/Product/Find/{category}": {
+      "/api/Product/{category}": {
         "get": {
           "tags": [
             "Product"
@@ -410,7 +410,7 @@ var spec =
           }
         }
       },
-      "/api/Product/GetAll": {
+      "/api/Product": {
         "get": {
           "tags": [
             "Product"
@@ -505,7 +505,7 @@ var spec =
           }
         }
       },
-      "/api/Product/Delete/{id}": {
+      "/api/Product/{id}": {
         "delete": {
           "tags": [
             "Product"

@@ -14,12 +14,12 @@ namespace BookStore.API.DTOs.Product
         [MaxLength(4096)]
         public string Desc {get; set;}
         [Required]
-        public int feedback {get; set;}
+        public int Feedback {get; set;}
         [Required]
-        public decimal price {get; set;}
+        public decimal Price {get; set;}
         [Required]
         public int Quantity {get; set;}
         [Required]
-        public decimal discount {get; set;}
+        public decimal Discount {get; set;}
     }
 }
