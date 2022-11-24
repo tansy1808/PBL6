@@ -21,6 +21,7 @@ namespace BookStore.API.Controllers
             _tokenService = tokenService;
             _context = context;
         }
+
         [HttpPost("register")]
         public IActionResult Register([FromForm] AuthUserDto authUserDto)
         {
@@ -47,7 +48,8 @@ namespace BookStore.API.Controllers
             var token = _tokenService.CreateToken(user.Username);
             return Ok(token);
         }
-        [HttpPost("createpay")]
+
+        [HttpPost("pay")]
         public IActionResult CreatePay([FromForm] PayUserDto payUserDto)
         {
             var userpay = new UserPay
@@ -60,6 +62,7 @@ namespace BookStore.API.Controllers
 
             return Ok(userpay.UserId);
         }
+
         [HttpPost("login")]
         public IActionResult Login([FromForm] AuthUserLogin authUserDto)
         {
@@ -84,18 +87,27 @@ namespace BookStore.API.Controllers
             var token = _tokenService.CreateToken(currentUser.Username);
             return Ok(token);
         }
+
         [HttpGet("logout")]
         public async Task<IActionResult> logout()
         {
             await HttpContext.SignOutAsync();
 	        return RedirectToAction("Index", "Home");
         }
-        [HttpPut("updateuser")]
-        public IActionResult UpdateUser([FromForm] AuthUserDto authUserDto)
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateUser(int id, AuthUserDto authUserDto)
         {
-            var result = _context.Update(authUserDto);
-            if (result == null)
-                return BadRequest();
+            var user = _context.Users.FirstOrDefault(c => c.IdUser == id);
+            if(user != null)
+            {
+                user.Name = authUserDto.Name;
+                user.Address = authUserDto.Address;
+                user.Contact = authUserDto.Contact;
+                user.RoleId = authUserDto.RoleId;
+                _context.SaveChangesAsync();
+                return Ok(user);
+            }
             return Ok();
         }
 //        [Authorize]

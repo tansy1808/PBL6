@@ -1,11 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BookStore.API.Data.Enities.Order
+namespace BookStore.API.DTOs.Store
 {
-    public class Payment
+    public class PaymentDTOs
     {
-        [Key]
-        public int IdPay {get; set;}
         [Required]
         public int IdOrder {get; set;}
         [Required]
@@ -13,7 +11,5 @@ namespace BookStore.API.Data.Enities.Order
         public DateTime Date {get; set;}
         [Required]
         public int TypePay {get; set;}
-        public Orders orders {get; set;}
-        public MethodPay methodPays {get; set;}
     }
 }

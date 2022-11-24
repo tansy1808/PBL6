@@ -1,7 +1,6 @@
 using BookStore.API.Data;
 using BookStore.API.Data.Enities.Product;
 using BookStore.API.DTOs.Product;
-using BookStore.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
@@ -16,51 +15,92 @@ namespace BookStore.API.Controllers
             _context = context;
         }
 
-        [HttpPost("AddBook")]
-        public IActionResult AddBook([FromForm] ProductDTOs productDTOs,[FromForm] CategoryDTOs categoryDTOs)
+        [HttpPost("Book")]
+        public IActionResult AddBook([FromForm] ProductDTOs productDTOs)
         {
             var products = new Products
             {
                 Name = productDTOs.Name,
                 Desc = productDTOs.Desc,
                 Image = productDTOs.Image,
-                Feedback = productDTOs.Feedback,
                 Frice = productDTOs.Price,
                 Quantity = productDTOs.Quantity,
                 Discount = productDTOs.Discount,
-                IdCate = categoryDTOs.Id
+                IdCate = productDTOs.IdCate
             };
             _context.Products.Add(products);
             _context.SaveChanges();
 
             return Ok();
         }
-        [HttpGet("{name}")]
+
+        [HttpPost("ProductFeed")]
+        public IActionResult AddProductFeed([FromForm] ProductFeedDTOs productFeedDTOs)
+        {
+            var feed = new ProductFeed
+            {
+                star = productFeedDTOs.star,
+                Comment = productFeedDTOs.Comment,
+                ProductID = productFeedDTOs.ProductID,
+                UserID = productFeedDTOs.UserID
+            };
+            _context.ProductFeeds.Add(feed);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpGet("Name/{name}")]
         public IActionResult GetFindBookByName(string name)
         {
             return  Ok(_context.Products.Where(c => c.Name.Contains(name)).ToList());
         }
-        [HttpGet("Find/{category}")]
+
+        [HttpGet("Categrory/{category}")]
         public IActionResult GetFindBookByCategory(int category)
         {
             return  Ok(_context.Products.Where(c => c.IdCate == category).ToList());
         }
+
+        [HttpGet("ProductFeed/{id}")]
+        public IActionResult GetFeedByBook(int id)
+        {
+            return  Ok(_context.ProductFeeds.Where(c => c.ProductID == id).ToList());
+        }
+
         [HttpGet]
         public IActionResult GetAll() => Ok(_context.Products.ToList());
 
-        [HttpPut("Update")]
-        public IActionResult UpdateBook([FromForm] ProductDTOs productDTOs)
+        [HttpGet("Category")]
+        public IActionResult GetAllCate() => Ok(_context.Categories.ToList());
+
+        [HttpPut("{Id}")]
+        public IActionResult UpdateBook(int Id,[FromForm] ProductDTOs productDTOs)
         {
-            var result = _context.Update(productDTOs);
-            if (result == null)
-                return BadRequest();
+            var product = _context.Products.FirstOrDefault(c => c.IdProduct == Id);
+            if (product != null)
+            {
+                product.Name = productDTOs.Name;
+                product.Image = productDTOs.Image;
+                product.Desc = productDTOs.Desc;
+                product.Frice = productDTOs.Price;
+                product.Quantity = productDTOs.Quantity;
+                product.Discount = productDTOs.Discount;
+                product.IdCate = productDTOs.IdCate;
+            }
             return Ok();
         }
+        
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            
-            return Ok();
+            var product = _context.Products.FirstOrDefault(c => c.IdProduct == id);
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                _context.SaveChanges();
+                return Ok(product);
+            }
+            return Unauthorized("Không có sản phẩm");
         }
     }
 }
