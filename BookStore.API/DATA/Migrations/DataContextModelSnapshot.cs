@@ -58,6 +58,11 @@ namespace BookStore.API.Data.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -75,6 +80,11 @@ namespace BookStore.API.Data.Migrations
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserImage")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -218,6 +228,9 @@ namespace BookStore.API.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<DateTime>("DateOrder")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("IdUser")
                         .HasColumnType("int");
 
@@ -292,13 +305,16 @@ namespace BookStore.API.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<DateTime>("FeedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("ProductID")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
+                    b.Property<int>("Star")
                         .HasColumnType("int");
 
-                    b.Property<int>("star")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("IdFeed");
@@ -318,6 +334,9 @@ namespace BookStore.API.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdProduct"), 1L, 1);
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Desc")
                         .IsRequired()

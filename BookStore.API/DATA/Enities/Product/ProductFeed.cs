@@ -11,7 +11,9 @@ namespace BookStore.API.Data.Enities.Product
         [MaxLength(256)]
         public string Comment {get; set;}
         [Required]
-        public int star {get; set;}
+        public int Star {get; set;}
+        [Required]
+        public DateTime FeedDate {get; set;}
         [Required]
         public int ProductID {get; set;}
         [Required]

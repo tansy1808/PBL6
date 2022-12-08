@@ -14,6 +14,8 @@ namespace BookStore.API.Data.Enities.Order
         public string Address {get; set;}
         [Required]
         public int Total {get; set;}
+        [Required]
+        public DateTime DateOrder {get; set;}
         public List<OrderProduct> orderProducts {get; set;}
         public User users {get; set;}
         public Payment payments {get; set;}

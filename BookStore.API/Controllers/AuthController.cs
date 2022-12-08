@@ -6,6 +6,7 @@ using BookStore.API.DTOs.User;
 using BookStore.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookStore.API.Controllers
 {
@@ -14,41 +15,56 @@ namespace BookStore.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        private readonly AuthService _authService;
         private readonly DataContext _context;
-        private readonly ITokenService _tokenService;
-        public AuthController(DataContext context, ITokenService tokenService)
+
+        public AuthController(AuthService authService, DataContext context)
         {
-            _tokenService = tokenService;
+            _authService = authService;
             _context = context;
         }
 
         [HttpPost("register")]
         public IActionResult Register([FromForm] AuthUserDto authUserDto)
         {
-            authUserDto.Username = authUserDto.Username.ToLower();
-            if (_context.Users.Any(u => u.Username == authUserDto.Username))
+            try
             {
-                return BadRequest("This username already exists!");
+                return Ok(_authService.Register(authUserDto));
             }
-            using var hmac = new HMACSHA512();
-            var passwordBytes = Encoding.UTF8.GetBytes(authUserDto.Password);
-            var user = new User
+            catch (BadHttpRequestException ex)
             {
-                Username = authUserDto.Username,
-                PasswordHash = hmac.ComputeHash(passwordBytes),
-                PasswordSalt = hmac.Key,
-                Name = authUserDto.Name,
-                Address = authUserDto.Address,
-                Contact = authUserDto.Contact,
-                RoleId = authUserDto.RoleId
-            };
-            _context.Users.Add(user);
-            _context.SaveChanges();
- 
-            var token = _tokenService.CreateToken(user.Username);
-            return Ok(token);
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        [HttpPost("login")]
+        public IActionResult Login([FromForm] AuthUserLogin authUserLogin)
+        {
+            try
+            {
+                return Ok(_authService.Login(authUserLogin));
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
 
+        [Authorize]
+        [HttpPut("Image/{id}")]
+        public IActionResult UpdateUserImage(int id, UserImage userImage)
+        {
+            var user = _authService.getUserId(id);
+            if(user != null)
+            {
+                user.UserImage = userImage.Userimage;
+                _context.SaveChanges();
+                return Ok(user);
+            }
+            return Ok();
+        }
+
+        [Authorize]
         [HttpPost("pay")]
         public IActionResult CreatePay([FromForm] PayUserDto payUserDto)
         {
@@ -63,31 +79,7 @@ namespace BookStore.API.Controllers
             return Ok(userpay.UserId);
         }
 
-        [HttpPost("login")]
-        public IActionResult Login([FromForm] AuthUserLogin authUserDto)
-        {
-            authUserDto.Username = authUserDto.Username.ToLower();
-            var currentUser = _context.Users
-                .FirstOrDefault(u => u.Username == authUserDto.Username);          
-            if (currentUser == null)
-            {
-                return Unauthorized("Username is invalid.");
-            }
-            using var hmac = new HMACSHA512(currentUser.PasswordSalt);
-            var passwordBytes = hmac.ComputeHash(
-                Encoding.UTF8.GetBytes(authUserDto.Password)
-            );
-            for (int i = 0; i < currentUser.PasswordHash.Length; i++)
-            {
-                if(currentUser.PasswordHash[i] != passwordBytes[i])
-                {
-                    return Unauthorized("Password is invalid.");
-                }
-            }
-            var token = _tokenService.CreateToken(currentUser.Username);
-            return Ok(token);
-        }
-
+        [Authorize]
         [HttpGet("logout")]
         public async Task<IActionResult> logout()
         {
@@ -95,11 +87,12 @@ namespace BookStore.API.Controllers
 	        return RedirectToAction("Index", "Home");
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult UpdateUser(int id, AuthUserDto authUserDto)
         {
-            var user = _context.Users.FirstOrDefault(c => c.IdUser == id);
-            if(user != null)
+            var user = _authService.getUserId(id);
+            if (user != null)
             {
                 user.Name = authUserDto.Name;
                 user.Address = authUserDto.Address;
@@ -110,8 +103,5 @@ namespace BookStore.API.Controllers
             }
             return Ok();
         }
-//        [Authorize]
-        [HttpGet]
-        public IActionResult Get() => Ok(_context.Users.ToList());
     }
 }

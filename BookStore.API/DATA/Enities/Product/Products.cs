@@ -24,6 +24,8 @@ namespace BookStore.API.Data.Enities.Product
         [Required]
         public int Quantity {get; set;}
         [Required]
+        public DateTime DateCreate {get; set;}
+        [Required]
         public decimal Discount {get; set;}
         [Required]
         public int IdCate {get; set;}

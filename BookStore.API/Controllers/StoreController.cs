@@ -24,7 +24,8 @@ namespace BookStore.API.Controllers
             {
                 IdUser = orderDTOs.IdUser,
                 Address = orderDTOs.Address,
-                Total = orderDTOs.Total
+                Total = orderDTOs.Total,
+                DateOrder = DateTime.Now
             };
             _context.Orders.Add(order);
             _context.SaveChanges();

@@ -25,6 +25,7 @@ namespace BookStore.API.Controllers
                 Image = productDTOs.Image,
                 Frice = productDTOs.Price,
                 Quantity = productDTOs.Quantity,
+                DateCreate = DateTime.Now,
                 Discount = productDTOs.Discount,
                 IdCate = productDTOs.IdCate
             };
@@ -39,10 +40,11 @@ namespace BookStore.API.Controllers
         {
             var feed = new ProductFeed
             {
-                star = productFeedDTOs.star,
+                Star = productFeedDTOs.star,
                 Comment = productFeedDTOs.Comment,
                 ProductID = productFeedDTOs.ProductID,
-                UserID = productFeedDTOs.UserID
+                UserID = productFeedDTOs.UserID,
+                FeedDate = DateTime.Now
             };
             _context.ProductFeeds.Add(feed);
             _context.SaveChanges();

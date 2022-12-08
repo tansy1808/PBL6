@@ -12,16 +12,28 @@ namespace BookStore.API.Data.Enities.Auth
         [Required]
         [MaxLength(256)]
         public string Username {get; set;}
+        [Required]
         [MaxLength(256)]
         public byte[] PasswordHash {get; set;}
+        [Required]
         [MaxLength(256)]
         public byte[] PasswordSalt {get; set;}
+        [Required]
+        [MaxLength(256)]
+        public string UserImage {get; set;}
+        [Required]
         [MaxLength(256)]
         public string Name {get; set;}
+        [Required]
         [MaxLength(256)]
         public string Address {get; set;}
+        [Required]
         [MaxLength(15)]
         public string Contact {get; set;}
+        [Required]
+        [MaxLength(256)]
+        public string Email {get; set;}
+        [Required]
         public int RoleId {get; set;}
         public Role roles {get; set;}
         public Carts carts {get; set;}

@@ -10,6 +10,7 @@ namespace BookStore.API.Data.Enities.Order
         public int IdOrder {get; set;}
         [Required]
         public int Amount {get; set;}
+        [Required]
         public DateTime Date {get; set;}
         [Required]
         public int TypePay {get; set;}

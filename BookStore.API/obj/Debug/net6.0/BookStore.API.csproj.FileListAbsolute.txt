@@ -62,3 +62,8 @@ D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\BookStore.API.genruntimeconfig.c
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\ref\BookStore.API.dll
 D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\staticwebassets\msbuild.BookStore.API.Microsoft.AspNetCore.StaticWebAssets.props
+D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\staticwebassets\msbuild.build.BookStore.API.props
+D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.BookStore.API.props
+D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.BookStore.API.props
+D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\staticwebassets.pack.json
