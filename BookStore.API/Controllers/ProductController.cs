@@ -1,6 +1,7 @@
 using BookStore.API.Data;
 using BookStore.API.Data.Enities.Product;
 using BookStore.API.DTOs.Product;
+using BookStore.API.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
@@ -9,13 +10,14 @@ namespace BookStore.API.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly DataContext _context;
-        public ProductController(DataContext context)
+        private readonly IProductService _productService;
+
+        public ProductController(IProductService productService)
         {
-            _context = context;
+            _productService = productService;
         }
 
-        [HttpPost("Book")]
+        [HttpPost]
         public IActionResult AddBook([FromForm] ProductDTOs productDTOs)
         {
             var products = new Products
@@ -23,16 +25,16 @@ namespace BookStore.API.Controllers
                 Name = productDTOs.Name,
                 Desc = productDTOs.Desc,
                 Image = productDTOs.Image,
-                Frice = productDTOs.Price,
+                Price = productDTOs.Price,
                 Quantity = productDTOs.Quantity,
                 DateCreate = DateTime.Now,
                 Discount = productDTOs.Discount,
                 IdCate = productDTOs.IdCate
             };
-            _context.Products.Add(products);
-            _context.SaveChanges();
+            _productService.InsertProduct(products);
+            _productService.IsSaveChanges();
 
-            return Ok();
+            return Ok(products);
         }
 
         [HttpPost("ProductFeed")]
@@ -46,60 +48,64 @@ namespace BookStore.API.Controllers
                 UserID = productFeedDTOs.UserID,
                 FeedDate = DateTime.Now
             };
-            _context.ProductFeeds.Add(feed);
-            _context.SaveChanges();
-            return Ok();
+            _productService.InsertProductFeed(feed);
+            _productService.IsSaveChanges();
+            return Ok(feed);
         }
 
         [HttpGet("Name/{name}")]
         public IActionResult GetFindBookByName(string name)
         {
-            return  Ok(_context.Products.Where(c => c.Name.Contains(name)).ToList());
+            return  Ok(_productService.GetProductsbyName(name));
         }
 
         [HttpGet("Categrory/{category}")]
         public IActionResult GetFindBookByCategory(int category)
         {
-            return  Ok(_context.Products.Where(c => c.IdCate == category).ToList());
+            return  Ok(_productService.GetProductsByCategory(category));
         }
 
         [HttpGet("ProductFeed/{id}")]
         public IActionResult GetFeedByBook(int id)
         {
-            return  Ok(_context.ProductFeeds.Where(c => c.ProductID == id).ToList());
+            return  Ok(_productService.GetProductFeedById(id));
         }
 
         [HttpGet]
-        public IActionResult GetAll() => Ok(_context.Products.ToList());
+        public IActionResult GetAll() => Ok(_productService.GetProducts());
 
         [HttpGet("Category")]
-        public IActionResult GetAllCate() => Ok(_context.Categories.ToList());
+        public IActionResult GetAllCate() => Ok(_productService.GetProductCate());
 
         [HttpPut("{Id}")]
         public IActionResult UpdateBook(int Id,[FromForm] ProductDTOs productDTOs)
         {
-            var product = _context.Products.FirstOrDefault(c => c.IdProduct == Id);
+            var product = _productService.GetProductsById(Id);
             if (product != null)
             {
                 product.Name = productDTOs.Name;
                 product.Image = productDTOs.Image;
                 product.Desc = productDTOs.Desc;
-                product.Frice = productDTOs.Price;
+                product.Price = productDTOs.Price;
                 product.Quantity = productDTOs.Quantity;
                 product.Discount = productDTOs.Discount;
                 product.IdCate = productDTOs.IdCate;
+                _productService.UpdateProduct(product);
+                _productService.IsSaveChanges();
             }
-            return Ok();
+            return Ok(product);
         }
         
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var product = _context.Products.FirstOrDefault(c => c.IdProduct == id);
+            var product =_productService.GetProductsById(id);
             if (product != null)
             {
-                _context.Products.Remove(product);
-                _context.SaveChanges();
+                var feed = _productService.GetProductFeedById(id);
+                _productService.DeteleFeed(feed);
+                _productService.DeteleProduct(product);
+                _productService.IsSaveChanges();
                 return Ok(product);
             }
             return Unauthorized("Không có sản phẩm");

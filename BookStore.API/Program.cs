@@ -1,24 +1,25 @@
-using System.Text;
 using BookStore.API.Data;
-using BookStore.API.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using BookStore.API.Services.IServices;
+using BookStore.API.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var connectionString = builder.Configuration.GetConnectionString("Default");
-
 // Add services to the container.
+
 /*services.AddCors(o =>
     o.AddPolicy("CorsPolicy", builder =>
         builder.WithOrigins("http://localhost:2534")
             .AllowAnyHeader()
             .AllowAnyMethod()));*/
-services.AddControllers();
+builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(connectionString));
@@ -36,8 +37,13 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 services.AddScoped<ITokenService, TokenService>();
+services.AddScoped<IAuthService, AuthService>();
+services.AddScoped<ICartService, CartService>();
+services.AddScoped<IOrderService, OrderService>();
+services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

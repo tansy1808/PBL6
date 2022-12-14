@@ -1,8 +1,7 @@
 using BookStore.API.Data;
-using BookStore.API.Data.Enities.Cart;
 using BookStore.API.Data.Enities.Order;
-using BookStore.API.DTOs.Cart;
 using BookStore.API.DTOs.Store;
+using BookStore.API.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
@@ -11,10 +10,11 @@ namespace BookStore.API.Controllers
     [ApiController]
     public class StoreController : ControllerBase
     {
-        private readonly DataContext _context;
-        public StoreController(DataContext context)
+        private readonly IOrderService _orderService;
+
+        public StoreController(IOrderService orderService)
         {
-            _context = context;
+            _orderService = orderService;
         }
         
         [HttpPost("Order")]
@@ -25,11 +25,12 @@ namespace BookStore.API.Controllers
                 IdUser = orderDTOs.IdUser,
                 Address = orderDTOs.Address,
                 Total = orderDTOs.Total,
+                Status = "Wait for pay",
                 DateOrder = DateTime.Now
             };
-            _context.Orders.Add(order);
-            _context.SaveChanges();
-            return Ok();
+            _orderService.InsertOrder(order);
+            _orderService.IsSaveChanges();
+            return Ok(order);
         }
 
         [HttpPost("OrderProduct")]
@@ -42,8 +43,8 @@ namespace BookStore.API.Controllers
                 Quantity = orderProductDTOs.Quantity,
                 Price = orderProductDTOs.Price
             };
-            _context.OrderProducts.Add(order);
-            _context.SaveChanges();
+            _orderService.InsertOrderProduct(order);
+            _orderService.IsSaveChanges();
             return Ok();
         }
 
@@ -56,43 +57,57 @@ namespace BookStore.API.Controllers
                 Amount = paymentDTOs.Amount,
                 TypePay = paymentDTOs.TypePay
             };
-            _context.Payments.Add(pay);
-            _context.SaveChanges();
+            _orderService.InsertPayment(pay);
+            _orderService.IsSaveChanges();
             return Ok();
         }
 
-        [HttpPost("MethodPay")]
+        [HttpPost("MethodPay")]        
         public IActionResult CreateMethodPay([FromForm] MethodPayDTOs methodPayDTOs)
         {
             var mpay = new MethodPay
             {
                 TypeName = methodPayDTOs.TypeName
             };
-            _context.MethodPays.Add(mpay);
-            _context.SaveChanges();
+            _orderService.InsertMethodPay(mpay);
+            _orderService.IsSaveChanges();
             return Ok();
         }
 
         [HttpGet("Order/{id}")]
         public IActionResult FindOrderId(int id)
         {
-            var order = _context.Orders.Where(c => c.IdOrder == id).ToList();
+            var order = _orderService.GetOrdersId(id);
+            return Ok(order);
+        }
+
+        [HttpGet("OrderProduct/{id}")]
+        public IActionResult FindOrderProductId(int id)
+        {
+            var order = _orderService.GetOrderProductId(id);
+            return Ok(order);
+        }
+
+        [HttpGet("Payment/{id}")]
+        public IActionResult FindPayId(int id)
+        {
+            var order = _orderService.GetPaymentId(id);
             return Ok(order);
         }
 
         [HttpGet]
-        public IActionResult GetOrder() => Ok(_context.Orders.ToList());
+        public IActionResult GetOrder() => Ok(_orderService.GetAllOrders());
 
         [HttpDelete("{id}")]
         public IActionResult DeleteOrder(int id)
         {
-            var order = _context.Orders.FirstOrDefault(c => c.IdOrder == id);
+            var order = _orderService.GetOrdersId(id);
             if (order != null)
             {
-                var orderitem = _context.OrderProducts.FirstOrDefault(c => c.IdOrder == id);
-                _context.OrderProducts.Remove(orderitem);
-                _context.Orders.Remove(order);
-                _context.SaveChanges();
+                var orderitem = _orderService.GetOrderProductId(id);
+                _orderService.DeleteItem(orderitem);
+                _orderService.DeleteOrders(order);
+                _orderService.IsSaveChanges();
                 return Ok(order);
             }
             return Unauthorized("Không có sản phẩm");

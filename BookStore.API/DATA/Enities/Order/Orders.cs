@@ -13,6 +13,9 @@ namespace BookStore.API.Data.Enities.Order
         [MaxLength(256)]
         public string Address {get; set;}
         [Required]
+        [MaxLength(256)]
+        public string Status { get; set; }
+        [Required]
         public int Total {get; set;}
         [Required]
         public DateTime DateOrder {get; set;}

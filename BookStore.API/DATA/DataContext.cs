@@ -23,10 +23,10 @@ namespace BookStore.API.Data
         public DbSet<Payment> Payments {get; set;}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-            .HasOne(p => p.roles)
-            .WithOne(c => c.users)
-            .HasForeignKey<User>(p => p.RoleId);
+            modelBuilder.Entity<Role>()
+            .HasMany(p => p.users)
+            .WithOne(c => c.roles)
+            .HasForeignKey(p => p.RoleId);
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>()

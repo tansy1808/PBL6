@@ -1,13 +1,10 @@
-using System.Security.Cryptography;
-using System.Text;
 using BookStore.API.Data;
 using BookStore.API.Data.Enities.Auth;
 using BookStore.API.DTOs.User;
-using BookStore.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-
+using BookStore.API.Services.IServices;
 namespace BookStore.API.Controllers
 {
 
@@ -15,17 +12,15 @@ namespace BookStore.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly AuthService _authService;
-        private readonly DataContext _context;
+        private readonly IAuthService _authService;
 
-        public AuthController(AuthService authService, DataContext context)
+        public AuthController( IAuthService authService)
         {
             _authService = authService;
-            _context = context;
         }
 
         [HttpPost("register")]
-        public IActionResult Register([FromForm] AuthUserDto authUserDto)
+        public IActionResult Register([FromBody] AuthUserDto authUserDto)
         {
             try
             {
@@ -44,13 +39,13 @@ namespace BookStore.API.Controllers
             {
                 return Ok(_authService.Login(authUserLogin));
             }
-            catch (UnauthorizedAccessException ex)
+            catch (BadHttpRequestException ex)
             {
-                return Unauthorized(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("Image/{id}")]
         public IActionResult UpdateUserImage(int id, UserImage userImage)
         {
@@ -58,13 +53,14 @@ namespace BookStore.API.Controllers
             if(user != null)
             {
                 user.UserImage = userImage.Userimage;
-                _context.SaveChanges();
+                _authService.UpdateUser(user);
+                _authService.IsSaveChanges();
                 return Ok(user);
             }
             return Ok();
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("pay")]
         public IActionResult CreatePay([FromForm] PayUserDto payUserDto)
         {
@@ -73,13 +69,13 @@ namespace BookStore.API.Controllers
                 UserId = payUserDto.UserId,
                 PayType = payUserDto.PayType
             };
-            _context.UserPays.Add(userpay);
-            _context.SaveChanges();
+            _authService.InsertUser(userpay);
+            _authService.IsSaveChanges();
 
             return Ok(userpay.UserId);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("logout")]
         public async Task<IActionResult> logout()
         {
@@ -87,7 +83,7 @@ namespace BookStore.API.Controllers
 	        return RedirectToAction("Index", "Home");
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("{id}")]
         public IActionResult UpdateUser(int id, AuthUserDto authUserDto)
         {
@@ -98,7 +94,9 @@ namespace BookStore.API.Controllers
                 user.Address = authUserDto.Address;
                 user.Contact = authUserDto.Contact;
                 user.RoleId = authUserDto.RoleId;
-                _context.SaveChangesAsync();
+                user.Email = authUserDto.Email; 
+                _authService.UpdateUser(user);
+                _authService.IsSaveChanges();
                 return Ok(user);
             }
             return Ok();

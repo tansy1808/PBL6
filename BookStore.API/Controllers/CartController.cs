@@ -1,6 +1,7 @@
 using BookStore.API.Data;
 using BookStore.API.Data.Enities.Cart;
 using BookStore.API.DTOs.Cart;
+using BookStore.API.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
@@ -9,11 +10,11 @@ namespace BookStore.API.Controllers
     [ApiController]
     public class CartController : ControllerBase
     {
-         private readonly DataContext _context;
+        private readonly ICartService _cartService;
 
-        public CartController(DataContext context)
+        public CartController(ICartService cartService)
         {
-            _context = context;
+            _cartService = cartService;
         }
 
         [HttpPost]
@@ -23,14 +24,14 @@ namespace BookStore.API.Controllers
             {
                 IdUser = cartDTOs.IdUser
             };
-            _context.Carts.Add(cart);
-            _context.SaveChanges();
+            _cartService.InsertCart(cart);
+            _cartService.IsSaveChanges();
             return Ok();
         }
         [HttpGet("{id}")]
         public IActionResult GetCartId(int id)
         {
-            var cart = _context.CartItems.Where(c => c.IdCart == id).ToList();
+            var cart = _cartService.getCartItem(id);
             return Ok(cart);
         }
         
@@ -43,18 +44,18 @@ namespace BookStore.API.Controllers
                 IdCart = cartItemDTOs.IdCart,
                 Quantity = cartItemDTOs.Quantity
             };
-            _context.CartItems.Add(cartItem);
-            _context.SaveChanges();
+            _cartService.InsertCartItem(cartItem);
+            _cartService.IsSaveChanges();
             return Ok();
         }
         [HttpDelete("CartItem/{id}")]
         public IActionResult DeleteItem(int id)
         {
-            var cartitem = _context.CartItems.FirstOrDefault(c => c.Id == id);
+            var cartitem = _cartService.GetCartItemId(id);
             if (cartitem != null)
             {
-                _context.CartItems.Remove(cartitem);
-                _context.SaveChanges();
+                _cartService.DeleteItem(cartitem);
+                _cartService.IsSaveChanges();
                 return Ok(cartitem);
             }
             return Unauthorized("Không có sản phẩm");
@@ -62,11 +63,11 @@ namespace BookStore.API.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var cart = _context.Carts.FirstOrDefault(c => c.Id == id);
+            var cart = _cartService.GetCartsId(id);
             if (cart != null)
             {
-                _context.Carts.Remove(cart);
-                _context.SaveChanges();
+                _cartService.DeleteCart(cart);
+                _cartService.IsSaveChanges();
                 return Ok(cart);
             }
             return Unauthorized("Không có sản phẩm");

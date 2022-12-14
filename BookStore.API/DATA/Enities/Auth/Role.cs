@@ -9,6 +9,6 @@ namespace BookStore.API.Data.Enities.Auth
         [Required]
         [MaxLength(256)]
         public string RoleName {get; set;}
-        public User users {get; set;}
+        public List<User> users {get; set;}
     }
 }

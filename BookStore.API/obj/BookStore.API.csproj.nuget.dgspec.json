@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\BookStore.API.csproj": {}
+    "D:\\DoAn\\PBL\\BookStore\\BookStore.API\\BookStore.API.csproj": {}
   },
   "projects": {
-    "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\BookStore.API.csproj": {
+    "D:\\DoAn\\PBL\\BookStore\\BookStore.API\\BookStore.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\BookStore.API.csproj",
+        "projectUniqueName": "D:\\DoAn\\PBL\\BookStore\\BookStore.API\\BookStore.API.csproj",
         "projectName": "BookStore.API",
-        "projectPath": "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\BookStore.API.csproj",
+        "projectPath": "D:\\DoAn\\PBL\\BookStore\\BookStore.API\\BookStore.API.csproj",
         "packagesPath": "C:\\Users\\tranv\\.nuget\\packages\\",
-        "outputPath": "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\obj\\",
+        "outputPath": "D:\\DoAn\\PBL\\BookStore\\BookStore.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tranv\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -42,21 +42,21 @@
           "dependencies": {
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[6.0.10, )"
+              "version": "[6.0.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[6.0.10, )"
+              "version": "[6.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[6.0.10, )"
+              "version": "[6.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[6.0.10, )"
+              "version": "[6.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -64,7 +64,7 @@
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
-              "version": "[6.24.0, )"
+              "version": "[6.25.1, )"
             }
           },
           "imports": [

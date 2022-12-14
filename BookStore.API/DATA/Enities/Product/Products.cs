@@ -20,7 +20,7 @@ namespace BookStore.API.Data.Enities.Product
         [Required]
         public int Feedback {get; set;}
         [Required]
-        public decimal Frice {get; set;}
+        public decimal Price {get; set;}
         [Required]
         public int Quantity {get; set;}
         [Required]
