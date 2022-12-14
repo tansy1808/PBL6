@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "9H2la1PWu1ssVU2kwDuQ3FB6oVXevKm6/+zonjpngPh1/Bgu7fPZ1TPe9kNSEwhfVX4Edsujp8MC73p6wchiNg==",
+  "dgSpecHash": "oc8ySsszUBKibk6kt/tlNM1IJwAhe4QL4g5Bb0Git1HvMRckLzk1ioAO67OiXMePU4Mhjev6dS0vmFx7bLajkQ==",
   "success": true,
-  "projectFilePath": "D:\\DoAn\\PBL\\BookStore\\BookStore.API\\BookStore.API.csproj",
+  "projectFilePath": "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\BookStore.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tranv\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\tranv\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.0\\microsoft.aspnetcore.authentication.jwtbearer.6.0.0.nupkg.sha512",

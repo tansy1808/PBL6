@@ -41,6 +41,22 @@ namespace BookStore.API.Services.Services
             return _tokenService.CreateToken(currentUser.Username);
         }
 
+        public string Change(int id, ChangePass changePass)
+        {
+            if( changePass.Password == changePass.RePassword )
+            {
+                using var hmac = new HMACSHA512();
+                var passwordBytes = Encoding.UTF8.GetBytes(changePass.Password);
+                var pass = _context.Users.FirstOrDefault(c => c.IdUser == id);
+                pass.PasswordHash = hmac.ComputeHash(passwordBytes);
+                pass.PasswordSalt = hmac.Key;
+                _context.Users.Update(pass);
+                _context.SaveChanges();
+                return _tokenService.CreateToken(pass.Username);
+            }
+            else throw new UnauthorizedAccessException("Password is unlike.");
+        }
+
         public string Register(AuthUserDto authUserDto)
         {
             authUserDto.Username = authUserDto.Username.ToLower();
@@ -84,5 +100,6 @@ namespace BookStore.API.Services.Services
             return _context.SaveChanges() > 0;
         }
 
+        
     }
 }

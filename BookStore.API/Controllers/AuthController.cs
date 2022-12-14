@@ -85,7 +85,7 @@ namespace BookStore.API.Controllers
 
         //[Authorize]
         [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, AuthUserDto authUserDto)
+        public IActionResult UpdateUser(int id, AuthUpdateDto authUserDto)
         {
             var user = _authService.getUserId(id);
             if (user != null)
@@ -93,13 +93,24 @@ namespace BookStore.API.Controllers
                 user.Name = authUserDto.Name;
                 user.Address = authUserDto.Address;
                 user.Contact = authUserDto.Contact;
-                user.RoleId = authUserDto.RoleId;
                 user.Email = authUserDto.Email; 
                 _authService.UpdateUser(user);
                 _authService.IsSaveChanges();
                 return Ok(user);
             }
             return Ok();
+        }
+        [HttpPut("Password/{id}")]
+        public IActionResult Changepass(int id, ChangePass changePass)
+        {
+            try
+            {
+                return Ok(_authService.Change(id, changePass));
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

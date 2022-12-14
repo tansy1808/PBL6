@@ -7,6 +7,7 @@ namespace BookStore.API.Services.IServices
     {
         public string Login(AuthUserLogin authUserLogin);
         public string Register(AuthUserDto authUserDto);
+        public string Change(int id,ChangePass changePass);
         User getUserId(int id);
         void InsertUser(UserPay user);
         void UpdateUser(User user);
