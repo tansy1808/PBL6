@@ -70,5 +70,10 @@ namespace BookStore.API.Services.Services
         {
             return _context.SaveChanges() > 0;
         }
+
+        public void UpdateOrder(Orders orders)
+        {
+            _context.Orders.Update(orders);
+        }
     }
 }

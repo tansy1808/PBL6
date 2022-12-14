@@ -24,7 +24,6 @@ namespace BookStore.API.Controllers
             {
                 IdUser = orderDTOs.IdUser,
                 Address = orderDTOs.Address,
-                Total = orderDTOs.Total,
                 Status = "Wait for pay",
                 DateOrder = DateTime.Now
             };
@@ -45,7 +44,16 @@ namespace BookStore.API.Controllers
             };
             _orderService.InsertOrderProduct(order);
             _orderService.IsSaveChanges();
-            return Ok();
+            var tem = _orderService.GetOrdersId(order.IdOrder);
+            tem.Total = 0;
+            var orders = _orderService.GetOrderProductId(order.IdOrder);
+            foreach(OrderProduct i in orders)
+            {
+                tem.Total += ((int)i.Price);
+                _orderService.UpdateOrder(tem);
+                _orderService.IsSaveChanges();
+            }
+            return Ok(tem);
         }
 
         [HttpPost("Payment")]

@@ -8,7 +8,6 @@ namespace BookStore.API.DTOs.Store
         public int IdUser {get; set;}
         [Required]
         public string Address {get; set;}
-        [Required]
-        public int Total {get; set;}
+        
     }
 }
