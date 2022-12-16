@@ -1,8 +1,12 @@
 using BookStore.API.Data;
 using BookStore.API.Data.Enities.Product;
 using BookStore.API.DTOs.Product;
+using BookStore.API.DTOs.Views;
 using BookStore.API.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BookStore.API.Controllers
 {
@@ -11,10 +15,12 @@ namespace BookStore.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly DataContext context;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, DataContext context)
         {
             _productService = productService;
+            this.context = context;
         }
 
         [HttpPost]
@@ -54,15 +60,15 @@ namespace BookStore.API.Controllers
         }
 
         [HttpGet("Name/{name}")]
-        public IActionResult GetFindBookByName(string name)
+        public ActionResult<List<Products>> GetFindBookByName(string name)
         {
-            return  Ok(_productService.GetProductsbyName(name));
+            return _productService.GetProductsbyName(name);
         }
 
-        [HttpGet("Categrory/{category}")]
-        public IActionResult GetFindBookByCategory(int category)
+        [HttpGet("Categrory/{Id}and{page}and{size}")]
+        public ActionResult<List<Products>> GetFindBookByCategory(int Id, int page, int size)
         {
-            return  Ok(_productService.GetProductsByCategory(category));
+            return Ok(_productService.GetProductsByCategory(Id,page,size));
         }
 
         [HttpGet("ProductFeed/{id}")]
@@ -72,7 +78,37 @@ namespace BookStore.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll() => Ok(_productService.GetProducts());
+        public IActionResult GetAll()
+        {
+            var pro = _productService.GetProductsAll();
+            List<ProductViewDTOs> list = new List<ProductViewDTOs>();
+            foreach (Products i in pro)
+            {
+                var proview = new ProductViewDTOs
+                {
+                    IdProduct = i.IdProduct,
+                    Name = i.Name,
+                    Image = i.Image,
+                    Desc = i.Desc,
+                    Feedback = i.Feedback,
+                    Price = i.Price,
+                    Quantity = i.Quantity,
+                    DateCreate = i.DateCreate,
+                    Discount = i.Discount,
+                    Cate = _productService.GetCateById(i.IdCate).CategoryType
+                };
+                list.Add(proview);
+
+            }
+            return Ok(list);
+        }
+
+        [HttpGet("ProductPage/{page}and{size}")]
+        public IActionResult GetPageAll(int page, int size) 
+        {
+            
+            return Ok(_productService.GetProductsPage(page,size));
+        }
 
         [HttpGet("Category")]
         public IActionResult GetAllCate() => Ok(_productService.GetProductCate());

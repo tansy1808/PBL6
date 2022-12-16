@@ -72,6 +72,7 @@ namespace BookStore.API.Services.Services
                 PasswordHash = hmac.ComputeHash(passwordBytes),
                 PasswordSalt = hmac.Key,
                 Name = authUserDto.Name,
+                UserImage = "Image",
                 Address = authUserDto.Address,
                 Contact = authUserDto.Contact,
                 Email = authUserDto.Email,

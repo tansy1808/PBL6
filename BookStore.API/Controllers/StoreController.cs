@@ -11,10 +11,12 @@ namespace BookStore.API.Controllers
     public class StoreController : ControllerBase
     {
         private readonly IOrderService _orderService;
+        private readonly IProductService _productService;
 
-        public StoreController(IOrderService orderService)
+        public StoreController(IOrderService orderService, IProductService productService)
         {
             _orderService = orderService;
+            _productService = productService;
         }
         
         [HttpPost("Order")]
@@ -35,24 +37,27 @@ namespace BookStore.API.Controllers
         [HttpPost("OrderProduct")]
         public IActionResult CreateOrderProduct([FromForm] OrderProductDTOs orderProductDTOs)
         {
+            var tem = _orderService.GetOrdersId(orderProductDTOs.IdOrder);
+            int total = 0;
+            var pro = _productService.GetProductsById(orderProductDTOs.IdProduct);
+            int pri = ((int)pro.Price) * ((int)orderProductDTOs.Quantity);
             var order = new OrderProduct
             {
                 IdOrder = orderProductDTOs.IdOrder,
                 IdProduct = orderProductDTOs.IdProduct,
                 Quantity = orderProductDTOs.Quantity,
-                Price = orderProductDTOs.Price
+                Price = pri
             };
             _orderService.InsertOrderProduct(order);
             _orderService.IsSaveChanges();
-            var tem = _orderService.GetOrdersId(order.IdOrder);
-            tem.Total = 0;
-            var orders = _orderService.GetOrderProductId(order.IdOrder);
-            foreach(OrderProduct i in orders)
+            var orders = _orderService.GetOrderProductId(orderProductDTOs.IdOrder);
+            foreach (OrderProduct i in orders)
             {
-                tem.Total += ((int)i.Price);
-                _orderService.UpdateOrder(tem);
-                _orderService.IsSaveChanges();
+                total += ((int)i.Price);
             }
+            tem.Total = total;
+            _orderService.UpdateOrder(tem);
+            _orderService.IsSaveChanges();
             return Ok(tem);
         }
 
@@ -67,7 +72,7 @@ namespace BookStore.API.Controllers
             };
             _orderService.InsertPayment(pay);
             _orderService.IsSaveChanges();
-            return Ok();
+            return Ok(pay);
         }
 
         [HttpPost("MethodPay")]        

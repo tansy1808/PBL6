@@ -132,3 +132,14 @@ D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\scopedcss\bundle\BookStore.API.s
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\BookStore.API.csproj.CopyComplete
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\BookStore.API.genruntimeconfig.cache
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Debug\net6.0\ref\BookStore.API.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Cuemon.AspNetCore.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Cuemon.AspNetCore.Mvc.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Cuemon.Core.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Cuemon.Data.Integrity.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Cuemon.Diagnostics.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Cuemon.Extensions.AspNetCore.Mvc.Formatters.Newtonsoft.Json.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Cuemon.Extensions.Newtonsoft.Json.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Cuemon.IO.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Cuemon.Security.Cryptography.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Cuemon.Threading.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net6.0\Newtonsoft.Json.dll

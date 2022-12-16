@@ -13,10 +13,12 @@ namespace BookStore.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly DataContext context;
 
-        public AuthController( IAuthService authService)
+        public AuthController( IAuthService authService, DataContext context)
         {
             _authService = authService;
+            this.context = context;
         }
 
         [HttpPost("register")]
@@ -112,5 +114,7 @@ namespace BookStore.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet]
+        public IActionResult get() { return Ok(context.Users.ToList()); }
     }
 }

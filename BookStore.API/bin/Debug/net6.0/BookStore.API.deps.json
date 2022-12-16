@@ -8,15 +8,135 @@
     ".NETCoreApp,Version=v6.0": {
       "BookStore.API/1.0.0": {
         "dependencies": {
+          "Cuemon.Extensions.AspNetCore.Mvc.Formatters.Newtonsoft.Json": "7.1.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "6.0.0",
           "Microsoft.EntityFrameworkCore": "6.0.0",
           "Microsoft.EntityFrameworkCore.Design": "6.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.0",
           "Swashbuckle.AspNetCore": "6.2.3",
+          "Swashbuckle.AspNetCore.Swagger": "6.4.0",
+          "Swashbuckle.AspNetCore.SwaggerGen": "6.4.0",
+          "Swashbuckle.AspNetCore.SwaggerUI": "6.4.0",
           "System.IdentityModel.Tokens.Jwt": "6.25.1"
         },
         "runtime": {
           "BookStore.API.dll": {}
+        }
+      },
+      "Cuemon.AspNetCore/7.1.0": {
+        "dependencies": {
+          "Cuemon.Core": "7.1.0",
+          "Cuemon.Data.Integrity": "7.1.0",
+          "Cuemon.Diagnostics": "7.1.0",
+          "Cuemon.IO": "7.1.0"
+        },
+        "runtime": {
+          "lib/net6.0/Cuemon.AspNetCore.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.1.0.34502"
+          }
+        }
+      },
+      "Cuemon.AspNetCore.Mvc/7.1.0": {
+        "dependencies": {
+          "Cuemon.AspNetCore": "7.1.0",
+          "Cuemon.Security.Cryptography": "7.1.0"
+        },
+        "runtime": {
+          "lib/net6.0/Cuemon.AspNetCore.Mvc.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.1.0.34502"
+          }
+        }
+      },
+      "Cuemon.Core/7.1.0": {
+        "runtime": {
+          "lib/net6.0/Cuemon.Core.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.1.0.34502"
+          }
+        }
+      },
+      "Cuemon.Data.Integrity/7.1.0": {
+        "dependencies": {
+          "Cuemon.IO": "7.1.0"
+        },
+        "runtime": {
+          "lib/net6.0/Cuemon.Data.Integrity.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.1.0.34502"
+          }
+        }
+      },
+      "Cuemon.Diagnostics/7.1.0": {
+        "dependencies": {
+          "Cuemon.Core": "7.1.0"
+        },
+        "runtime": {
+          "lib/net6.0/Cuemon.Diagnostics.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.1.0.34502"
+          }
+        }
+      },
+      "Cuemon.Extensions.AspNetCore.Mvc.Formatters.Newtonsoft.Json/7.1.0": {
+        "dependencies": {
+          "Cuemon.AspNetCore.Mvc": "7.1.0",
+          "Cuemon.Extensions.Newtonsoft.Json": "7.1.0"
+        },
+        "runtime": {
+          "lib/net6.0/Cuemon.Extensions.AspNetCore.Mvc.Formatters.Newtonsoft.Json.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.1.0.34502"
+          }
+        }
+      },
+      "Cuemon.Extensions.Newtonsoft.Json/7.1.0": {
+        "dependencies": {
+          "Cuemon.Core": "7.1.0",
+          "Cuemon.Diagnostics": "7.1.0",
+          "Cuemon.IO": "7.1.0",
+          "Newtonsoft.Json": "13.0.2"
+        },
+        "runtime": {
+          "lib/net6.0/Cuemon.Extensions.Newtonsoft.Json.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.1.0.34502"
+          }
+        }
+      },
+      "Cuemon.IO/7.1.0": {
+        "dependencies": {
+          "Cuemon.Core": "7.1.0",
+          "Cuemon.Threading": "7.1.0"
+        },
+        "runtime": {
+          "lib/net6.0/Cuemon.IO.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.1.0.34502"
+          }
+        }
+      },
+      "Cuemon.Security.Cryptography/7.1.0": {
+        "dependencies": {
+          "Cuemon.Core": "7.1.0"
+        },
+        "runtime": {
+          "lib/net6.0/Cuemon.Security.Cryptography.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.1.0.34502"
+          }
+        }
+      },
+      "Cuemon.Threading/7.1.0": {
+        "dependencies": {
+          "Cuemon.Core": "7.1.0"
+        },
+        "runtime": {
+          "lib/net6.0/Cuemon.Threading.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.1.0.34502"
+          }
         }
       },
       "Humanizer.Core/2.8.26": {
@@ -319,41 +439,49 @@
           }
         }
       },
+      "Newtonsoft.Json/13.0.2": {
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.2.27524"
+          }
+        }
+      },
       "Swashbuckle.AspNetCore/6.2.3": {
         "dependencies": {
           "Microsoft.Extensions.ApiDescription.Server": "3.0.0",
-          "Swashbuckle.AspNetCore.Swagger": "6.2.3",
-          "Swashbuckle.AspNetCore.SwaggerGen": "6.2.3",
-          "Swashbuckle.AspNetCore.SwaggerUI": "6.2.3"
+          "Swashbuckle.AspNetCore.Swagger": "6.4.0",
+          "Swashbuckle.AspNetCore.SwaggerGen": "6.4.0",
+          "Swashbuckle.AspNetCore.SwaggerUI": "6.4.0"
         }
       },
-      "Swashbuckle.AspNetCore.Swagger/6.2.3": {
+      "Swashbuckle.AspNetCore.Swagger/6.4.0": {
         "dependencies": {
           "Microsoft.OpenApi": "1.2.3"
         },
         "runtime": {
           "lib/net6.0/Swashbuckle.AspNetCore.Swagger.dll": {
-            "assemblyVersion": "6.2.3.0",
-            "fileVersion": "6.2.3.0"
+            "assemblyVersion": "6.4.0.0",
+            "fileVersion": "6.4.0.0"
           }
         }
       },
-      "Swashbuckle.AspNetCore.SwaggerGen/6.2.3": {
+      "Swashbuckle.AspNetCore.SwaggerGen/6.4.0": {
         "dependencies": {
-          "Swashbuckle.AspNetCore.Swagger": "6.2.3"
+          "Swashbuckle.AspNetCore.Swagger": "6.4.0"
         },
         "runtime": {
           "lib/net6.0/Swashbuckle.AspNetCore.SwaggerGen.dll": {
-            "assemblyVersion": "6.2.3.0",
-            "fileVersion": "6.2.3.0"
+            "assemblyVersion": "6.4.0.0",
+            "fileVersion": "6.4.0.0"
           }
         }
       },
-      "Swashbuckle.AspNetCore.SwaggerUI/6.2.3": {
+      "Swashbuckle.AspNetCore.SwaggerUI/6.4.0": {
         "runtime": {
           "lib/net6.0/Swashbuckle.AspNetCore.SwaggerUI.dll": {
-            "assemblyVersion": "6.2.3.0",
-            "fileVersion": "6.2.3.0"
+            "assemblyVersion": "6.4.0.0",
+            "fileVersion": "6.4.0.0"
           }
         }
       },
@@ -518,6 +646,76 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Cuemon.AspNetCore/7.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-flf0tMYJmGhSeavWeGH49zLjevcvrbMpWkNX98CQwgWtNWWeJg8zY3S/qUULuU3oMiXFEbBtOlCATZBNwKp1Fw==",
+      "path": "cuemon.aspnetcore/7.1.0",
+      "hashPath": "cuemon.aspnetcore.7.1.0.nupkg.sha512"
+    },
+    "Cuemon.AspNetCore.Mvc/7.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6sBQs9d8qf59rVSDbZm8p6vz2ewSYJlRYLLXW5JS9gqDCjacB6GwoCmvTmWbO09KiwWMt7vmSKht1RjZFMHLTQ==",
+      "path": "cuemon.aspnetcore.mvc/7.1.0",
+      "hashPath": "cuemon.aspnetcore.mvc.7.1.0.nupkg.sha512"
+    },
+    "Cuemon.Core/7.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Z8dzwvoPUtDXsYNNqKlx2+XjU2O4hScdL3+iQrJ43PKhQe5EPLwCJONqnASronAiBUwt6yKc9kOvfRsIIwX7Ww==",
+      "path": "cuemon.core/7.1.0",
+      "hashPath": "cuemon.core.7.1.0.nupkg.sha512"
+    },
+    "Cuemon.Data.Integrity/7.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hPYp1miCnodeS3i7XMg/G8PWQXsxL+Wk89n11VKxYmSBl2d+XPV4xqE2HTRHKsquDZICydDGg/79FQ7PdLJ2JQ==",
+      "path": "cuemon.data.integrity/7.1.0",
+      "hashPath": "cuemon.data.integrity.7.1.0.nupkg.sha512"
+    },
+    "Cuemon.Diagnostics/7.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-nHABNCErOhq7h3scTreh9T8mSGIz7IJ9tRuB0sx6P/rMC5lA98MhQdTu344AUSDkrzzuRMrUa59Z+M/PvptHtA==",
+      "path": "cuemon.diagnostics/7.1.0",
+      "hashPath": "cuemon.diagnostics.7.1.0.nupkg.sha512"
+    },
+    "Cuemon.Extensions.AspNetCore.Mvc.Formatters.Newtonsoft.Json/7.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZI9+9bxCMQDHLarmuevXDMRNKoGl+dMudiiIS3C79WNN/V9nBSFCZojbUj5pDp2eyBYk7h/otX59NbvuOibADw==",
+      "path": "cuemon.extensions.aspnetcore.mvc.formatters.newtonsoft.json/7.1.0",
+      "hashPath": "cuemon.extensions.aspnetcore.mvc.formatters.newtonsoft.json.7.1.0.nupkg.sha512"
+    },
+    "Cuemon.Extensions.Newtonsoft.Json/7.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/DoaEoD0Ll9X7KTlHGdfwKwvjs2ACp+QQFhdM0Vaqfu6ywERXTUJnoOu9s86I6zRrbcl4yZf5LeIU5OKOngMSA==",
+      "path": "cuemon.extensions.newtonsoft.json/7.1.0",
+      "hashPath": "cuemon.extensions.newtonsoft.json.7.1.0.nupkg.sha512"
+    },
+    "Cuemon.IO/7.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-PRaN2KCY/1Ew8fOkhJ233l1b41ItI7zk0Av5+8FXWZ5SqJ57APoN5HEEla0+DyiPbE71GkTd4VjSkGo7Nab8rg==",
+      "path": "cuemon.io/7.1.0",
+      "hashPath": "cuemon.io.7.1.0.nupkg.sha512"
+    },
+    "Cuemon.Security.Cryptography/7.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-524FDINeciBC+ECKhK72D6ocNh3qC/Z+vtt51SxsXkvVL23kFypq8tokO5UXMuAOalhfaSWApUpyhJC+SORoSQ==",
+      "path": "cuemon.security.cryptography/7.1.0",
+      "hashPath": "cuemon.security.cryptography.7.1.0.nupkg.sha512"
+    },
+    "Cuemon.Threading/7.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LfbSQWG/UnvBpMpp5EQHYms3lG1FBTDeCPEOY2gRnyd+MVs3aEX/Y/g/fAM+IdxTQRhg0Uvr4PHa3cxNBJz5mg==",
+      "path": "cuemon.threading/7.1.0",
+      "hashPath": "cuemon.threading.7.1.0.nupkg.sha512"
     },
     "Humanizer.Core/2.8.26": {
       "type": "package",
@@ -750,6 +948,13 @@
       "path": "microsoft.win32.systemevents/4.7.0",
       "hashPath": "microsoft.win32.systemevents.4.7.0.nupkg.sha512"
     },
+    "Newtonsoft.Json/13.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-R2pZ3B0UjeyHShm9vG+Tu0EBb2lC8b0dFzV9gVn50ofHXh9Smjk6kTn7A/FdAsC8B5cKib1OnGYOXxRBz5XQDg==",
+      "path": "newtonsoft.json/13.0.2",
+      "hashPath": "newtonsoft.json.13.0.2.nupkg.sha512"
+    },
     "Swashbuckle.AspNetCore/6.2.3": {
       "type": "package",
       "serviceable": true,
@@ -757,26 +962,26 @@
       "path": "swashbuckle.aspnetcore/6.2.3",
       "hashPath": "swashbuckle.aspnetcore.6.2.3.nupkg.sha512"
     },
-    "Swashbuckle.AspNetCore.Swagger/6.2.3": {
+    "Swashbuckle.AspNetCore.Swagger/6.4.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-qOF7j1sL0bWm8g/qqHVPCvkO3JlVvUIB8WfC98kSh6BT5y5DAnBNctfac7XR5EZf+eD7/WasvANncTqwZYfmWQ==",
-      "path": "swashbuckle.aspnetcore.swagger/6.2.3",
-      "hashPath": "swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512"
+      "sha512": "sha512-nl4SBgGM+cmthUcpwO/w1lUjevdDHAqRvfUoe4Xp/Uvuzt9mzGUwyFCqa3ODBAcZYBiFoKvrYwz0rabslJvSmQ==",
+      "path": "swashbuckle.aspnetcore.swagger/6.4.0",
+      "hashPath": "swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512"
     },
-    "Swashbuckle.AspNetCore.SwaggerGen/6.2.3": {
+    "Swashbuckle.AspNetCore.SwaggerGen/6.4.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-+Xq7WdMCCfcXlnbLJVFNgY8ITdP2TRYIlpbt6IKzDw5FwFxdi9lBfNDtcT+/wkKwX70iBBFmXldnnd02/VO72A==",
-      "path": "swashbuckle.aspnetcore.swaggergen/6.2.3",
-      "hashPath": "swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512"
+      "sha512": "sha512-lXhcUBVqKrPFAQF7e/ZeDfb5PMgE8n5t6L5B6/BQSpiwxgHzmBcx8Msu42zLYFTvR5PIqE9Q9lZvSQAcwCxJjw==",
+      "path": "swashbuckle.aspnetcore.swaggergen/6.4.0",
+      "hashPath": "swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512"
     },
-    "Swashbuckle.AspNetCore.SwaggerUI/6.2.3": {
+    "Swashbuckle.AspNetCore.SwaggerUI/6.4.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-bCRI87uKJVb4G+KURWm8LQrL64St04dEFZcF6gIM67Zc0Sr/N47EO83ybLMYOvfNdO1DCv8xwPcrz9J/VEhQ5g==",
-      "path": "swashbuckle.aspnetcore.swaggerui/6.2.3",
-      "hashPath": "swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+      "sha512": "sha512-1Hh3atb3pi8c+v7n4/3N80Jj8RvLOXgWxzix6w3OZhB7zBGRwsy7FWr4e3hwgPweSBpwfElqj4V4nkjYabH9nQ==",
+      "path": "swashbuckle.aspnetcore.swaggerui/6.4.0",
+      "hashPath": "swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
     },
     "System.Collections.Immutable/6.0.0": {
       "type": "package",

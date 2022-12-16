@@ -10,8 +10,6 @@ D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net6.0\PubTmp\Out\Microsoft.EntityFra
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net6.0\PubTmp\Out\Microsoft.EntityFrameworkCore.Abstractions.dll
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net6.0\PubTmp\Out\Microsoft.EntityFrameworkCore.Relational.dll
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net6.0\PubTmp\Out\Microsoft.EntityFrameworkCore.SqlServer.dll
-D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.Caching.Memory.dll
-D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net6.0\PubTmp\Out\Microsoft.Extensions.DependencyInjection.dll
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net6.0\PubTmp\Out\Microsoft.Identity.Client.dll
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.Abstractions.dll
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.JsonWebTokens.dll

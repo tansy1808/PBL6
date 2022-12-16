@@ -11,10 +11,12 @@ namespace BookStore.API.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
+        private readonly DataContext context;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, DataContext context)
         {
             _cartService = cartService;
+            this.context = context;
         }
 
         [HttpPost]
@@ -26,8 +28,11 @@ namespace BookStore.API.Controllers
             };
             _cartService.InsertCart(cart);
             _cartService.IsSaveChanges();
-            return Ok();
+            return Ok(cart);
         }
+        [HttpGet]
+        public IActionResult get() { return Ok(context.Carts.ToList()); }
+
         [HttpGet("{id}")]
         public IActionResult GetCartId(int id)
         {
@@ -46,7 +51,7 @@ namespace BookStore.API.Controllers
             };
             _cartService.InsertCartItem(cartItem);
             _cartService.IsSaveChanges();
-            return Ok();
+            return Ok(cartItem);
         }
         [HttpDelete("CartItem/{id}")]
         public IActionResult DeleteItem(int id)
