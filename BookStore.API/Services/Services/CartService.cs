@@ -29,7 +29,7 @@ namespace BookStore.API.Services.Services
 
         public CartItem GetCartItemId(int id) => _context.CartItems.FirstOrDefault(c => c.Id == id);
 
-        public Carts GetCartsId(int id) => _context.Carts.FirstOrDefault(c => c.Id == id);
+        public Carts GetCartsId(int id) => _context.Carts.FirstOrDefault(c => c.IdUser == id);
 
         public void InsertCart(Carts carts)
         {

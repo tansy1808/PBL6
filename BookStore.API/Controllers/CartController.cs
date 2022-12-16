@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
 {
-    [Route("api/Cart")]
+    [Route("api/cart")]
     [ApiController]
     public class CartController : ControllerBase
     {
@@ -36,11 +36,11 @@ namespace BookStore.API.Controllers
         [HttpGet("{id}")]
         public IActionResult GetCartId(int id)
         {
-            var cart = _cartService.getCartItem(id);
+            var cart = _cartService.GetCartsId(id);
             return Ok(cart);
         }
         
-        [HttpPost("CartItem")]
+        [HttpPost("cartItem")]
         public IActionResult CreateCartItem([FromForm] CartItemDTOs cartItemDTOs)
         {
             var cartItem = new CartItem
@@ -53,7 +53,7 @@ namespace BookStore.API.Controllers
             _cartService.IsSaveChanges();
             return Ok(cartItem);
         }
-        [HttpDelete("CartItem/{id}")]
+        [HttpDelete("cartItem/{id}")]
         public IActionResult DeleteItem(int id)
         {
             var cartitem = _cartService.GetCartItemId(id);

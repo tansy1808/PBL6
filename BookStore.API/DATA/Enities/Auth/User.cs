@@ -24,10 +24,7 @@ namespace BookStore.API.Data.Enities.Auth
         [Required]
         [MaxLength(256)]
         public string Name {get; set;}
-        [Required]
-        [MaxLength(256)]
         public string Address {get; set;}
-        [Required]
         [MaxLength(15)]
         public string Contact {get; set;}
         [Required]

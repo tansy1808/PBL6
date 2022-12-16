@@ -7,8 +7,6 @@ namespace BookStore.API.Data.Enities.Product
     {
         [Key]
         public int IdFeed {get; set;}
-        [Required]
-        [MaxLength(256)]
         public string Comment {get; set;}
         [Required]
         public int Star {get; set;}

@@ -43,18 +43,27 @@ namespace BookStore.API.Services.Services
 
         public string Change(int id, ChangePass changePass)
         {
-            if( changePass.Password == changePass.RePassword )
+            var pass = _context.Users.FirstOrDefault(c => c.IdUser == id);
+            using var hmac = new HMACSHA512(pass.PasswordSalt);
+            var passwordBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(changePass.Password));
+            for (int i = 0; i < pass.PasswordHash.Length; i++)
             {
-                using var hmac = new HMACSHA512();
-                var passwordBytes = Encoding.UTF8.GetBytes(changePass.Password);
-                var pass = _context.Users.FirstOrDefault(c => c.IdUser == id);
-                pass.PasswordHash = hmac.ComputeHash(passwordBytes);
-                pass.PasswordSalt = hmac.Key;
-                _context.Users.Update(pass);
-                _context.SaveChanges();
-                return _tokenService.CreateToken(pass.Username);
+                if (pass.PasswordHash[i] != passwordBytes[i])
+                {
+                    throw new UnauthorizedAccessException("Password is invalid.");
+                }
+                if (changePass.NewPassword == changePass.RePassword)
+                {
+                    var password = Encoding.UTF8.GetBytes(changePass.Password);
+                    pass.PasswordHash = hmac.ComputeHash(passwordBytes);
+                    pass.PasswordSalt = hmac.Key;
+                    _context.Users.Update(pass);
+                    _context.SaveChanges();
+                    return _tokenService.CreateToken(pass.Username);
+                }
+                else throw new UnauthorizedAccessException("Password is unlike.");
             }
-            else throw new UnauthorizedAccessException("Password is unlike.");
+            return _tokenService.CreateToken(pass.Username);
         }
 
         public string Register(AuthUserDto authUserDto)
@@ -72,11 +81,8 @@ namespace BookStore.API.Services.Services
                 PasswordHash = hmac.ComputeHash(passwordBytes),
                 PasswordSalt = hmac.Key,
                 Name = authUserDto.Name,
-                UserImage = "Image",
-                Address = authUserDto.Address,
-                Contact = authUserDto.Contact,
                 Email = authUserDto.Email,
-                RoleId = authUserDto.RoleId
+                RoleId = 2
             };
             _context.Users.Add(user);
             _context.SaveChanges();

@@ -4,8 +4,6 @@ namespace BookStore.API.DTOs.Product
 {
     public class ProductFeedDTOs
     {
-        [Required]
-        [MaxLength(256)]
         public string Comment {get; set;}
         [Required]
         public int star {get; set;}

@@ -8,17 +8,15 @@ using BookStore.API.Services.IServices;
 namespace BookStore.API.Controllers
 {
 
-    [Route("api/Auth")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly DataContext context;
 
-        public AuthController( IAuthService authService, DataContext context)
+        public AuthController( IAuthService authService)
         {
             _authService = authService;
-            this.context = context;
         }
 
         [HttpPost("register")]
@@ -48,7 +46,7 @@ namespace BookStore.API.Controllers
         }
 
         //[Authorize]
-        [HttpPut("Image/{id}")]
+        [HttpPut("image/{id}")]
         public IActionResult UpdateUserImage(int id, UserImage userImage)
         {
             var user = _authService.getUserId(id);
@@ -102,7 +100,7 @@ namespace BookStore.API.Controllers
             }
             return Ok();
         }
-        [HttpPut("Password/{id}")]
+        [HttpPut("password/{id}")]
         public IActionResult Changepass(int id, ChangePass changePass)
         {
             try
@@ -114,7 +112,5 @@ namespace BookStore.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet]
-        public IActionResult get() { return Ok(context.Users.ToList()); }
     }
 }

@@ -10,7 +10,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BookStore.API.Controllers
 {
-    [Route("api/Product")]
+    [Route("api/product")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -43,7 +43,7 @@ namespace BookStore.API.Controllers
             return Ok(products);
         }
 
-        [HttpPost("ProductFeed")]
+        [HttpPost("productFeed")]
         public IActionResult AddProductFeed([FromForm] ProductFeedDTOs productFeedDTOs)
         {
             var feed = new ProductFeed
@@ -59,64 +59,38 @@ namespace BookStore.API.Controllers
             return Ok(feed);
         }
 
-        [HttpGet("Name/{name}")]
+        [HttpGet("{name}")]
         public ActionResult<List<Products>> GetFindBookByName(string name)
         {
             return _productService.GetProductsbyName(name);
         }
 
-        [HttpGet("Categrory/{Id}and{page}and{size}")]
-        public ActionResult<List<Products>> GetFindBookByCategory(int Id, int page, int size)
+        [HttpGet("{id}and{page}and{size}")]
+        public ActionResult<List<Products>> GetFindBookByCategory(int id, int page, int size)
         {
-            return Ok(_productService.GetProductsByCategory(Id,page,size));
+            return Ok(_productService.GetProductsByCategory(id,page,size));
         }
 
-        [HttpGet("ProductFeed/{id}")]
+        [HttpGet("productFeed/{id}")]
         public IActionResult GetFeedByBook(int id)
         {
             return  Ok(_productService.GetProductFeedById(id));
         }
 
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var pro = _productService.GetProductsAll();
-            List<ProductViewDTOs> list = new List<ProductViewDTOs>();
-            foreach (Products i in pro)
-            {
-                var proview = new ProductViewDTOs
-                {
-                    IdProduct = i.IdProduct,
-                    Name = i.Name,
-                    Image = i.Image,
-                    Desc = i.Desc,
-                    Feedback = i.Feedback,
-                    Price = i.Price,
-                    Quantity = i.Quantity,
-                    DateCreate = i.DateCreate,
-                    Discount = i.Discount,
-                    Cate = _productService.GetCateById(i.IdCate).CategoryType
-                };
-                list.Add(proview);
-
-            }
-            return Ok(list);
-        }
-
-        [HttpGet("ProductPage/{page}and{size}")]
+        [HttpGet("productPage/{page}and{size}")]
         public IActionResult GetPageAll(int page, int size) 
         {
             
             return Ok(_productService.GetProductsPage(page,size));
         }
 
-        [HttpGet("Category")]
+        [HttpGet("category")]
         public IActionResult GetAllCate() => Ok(_productService.GetProductCate());
 
-        [HttpPut("{Id}")]
-        public IActionResult UpdateBook(int Id,[FromForm] ProductDTOs productDTOs)
+        [HttpPut("{id}")]
+        public IActionResult UpdateBook(int id,[FromForm] ProductDTOs productDTOs)
         {
-            var product = _productService.GetProductsById(Id);
+            var product = _productService.GetProductsById(id);
             if (product != null)
             {
                 product.Name = productDTOs.Name;

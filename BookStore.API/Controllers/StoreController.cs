@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
 {
-    [Route("api/Store")]
+    [Route("api/store")]
     [ApiController]
     public class StoreController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace BookStore.API.Controllers
             _productService = productService;
         }
         
-        [HttpPost("Order")]
+        [HttpPost("order")]
         public IActionResult CreateOrder([FromForm] OrderDTOs orderDTOs)
         {
             var order = new Orders
@@ -34,7 +34,7 @@ namespace BookStore.API.Controllers
             return Ok(order);
         }
 
-        [HttpPost("OrderProduct")]
+        [HttpPost("orderProduct")]
         public IActionResult CreateOrderProduct([FromForm] OrderProductDTOs orderProductDTOs)
         {
             var tem = _orderService.GetOrdersId(orderProductDTOs.IdOrder);
@@ -61,7 +61,7 @@ namespace BookStore.API.Controllers
             return Ok(tem);
         }
 
-        [HttpPost("Payment")]
+        [HttpPost("payment")]
         public IActionResult CreatePayment([FromForm] PaymentDTOs paymentDTOs)
         {
             var pay = new Payment
@@ -75,7 +75,7 @@ namespace BookStore.API.Controllers
             return Ok(pay);
         }
 
-        [HttpPost("MethodPay")]        
+        [HttpPost("methodPay")]        
         public IActionResult CreateMethodPay([FromForm] MethodPayDTOs methodPayDTOs)
         {
             var mpay = new MethodPay
@@ -87,21 +87,21 @@ namespace BookStore.API.Controllers
             return Ok();
         }
 
-        [HttpGet("Order/{id}")]
+        [HttpGet("order/{id}")]
         public IActionResult FindOrderId(int id)
         {
             var order = _orderService.GetOrdersId(id);
             return Ok(order);
         }
 
-        [HttpGet("OrderProduct/{id}")]
+        [HttpGet("orderProduct/{id}")]
         public IActionResult FindOrderProductId(int id)
         {
             var order = _orderService.GetOrderProductId(id);
             return Ok(order);
         }
 
-        [HttpGet("Payment/{id}")]
+        [HttpGet("payment/{id}")]
         public IActionResult FindPayId(int id)
         {
             var order = _orderService.GetPaymentId(id);
@@ -109,7 +109,10 @@ namespace BookStore.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetOrder() => Ok(_orderService.GetAllOrders());
+        public IActionResult GetOrder()
+        {
+            return Ok(_orderService.GetAllOrders()); ;
+        }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteOrder(int id)

@@ -10,7 +10,6 @@ namespace BookStore.API.Data.Enities.Order
         [Required]
         public int IdUser {get; set;}
         [Required]
-        [MaxLength(256)]
         public string Address {get; set;}
         [Required]
         [MaxLength(256)]

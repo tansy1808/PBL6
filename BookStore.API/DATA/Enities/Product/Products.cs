@@ -12,12 +12,9 @@ namespace BookStore.API.Data.Enities.Product
         [MaxLength(256)]
         public string Name {get; set;}
         [Required]
-        [MaxLength(256)]
         public string Image {get; set;}
         [Required]
-        [MaxLength(256)]
         public string Desc {get; set;}
-        [Required]
         public int Feedback {get; set;}
         [Required]
         public decimal Price {get; set;}
@@ -25,7 +22,6 @@ namespace BookStore.API.Data.Enities.Product
         public int Quantity {get; set;}
         [Required]
         public DateTime DateCreate {get; set;}
-        [Required]
         public decimal Discount {get; set;}
         [Required]
         public int IdCate {get; set;}
