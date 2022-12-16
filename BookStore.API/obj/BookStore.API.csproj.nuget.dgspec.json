@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\BookStore.API.csproj": {}
+    "D:\\DoAn\\PBL\\BookStore.API\\BookStore.API\\BookStore.API.csproj": {}
   },
   "projects": {
-    "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\BookStore.API.csproj": {
+    "D:\\DoAn\\PBL\\BookStore.API\\BookStore.API\\BookStore.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\BookStore.API.csproj",
+        "projectUniqueName": "D:\\DoAn\\PBL\\BookStore.API\\BookStore.API\\BookStore.API.csproj",
         "projectName": "BookStore.API",
-        "projectPath": "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\BookStore.API.csproj",
+        "projectPath": "D:\\DoAn\\PBL\\BookStore.API\\BookStore.API\\BookStore.API.csproj",
         "packagesPath": "C:\\Users\\tranv\\.nuget\\packages\\",
-        "outputPath": "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\obj\\",
+        "outputPath": "D:\\DoAn\\PBL\\BookStore.API\\BookStore.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tranv\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,47 +40,31 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Cuemon.Extensions.AspNetCore.Mvc.Formatters.Newtonsoft.Json": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
-              "version": "[7.1.0, )"
+              "version": "[12.0.0, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[6.0.0, )"
+              "version": "[6.0.12, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[6.0.0, )"
+              "version": "[7.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[6.0.0, )"
+              "version": "[7.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[6.0.0, )"
+              "version": "[7.0.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
-            },
-            "Swashbuckle.AspNetCore.Swagger": {
-              "target": "Package",
-              "version": "[6.4.0, )"
-            },
-            "Swashbuckle.AspNetCore.SwaggerGen": {
-              "target": "Package",
-              "version": "[6.4.0, )"
-            },
-            "Swashbuckle.AspNetCore.SwaggerUI": {
-              "target": "Package",
-              "version": "[6.4.0, )"
-            },
-            "System.IdentityModel.Tokens.Jwt": {
-              "target": "Package",
-              "version": "[6.25.1, )"
             }
           },
           "imports": [

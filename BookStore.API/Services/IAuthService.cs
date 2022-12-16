@@ -1,0 +1,19 @@
+using API.DatingApp.API.DTO;
+using BookStore.API.Data.Enities.Auth;
+using BookStore.API.DTO.User;
+
+namespace BookStore.API.Services
+{
+    public interface IAuthService
+    {
+        public string Login(AuthUserLogin authUserLogin);
+        public string Register(AuthUserDTO authUserDto);
+        public string Change(int id,ChangePass changePass);
+        MemberAPI GetUserAll();
+        UserDTO GetUserByUserName(string name);
+        UserDTO GetUserById(int id);
+        User UpdateUser(int id, AuthUpdateDTO authUpdateDTO);
+        User UpdateImage(int id, UserImage userImage);
+        UserPay CreatePay(PayUserDTO payUserDto);
+    }
+}

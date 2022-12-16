@@ -1,18 +1,17 @@
-using BookStore.API.Data;
+﻿using AutoMapper.Execution;
 using BookStore.API.Data.Enities.Product;
-using BookStore.API.DTOs.Product;
-using BookStore.API.DTOs.Views;
-using BookStore.API.Services.IServices;
-using Microsoft.AspNetCore.Authorization;
+using BookStore.API.DTO;
+using BookStore.API.DTO.Product;
+using BookStore.API.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Drawing;
 
 namespace BookStore.API.Controllers
 {
-    [Route("api/product")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductController : Controller
     {
         private readonly IProductService _productService;
 
@@ -22,101 +21,62 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddBook([FromForm] ProductDTOs productDTOs)
+        public IActionResult AddBook([FromForm] ProductDTO productDTO)
         {
-            var products = new Products
-            {
-                Name = productDTOs.Name,
-                Desc = productDTOs.Desc,
-                Image = productDTOs.Image,
-                Price = productDTOs.Price,
-                Quantity = productDTOs.Quantity,
-                DateCreate = DateTime.Now,
-                Discount = productDTOs.Discount,
-                IdCate = productDTOs.IdCate
-            };
-            _productService.InsertProduct(products);
-            _productService.IsSaveChanges();
-
-            return Ok(products);
+            return Ok(_productService.CreateProduct(productDTO));
         }
 
         [HttpPost("productFeed")]
-        public IActionResult AddProductFeed([FromForm] ProductFeedDTOs productFeedDTOs)
+        public IActionResult AddProductFeed([FromForm] ProductFeedDTO productFeedDTOs)
         {
-            var feed = new ProductFeed
-            {
-                Star = productFeedDTOs.star,
-                Comment = productFeedDTOs.Comment,
-                ProductID = productFeedDTOs.ProductID,
-                UserID = productFeedDTOs.UserID,
-                FeedDate = DateTime.Now
-            };
-            _productService.InsertProductFeed(feed);
-            _productService.IsSaveChanges();
-            return Ok(feed);
+            return Ok(_productService.AddProductFeed(productFeedDTOs));
         }
 
         [HttpGet("{name}")]
-        public ActionResult<List<Products>> GetFindBookByName(string name)
+        public ActionResult<ProductAPI> GetFindBookByName(string name)
         {
-            return _productService.GetProductsbyName(name);
+            var pro = _productService.GetProductByName(name);
+            if (pro == null) return NotFound();
+            return pro;
         }
 
-        [HttpGet("{id}and{page}and{size}")]
-        public ActionResult<List<Products>> GetFindBookByCategory(int id, int page, int size)
+        [HttpGet("{page}and{size}")]
+        public ActionResult<ProductPage> GetProductPage(int page, int size)
         {
-            return Ok(_productService.GetProductsByCategory(id,page,size));
+            var pro = _productService.GetProductAll(page, size);
+            if (pro == null) return NotFound();
+            return pro;
+        }
+
+        [HttpGet("category/{id}and{page}and{size}")]
+        public ActionResult<CategoryAPI> GetFindBookByCategory(int id, int page, int size)
+        {
+            var pro = _productService.GetProductsByCategory(id, page, size);
+            if (pro == null) return NotFound();
+            return pro;
         }
 
         [HttpGet("productFeed/{id}")]
-        public IActionResult GetFeedByBook(int id)
+        public ActionResult<List<FeedDTO>> GetFeedByBook(int id)
         {
-            return  Ok(_productService.GetProductFeedById(id));
+            var pro = _productService.GetProductFeedById(id);
+            if (pro == null) return NotFound();
+            return pro;
         }
-
-        [HttpGet("productPage/{page}and{size}")]
-        public IActionResult GetPageAll(int page, int size) 
-        {
-            
-            return Ok(_productService.GetProductsPage(page,size));
-        }
-
         [HttpGet("category")]
-        public IActionResult GetAllCate() => Ok(_productService.GetProductCate());
+        public ActionResult<ProductCate> GetAllCate() => Ok(_productService.GetProductCate());
 
         [HttpPut("{id}")]
-        public IActionResult UpdateBook(int id,[FromForm] ProductDTOs productDTOs)
+        public IActionResult UpdateBook(int id, [FromForm] ProductDTO productDTOs)
         {
-            var product = _productService.GetProductsById(id);
-            if (product != null)
-            {
-                product.Name = productDTOs.Name;
-                product.Image = productDTOs.Image;
-                product.Desc = productDTOs.Desc;
-                product.Price = productDTOs.Price;
-                product.Quantity = productDTOs.Quantity;
-                product.Discount = productDTOs.Discount;
-                product.IdCate = productDTOs.IdCate;
-                _productService.UpdateProduct(product);
-                _productService.IsSaveChanges();
-            }
-            return Ok(product);
+            return Ok(_productService.UpdateProduct(id, productDTOs));
         }
-        
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var product =_productService.GetProductsById(id);
-            if (product != null)
-            {
-                var feed = _productService.GetProductFeedById(id);
-                _productService.DeteleFeed(feed);
-                _productService.DeteleProduct(product);
-                _productService.IsSaveChanges();
-                return Ok(product);
-            }
-            return Unauthorized("Không có sản phẩm");
+            return Ok(_productService.Delete(id));
+
         }
     }
 }

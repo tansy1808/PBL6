@@ -1,81 +1,71 @@
-using BookStore.API.Data;
+﻿using BookStore.API.Data;
 using BookStore.API.Data.Enities.Cart;
-using BookStore.API.DTOs.Cart;
-using BookStore.API.DTOs.Views;
-using BookStore.API.Services.IServices;
+using BookStore.API.DTO.Cart;
+using BookStore.API.DTO.User;
+using BookStore.API.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
 {
     [Route("api/cart")]
     [ApiController]
-    public class CartController : ControllerBase
+    public class CartController : Controller
     {
         private readonly ICartService _cartService;
-        private readonly DataContext context;
 
-        public CartController(ICartService cartService, DataContext context)
+        public CartController(ICartService cartService)
         {
             _cartService = cartService;
-            this.context = context;
         }
 
         [HttpPost]
-        public IActionResult CreateCart([FromForm] CartDTOs cartDTOs)
+        public IActionResult CreateCart([FromForm] CartDTO cartDTO)
         {
-            var cart = new Carts
+            try
             {
-                IdUser = cartDTOs.IdUser
-            };
-            _cartService.InsertCart(cart);
-            _cartService.IsSaveChanges();
-            return Ok(cart);
+                return Ok(_cartService.AddCart(cartDTO));
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-        [HttpGet]
-        public IActionResult get() { return Ok(context.Carts.ToList()); }
+
+        [HttpPost("cartItem")]
+        public IActionResult CreateCartItem([FromForm] CartItemDTO cartItemDTOs)
+        {
+            try
+            {
+                return Ok(_cartService.AddCartItem(cartItemDTOs));
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet("{id}")]
-        public IActionResult GetCartId(int id)
-        {   
-            return Ok(_cartService.GetCartsId(id));
-        }
-        
-        [HttpPost("cartItem")]
-        public IActionResult CreateCartItem([FromForm] CartItemDTOs cartItemDTOs)
+        public ActionResult<CartView> GetCartId(int id)
         {
-            var cartItem = new CartItem
-            {
-                IdProduct = cartItemDTOs.IdProduct,
-                IdCart = cartItemDTOs.IdCart,
-                Quantity = cartItemDTOs.Quantity
-            };
-            _cartService.InsertCartItem(cartItem);
-            _cartService.IsSaveChanges();
-            return Ok(cartItem);
+            var members = _cartService.GetCartId(id);
+            if (members == null) return NotFound();
+            return members;
         }
+
         [HttpDelete("cartItem/{id}")]
         public IActionResult DeleteItem(int id)
         {
-            var cartitem = _cartService.GetCartItemId(id);
-            if (cartitem != null)
-            {
-                _cartService.DeleteItem(cartitem);
-                _cartService.IsSaveChanges();
-                return Ok(cartitem);
-            }
-            return Unauthorized("Không có sản phẩm");
+            var members = _cartService.DeleteItem(id);
+            if (members == null) return NotFound();
+            return Ok(members);
         }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var cart = _cartService.GetCarts(id);
-            if (cart != null)
-            {
-                _cartService.DeleteCart(cart);
-                _cartService.IsSaveChanges();
-                return Ok(cart);
-            }
-            return Unauthorized("Không có sản phẩm");
+            return Ok(_cartService.DeleteCart(id));
         }
+
     }
 }

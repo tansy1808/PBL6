@@ -1,18 +1,15 @@
-using BookStore.API.Data;
-using BookStore.API.Data.Enities.Auth;
-using BookStore.API.DTOs.User;
-using Microsoft.AspNetCore.Mvc;
+﻿using API.DatingApp.API.DTO;
+using BookStore.API.DTO.User;
+using BookStore.API.Services;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using BookStore.API.Services.IServices;
-using BookStore.API.Services.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
 {
-
     [Route("api/auth")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : Controller
     {
         private readonly IAuthService _authService;
 
@@ -20,9 +17,8 @@ namespace BookStore.API.Controllers
         {
             _authService = authService;
         }
-
         [HttpPost("register")]
-        public IActionResult Register([FromBody] AuthUserDto authUserDto)
+        public IActionResult Register([FromBody] AuthUserDTO authUserDto)
         {
             try
             {
@@ -47,79 +43,67 @@ namespace BookStore.API.Controllers
             }
         }
 
-        //[Authorize]
-        [HttpPut("image/{id}")]
-        public IActionResult UpdateUserImage(int id, UserImage userImage)
-        {
-            var user = _authService.getUserId(id);
-            if (user != null)
-            {
-                user.UserImage = userImage.Userimage;
-                _authService.UpdateUser(user);
-                _authService.IsSaveChanges();
-                return Ok(user);
-            }
-            return Ok();
-        }
-
-        //[Authorize]
         [HttpPost("pay")]
-        public IActionResult CreatePay([FromForm] PayUserDto payUserDto)
-        {
-            var userpay = new UserPay
-            {
-                UserId = payUserDto.UserId,
-                PayType = payUserDto.PayType
-            };
-            _authService.InsertUser(userpay);
-            _authService.IsSaveChanges();
-
-            return Ok(userpay.UserId);
-        }
-
-        //[Authorize]
-        [HttpGet("logout")]
-        public async Task<IActionResult> logout()
-        {
-            await HttpContext.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
-
-        //[Authorize]
-        [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, AuthUpdateDto authUserDto)
-        {
-            var user = _authService.getUserId(id);
-            if (user != null)
-            {
-                user.Name = authUserDto.Name;
-                user.Address = authUserDto.Address;
-                user.Contact = authUserDto.Contact;
-                user.Email = authUserDto.Email;
-                _authService.UpdateUser(user);
-                _authService.IsSaveChanges();
-                return Ok(user);
-            }
-            return Ok();
-        }
-        [HttpPut("password/{id}")]
-        public IActionResult Changepass(int id, ChangePass changePass)
+        public IActionResult CreatePay([FromForm] PayUserDTO payUserDto)
         {
             try
             {
-                return Ok(_authService.Change(id, changePass));
+                return Ok(_authService.CreatePay(payUserDto));
             }
             catch (BadHttpRequestException ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
+            [HttpGet("logout")]
+        public async Task<IActionResult> logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
         [HttpGet]
-        public IActionResult GetAll()
+        public ActionResult<MemberAPI> GetAll()
+        {
+            return _authService.GetUserAll();
+        }
+
+        [HttpGet("{username}")]
+        public ActionResult<UserDTO> GetUserName(string username)
+        {
+            var members = _authService.GetUserByUserName(username);
+            if (members == null) return NotFound();
+            return members;
+        }
+        [HttpGet("{id}")]
+        public ActionResult<UserDTO> GetUserName(int id)
+        {
+            var members = _authService.GetUserById(id);
+            if (members == null) return NotFound();
+            return members;
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateInfoUser(int id, AuthUpdateDTO authUserDto)
+        {
+
+            return Ok(_authService.UpdateUser(id,authUserDto));
+        }
+
+        [HttpPut("image/{id}")]
+        public IActionResult UpdateUserImage(int id, UserImage userImage)
+        {
+
+            return Ok(_authService.UpdateImage(id,userImage));
+        }
+
+        [HttpPut("password/{id}")]
+        public IActionResult ChangePass(int id, [FromForm] ChangePass changePass)
         {
             try
             {
-                return Ok(_authService.getAll());
+                return Ok(_authService.Change(id, changePass));
             }
             catch (BadHttpRequestException ex)
             {
