@@ -20,8 +20,7 @@ namespace BookStore.API.Services.Services
         public string Login(AuthUserLogin authUserLogin)
         {
             authUserLogin.Username = authUserLogin.Username.ToLower();
-            var currentUser = _context.Users
-                .FirstOrDefault(u => u.Username == authUserLogin.Username);
+            var currentUser = _context.Users.FirstOrDefault(u => u.Username == authUserLogin.Username);
             if (currentUser == null)
             {
                 throw new UnauthorizedAccessException("Username is invalid.");
@@ -107,6 +106,9 @@ namespace BookStore.API.Services.Services
             return _context.SaveChanges() > 0;
         }
 
-        
+        public List<User> getAll()
+        {
+            return _context.Users.ToList(); ;
+        }
     }
 }

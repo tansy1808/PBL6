@@ -9,6 +9,7 @@ namespace BookStore.API.Services.IServices
         public string Register(AuthUserDto authUserDto);
         public string Change(int id,ChangePass changePass);
         User getUserId(int id);
+        List<User> getAll();
         void InsertUser(UserPay user);
         void UpdateUser(User user);
         bool IsSaveChanges();

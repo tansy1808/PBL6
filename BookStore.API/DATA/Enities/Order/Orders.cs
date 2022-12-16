@@ -9,12 +9,8 @@ namespace BookStore.API.Data.Enities.Order
         public int IdOrder {get; set;}
         [Required]
         public int IdUser {get; set;}
-        [Required]
-        public string Address {get; set;}
-        [Required]
-        [MaxLength(256)]
-        public string Status { get; set; }
-        [Required]
+        public string? Address {get; set;}
+        public string? Status { get; set; }
         public int Total {get; set;}
         [Required]
         public DateTime DateOrder {get; set;}

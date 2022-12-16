@@ -1,6 +1,7 @@
 using BookStore.API.Data;
 using BookStore.API.Data.Enities.Cart;
 using BookStore.API.DTOs.Cart;
+using BookStore.API.DTOs.Views;
 using BookStore.API.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,9 +36,8 @@ namespace BookStore.API.Controllers
 
         [HttpGet("{id}")]
         public IActionResult GetCartId(int id)
-        {
-            var cart = _cartService.GetCartsId(id);
-            return Ok(cart);
+        {   
+            return Ok(_cartService.GetCartsId(id));
         }
         
         [HttpPost("cartItem")]
@@ -68,7 +68,7 @@ namespace BookStore.API.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var cart = _cartService.GetCartsId(id);
+            var cart = _cartService.GetCarts(id);
             if (cart != null)
             {
                 _cartService.DeleteCart(cart);

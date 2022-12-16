@@ -1,5 +1,6 @@
 using BookStore.API.Data;
 using BookStore.API.Data.Enities.Cart;
+using BookStore.API.DTOs.Views;
 using BookStore.API.Services.IServices;
 
 namespace BookStore.API.Services.Services
@@ -29,7 +30,19 @@ namespace BookStore.API.Services.Services
 
         public CartItem GetCartItemId(int id) => _context.CartItems.FirstOrDefault(c => c.Id == id);
 
-        public Carts GetCartsId(int id) => _context.Carts.FirstOrDefault(c => c.IdUser == id);
+        public Carts GetCarts(int id) => _context.Carts.FirstOrDefault(c => c.IdUser == id);
+
+        public CartViewDTOs GetCartsId(int id)
+        {
+            var cart = GetCarts(id);
+            var item = getCartItem(cart.Id);
+            var view = new CartViewDTOs
+            {
+                Id = cart.Id,
+                items = item
+            };
+            return view;
+        }
 
         public void InsertCart(Carts carts)
         {

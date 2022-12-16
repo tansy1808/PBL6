@@ -8,7 +8,8 @@ namespace BookStore.API.Data.Enities.Auth
         [Key]
         public int PayID {get; set;}
         [MaxLength(256)]
-        public string PayType {get; set;}
+        public string? PayType {get; set;}
+        [Required]
         public int UserId {get; set;}
         public User users {get; set;}
         

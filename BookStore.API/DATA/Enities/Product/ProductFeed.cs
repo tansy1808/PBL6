@@ -7,7 +7,7 @@ namespace BookStore.API.Data.Enities.Product
     {
         [Key]
         public int IdFeed {get; set;}
-        public string Comment {get; set;}
+        public string? Comment {get; set;}
         [Required]
         public int Star {get; set;}
         [Required]

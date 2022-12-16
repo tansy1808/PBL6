@@ -2,7 +2,7 @@
 
 namespace BookStore.API.DTOs.Views
 {
-    public class OrderViewDTOs:OrderProduct
+    public class OrderViewDTOs
     {
         public int IdOrder { get; set; }
         public string Address { get; set; }

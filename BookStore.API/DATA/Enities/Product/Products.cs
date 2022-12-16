@@ -11,8 +11,7 @@ namespace BookStore.API.Data.Enities.Product
         [Required]
         [MaxLength(256)]
         public string Name {get; set;}
-        [Required]
-        public string Image {get; set;}
+        public string? Image {get; set;}
         [Required]
         public string Desc {get; set;}
         public int Feedback {get; set;}

@@ -15,12 +15,10 @@ namespace BookStore.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
-        private readonly DataContext context;
 
-        public ProductController(IProductService productService, DataContext context)
+        public ProductController(IProductService productService)
         {
             _productService = productService;
-            this.context = context;
         }
 
         [HttpPost]

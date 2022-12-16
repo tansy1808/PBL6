@@ -2,7 +2,7 @@
 
 namespace BookStore.API.DTOs.Views
 {
-    public class CartViewDTOs: CartItem
+    public class CartViewDTOs
     {
         public int Id { get; set; }
         public List<CartItem> items { get; set; }

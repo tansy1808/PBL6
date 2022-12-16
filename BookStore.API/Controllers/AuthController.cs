@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using BookStore.API.Services.IServices;
+using BookStore.API.Services.Services;
+
 namespace BookStore.API.Controllers
 {
 
@@ -14,7 +16,7 @@ namespace BookStore.API.Controllers
     {
         private readonly IAuthService _authService;
 
-        public AuthController( IAuthService authService)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
         }
@@ -31,7 +33,7 @@ namespace BookStore.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+
         [HttpPost("login")]
         public IActionResult Login([FromForm] AuthUserLogin authUserLogin)
         {
@@ -50,7 +52,7 @@ namespace BookStore.API.Controllers
         public IActionResult UpdateUserImage(int id, UserImage userImage)
         {
             var user = _authService.getUserId(id);
-            if(user != null)
+            if (user != null)
             {
                 user.UserImage = userImage.Userimage;
                 _authService.UpdateUser(user);
@@ -80,7 +82,7 @@ namespace BookStore.API.Controllers
         public async Task<IActionResult> logout()
         {
             await HttpContext.SignOutAsync();
-	        return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home");
         }
 
         //[Authorize]
@@ -93,7 +95,7 @@ namespace BookStore.API.Controllers
                 user.Name = authUserDto.Name;
                 user.Address = authUserDto.Address;
                 user.Contact = authUserDto.Contact;
-                user.Email = authUserDto.Email; 
+                user.Email = authUserDto.Email;
                 _authService.UpdateUser(user);
                 _authService.IsSaveChanges();
                 return Ok(user);
@@ -106,6 +108,18 @@ namespace BookStore.API.Controllers
             try
             {
                 return Ok(_authService.Change(id, changePass));
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            try
+            {
+                return Ok(_authService.getAll());
             }
             catch (BadHttpRequestException ex)
             {
