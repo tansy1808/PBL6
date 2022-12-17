@@ -61,7 +61,7 @@ namespace BookStore.API.Controllers
             return Ok(members);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{iduser}")]
         public IActionResult Delete(int id)
         {
             return Ok(_cartService.DeleteCart(id));

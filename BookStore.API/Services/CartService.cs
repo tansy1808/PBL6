@@ -59,7 +59,6 @@ namespace BookStore.API.Services
                         _cartReponsitory.DeleteItem(i);
                     }
                 }                
-                _cartReponsitory.DeleteCart(cart);
                 _cartReponsitory.IsSaveChanges();
             } 
             return cart;
