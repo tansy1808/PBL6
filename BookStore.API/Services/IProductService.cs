@@ -9,7 +9,7 @@ namespace BookStore.API.Services
     {
         Products CreateProduct(ProductDTO productDTOs);
         ProductFeed AddProductFeed(ProductFeedDTO productFeedDTOs);
-        ProductAPI GetProductByName(string name);
+        ProductAPI GetProductByName(string name, int page, int size);
         ProductPage GetProductAll(int page,int size);
         CategoryAPI GetProductsByCategory(int categoryId, int page, int size);
         List<FeedDTO> GetProductFeedById(int id);

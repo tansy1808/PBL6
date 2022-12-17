@@ -33,13 +33,13 @@ namespace BookStore.API.Controllers
         }
 
         [HttpGet("{name}")]
-        public ActionResult<ProductAPI> GetFindBookByName(string name)
+        public ActionResult<ProductAPI> GetFindBookByName(string name, int page, int size)
         {
-            var pro = _productService.GetProductByName(name);
+            var pro = _productService.GetProductByName(name,page,size);
             if (pro == null) return NotFound();
             return pro;
         }
-        [HttpGet("Product/{id}")]
+        [HttpGet("product/{id}")]
         public ActionResult<ProductView> GetFindBookById(int id)
         {
             var pro = _productService.GetProductById(id);
@@ -47,7 +47,7 @@ namespace BookStore.API.Controllers
             return pro;
         }
 
-        [HttpGet("{page}and{size}")]
+        [HttpGet()]
         public ActionResult<ProductPage> GetProductPage(int page, int size)
         {
             var pro = _productService.GetProductAll(page, size);
@@ -55,7 +55,7 @@ namespace BookStore.API.Controllers
             return pro;
         }
 
-        [HttpGet("category/{id}and{page}and{size}")]
+        [HttpGet("category/{id}")]
         public ActionResult<CategoryAPI> GetFindBookByCategory(int id, int page, int size)
         {
             var pro = _productService.GetProductsByCategory(id, page, size);
@@ -70,7 +70,7 @@ namespace BookStore.API.Controllers
             if (pro == null) return NotFound();
             return pro;
         }
-        [HttpGet("category")]
+        [HttpGet("categories")]
         public ActionResult<ProductCate> GetAllCate() => Ok(_productService.GetProductCate());
 
         [HttpPut("{id}")]

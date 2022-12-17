@@ -6,6 +6,8 @@ using BookStore.API.DTO.Product;
 using BookStore.API.DTO.User;
 using BookStore.API.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BookStore.API.Services
 {
@@ -137,13 +139,19 @@ namespace BookStore.API.Services
             return view;
         }
 
-        public ProductAPI GetProductByName(string name)
+        public ProductAPI GetProductByName(string name,int page, int size)
         {
             var pro = _productReponsitory.GetProductsbyName(name);
-            List<ProductView> list = new List<ProductView> { };
-            if(pro != null)
+            ProductAPI rs = new ProductAPI();
+            if (pro != null)
             {
-                foreach (Products i in pro)
+                int total = pro.Count();
+                List<ProductView> list = new List<ProductView> { };
+                int pagecount = total / size;
+                float Page = total % size;
+                if (Page > 0) { pagecount = pagecount + 1; }
+                var data = pro.Skip(((page) - 1) * size).Take(size).ToList();
+                foreach (Products i in data)
                 {
                     var add = new ProductView
                     {
@@ -160,13 +168,20 @@ namespace BookStore.API.Services
                     };
                     list.Add(add);
                 };
+                var product = new ProductPage
+                {
+                    Size = size,
+                    Page = page,
+                    TotalPage = pagecount,
+                    data = list
+                };
+                rs.keyword = name;
+                rs.data = product;
+                return rs;
             }
-            ProductAPI rs = new ProductAPI
-            {
-                keyword = name,
-                data = list
-            };
             return rs;
+
+
         }
 
         public List<ProductCate> GetProductCate()

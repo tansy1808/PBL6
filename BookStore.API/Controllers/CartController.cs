@@ -45,18 +45,18 @@ namespace BookStore.API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<CartView> GetCartId(int id)
+        [HttpGet("{iduser}")]
+        public ActionResult<CartView> GetCartId(int iduser)
         {
-            var members = _cartService.GetCartId(id);
+            var members = _cartService.GetCartId(iduser);
             if (members == null) return NotFound();
             return members;
         }
 
-        [HttpDelete("cartItem/{id}")]
-        public IActionResult DeleteItem(int id)
+        [HttpDelete("cartItem/{iditem}")]
+        public IActionResult DeleteItem(int iditem)
         {
-            var members = _cartService.DeleteItem(id);
+            var members = _cartService.DeleteItem(iditem);
             if (members == null) return NotFound();
             return Ok(members);
         }

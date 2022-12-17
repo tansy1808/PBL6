@@ -29,8 +29,9 @@ namespace BookStore.API.Services
             {
                 var view1 = new ViewBag()
                 {
-                    Status = "CORRECT UserNAme and Password",
-                    Title = "Error"
+                    Status = "Error",
+                    Message = "Correct UserNAme and Password",
+                    Title = null
                 };
                 return view1;
             }
@@ -44,8 +45,9 @@ namespace BookStore.API.Services
                 {
                     var view2 = new ViewBag()
                     {
-                        Status = "CORRECT UserName and Password",
-                        Title = "Error"
+                        Status = "Error",
+                        Message = "Correct UserNAme and Password",
+                        Title = null
                     };
                     return view2;
                 }
@@ -53,6 +55,7 @@ namespace BookStore.API.Services
             var view = new ViewBag()
             {
                 Status = "Success",
+                Message = null,
                 Title = _tokenService.CreateToken(currentUser.Username)
             };
             return view;
@@ -69,8 +72,9 @@ namespace BookStore.API.Services
                 {
                     var view1 = new ViewBag()
                     {
-                        Status = "CORRECT Password",
-                        Title = "Error"
+                        Status = "Error",
+                        Message = "Correst Password",
+                        Title = null
                     };
                     return view1;
                 }
@@ -84,6 +88,7 @@ namespace BookStore.API.Services
                     var view3 = new ViewBag()
                     {
                         Status = "Success",
+                        Message = null,
                         Title = _tokenService.CreateToken(pass.Username)
                     };
                     return view3;
@@ -92,8 +97,9 @@ namespace BookStore.API.Services
                 {
                     var view2 = new ViewBag()
                     {
-                        Status = "Password is unlike",
-                        Title = "Error"
+                        Status = "Error",
+                        Message = "Password is unlike",
+                        Title = null
                     };
                     return view2;
                 }
@@ -101,6 +107,7 @@ namespace BookStore.API.Services
             var view = new ViewBag()
             {
                 Status = "Success",
+                Message = null,
                 Title = _tokenService.CreateToken(pass.Username)
             };
             return view;
@@ -113,8 +120,9 @@ namespace BookStore.API.Services
             {
                 var view2 = new ViewBag()
                 {
-                    Status = "This username already exists!",
-                    Title = "Error"
+                    Status = "Error",
+                    Message = "This username already exists!",
+                    Title = null
                 };
                 return view2;
             }
@@ -135,6 +143,7 @@ namespace BookStore.API.Services
             var view = new ViewBag()
             {
                 Status = "Success",
+                Message =null,
                 Title = _tokenService.CreateToken(user.Username)
             };
             return view;
