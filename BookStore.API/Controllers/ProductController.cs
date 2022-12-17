@@ -39,10 +39,17 @@ namespace BookStore.API.Controllers
             if (pro == null) return NotFound();
             return pro;
         }
-        [HttpGet("product/{id}")]
+        [HttpGet("{id:int}")]
         public ActionResult<ProductView> GetFindBookById(int id)
         {
             var pro = _productService.GetProductById(id);
+            if (pro == null) return NotFound();
+            return pro;
+        }
+        [HttpGet("orderby/{size}")]
+        public ActionResult<List<ProductView>> GetProductByDate(int size)
+        {
+            var pro = _productService.GetProductByDate(size);
             if (pro == null) return NotFound();
             return pro;
         }

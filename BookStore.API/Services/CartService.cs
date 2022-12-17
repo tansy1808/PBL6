@@ -3,6 +3,7 @@ using BookStore.API.Data.Enities.Auth;
 using BookStore.API.Data.Enities.Cart;
 using BookStore.API.DATA.Reponsitories;
 using BookStore.API.DTO.Cart;
+using BookStore.API.DTO.Product;
 using BookStore.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,11 +38,15 @@ namespace BookStore.API.Services
             var id = _context.Products.FirstOrDefault(c => c.IdProduct == addItemDTO.IdProduct);
             var cartItem = new CartItem();
             if (id != null) {
-                cartItem.IdProduct = addItemDTO.IdProduct;
-                cartItem.IdCart = addItemDTO.IdCart;
-                cartItem.Quantity = addItemDTO.Quantity;
-                _cartReponsitory.InsertCartItem(cartItem);
-                _cartReponsitory.IsSaveChanges();
+                var user = _context.Carts.FirstOrDefault(c => c.IdUser == addItemDTO.IdUser);
+                if (user != null)
+                {
+                    cartItem.IdProduct = addItemDTO.IdProduct;
+                    cartItem.IdCart = user.Id;
+                    cartItem.Quantity = addItemDTO.Quantity;
+                    _cartReponsitory.InsertCartItem(cartItem);
+                    _cartReponsitory.IsSaveChanges();
+                }
             }
             return cartItem;
         }
@@ -83,23 +88,30 @@ namespace BookStore.API.Services
             if (cart != null)
             {
                 var item = _cartReponsitory.getCartItem(cart.Id);
-                var list = new List<CartItemDTO>();
+                var list = new List<ProductView>();
                 if (item != null)
                 {
                     foreach (CartItem i in item)
                     {
-                        var tem = new CartItemDTO
+                        var pro = _context.Products.FirstOrDefault(c => c.IdProduct == i.IdProduct);
+                        var tem = new ProductView
                         {
-                            id= i.Id,
-                            IdCart = i.IdCart,
-                            IdProduct = i.IdProduct,
-                            Quantity = i.Quantity
+                            IdProduct = pro.IdProduct,
+                            Name = pro.Name,
+                            Image = pro.Image,
+                            Desc = pro.Desc,
+                            Feedback = pro.Feedback,
+                            Price = pro.Price,
+                            Quantity = i.Quantity,
+                            DateCreate = pro.DateCreate,
+                            Discount = pro.Discount,
+                            Cate = _context.Categories.FirstOrDefault(c => c.Id==pro.IdCate).CategoryType
                         };
                         list.Add(tem);
                     }
                 }
                 view.Id = cart.Id;
-                view. items = list;
+                view.items = list;
             }
             return view;
         }

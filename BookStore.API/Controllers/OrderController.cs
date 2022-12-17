@@ -71,7 +71,7 @@ namespace BookStore.API.Controllers
             }
         }
 
-        [HttpGet("order/{id}")]
+        [HttpGet("{id}")]
         public ActionResult<OrderView> FindOrderId(int id)
         {
             var members = _orderService.FindOrderById(id);

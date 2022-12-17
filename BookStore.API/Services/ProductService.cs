@@ -3,11 +3,6 @@ using BookStore.API.Data.Enities.Product;
 using BookStore.API.DATA.Reponsitories;
 using BookStore.API.DTO;
 using BookStore.API.DTO.Product;
-using BookStore.API.DTO.User;
-using BookStore.API.Services;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BookStore.API.Services
 {
@@ -20,6 +15,34 @@ namespace BookStore.API.Services
         {
             _context = context;
             _productReponsitory = productReponsitory;
+        }
+
+
+        public List<ProductView> GetProductByDate( int size)
+        {
+            var pros = from s in _context.Products
+                       orderby s.DateCreate descending
+                       select s;
+            var data = pros.Skip(0).Take(size).ToList();
+            var list = new List<ProductView>();
+            foreach (Products i in data)
+            {
+                var add = new ProductView
+                {
+                    IdProduct = i.IdProduct,
+                    Name = i.Name,
+                    Image = i.Image,
+                    Desc = i.Desc,
+                    Feedback = i.Feedback,
+                    Price = i.Price,
+                    Quantity = i.Quantity,
+                    DateCreate = i.DateCreate,
+                    Discount = i.Discount,
+                    Cate = _productReponsitory.GetCateById(i.IdCate).CategoryType
+                };
+                list.Add(add);
+            };
+            return list;
         }
 
         public ProductFeed AddProductFeed( ProductFeedDTO productFeedDTOs)
@@ -273,5 +296,7 @@ namespace BookStore.API.Services
             }
             return product;
         }
+
+
     }
 }

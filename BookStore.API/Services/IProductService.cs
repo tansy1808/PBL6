@@ -7,6 +7,7 @@ namespace BookStore.API.Services
 {
     public interface IProductService
     {
+        List<ProductView> GetProductByDate( int sl);
         Products CreateProduct(ProductDTO productDTOs);
         ProductFeed AddProductFeed(ProductFeedDTO productFeedDTOs);
         ProductAPI GetProductByName(string name, int page, int size);
