@@ -36,6 +36,10 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"]))
         };
     });
+services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 services.AddScoped<ITokenService, TokenService>();
 services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(connectionString));

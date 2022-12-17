@@ -2,8 +2,10 @@ using API.DatingApp.API.DTO;
 using BookStore.API.Data;
 using BookStore.API.Data.Enities.Auth;
 using BookStore.API.DATA.Reponsitories;
+using BookStore.API.DTO;
 using BookStore.API.DTO.User;
 using BookStore.API.Services;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -19,13 +21,18 @@ namespace BookStore.API.Services
             _tokenService = tokenService;
             _userReponsitory = userReponsitory;
         }
-        public string Login(AuthUserLogin authUserLogin)
+        public ViewBag Login(AuthUserLogin authUserLogin)
         {
             authUserLogin.Username = authUserLogin.Username.ToLower();
             var currentUser = _userReponsitory.GetUserByUsername(authUserLogin.Username);
             if (currentUser == null)
             {
-                throw new UnauthorizedAccessException("Username is invalid.");
+                var view1 = new ViewBag()
+                {
+                    Status = "CORRECT UserNAme and Password",
+                    Title = "Error"
+                };
+                return view1;
             }
             using var hmac = new HMACSHA512(currentUser.PasswordSalt);
             var passwordBytes = hmac.ComputeHash(
@@ -35,14 +42,23 @@ namespace BookStore.API.Services
             {
                 if (currentUser.PasswordHash[i] != passwordBytes[i])
                 {
-                    throw new UnauthorizedAccessException("Password is invalid.");
+                    var view2 = new ViewBag()
+                    {
+                        Status = "CORRECT UserName and Password",
+                        Title = "Error"
+                    };
+                    return view2;
                 }
             }
-            
-            return _tokenService.CreateToken(currentUser.Username);
+            var view = new ViewBag()
+            {
+                Status = "Success",
+                Title = _tokenService.CreateToken(currentUser.Username)
+            };
+            return view;
         }
 
-        public string Change(int id, ChangePass changePass)
+        public ViewBag Change(int id, ChangePass changePass)
         {
             var pass = _userReponsitory.GetUserById(id);
             using var hmac = new HMACSHA512(pass.PasswordSalt);
@@ -51,7 +67,12 @@ namespace BookStore.API.Services
             {
                 if (pass.PasswordHash[i] != passwordBytes[i])
                 {
-                    throw new UnauthorizedAccessException("Password is invalid.");
+                    var view1 = new ViewBag()
+                    {
+                        Status = "CORRECT Password",
+                        Title = "Error"
+                    };
+                    return view1;
                 }
                 if (changePass.NewPassword == changePass.RePassword)
                 {
@@ -60,19 +81,42 @@ namespace BookStore.API.Services
                     pass.PasswordSalt = hmac.Key;
                     _userReponsitory.UpdateUser(pass);
                     _userReponsitory.IsSaveChanges();
-                    return _tokenService.CreateToken(pass.Username);
+                    var view3 = new ViewBag()
+                    {
+                        Status = "Success",
+                        Title = _tokenService.CreateToken(pass.Username)
+                    };
+                    return view3;
                 }
-                else throw new UnauthorizedAccessException("Password is unlike.");
+                else
+                {
+                    var view2 = new ViewBag()
+                    {
+                        Status = "Password is unlike",
+                        Title = "Error"
+                    };
+                    return view2;
+                }
             }
-            return _tokenService.CreateToken(pass.Username);
+            var view = new ViewBag()
+            {
+                Status = "Success",
+                Title = _tokenService.CreateToken(pass.Username)
+            };
+            return view;
         }
 
-        public string Register(AuthUserDTO authUserDto)
+        public ViewBag Register(AuthUserDTO authUserDto)
         {
             authUserDto.Username = authUserDto.Username.ToLower();
             if (_userReponsitory.GetUserAnyUsername(authUserDto.Username))
             {
-                throw new BadHttpRequestException("This username already exists!");
+                var view2 = new ViewBag()
+                {
+                    Status = "This username already exists!",
+                    Title = "Error"
+                };
+                return view2;
             }
             using var hmac = new HMACSHA512();
             var passwordBytes = Encoding.UTF8.GetBytes(authUserDto.Password);
@@ -88,28 +132,36 @@ namespace BookStore.API.Services
             _userReponsitory.InsertUser(user);
             _userReponsitory.IsSaveChanges();
 
-            return _tokenService.CreateToken(user.Username);
+            var view = new ViewBag()
+            {
+                Status = "Success",
+                Title = _tokenService.CreateToken(user.Username)
+            };
+            return view;
         }
 
         public MemberAPI GetUserAll()
         {
             var users = _userReponsitory.GetUsers();
             List<UserDTO> result = new List<UserDTO> { };
-            foreach(User i in users)
+            if(users != null)
             {
-                var add = new UserDTO
+                foreach (User i in users)
                 {
-                    IdUser = i.IdUser,
-                    Username= i.Username,
-                    UserImage= i.UserImage,
-                    Address= i.Address,
-                    Name = i.Name,
-                    Email = i.Email,
-                    Role = _userReponsitory.GetRoleById(i.RoleId).RoleName,
-                    Contact = i.Contact
+                    var add = new UserDTO
+                    {
+                        IdUser = i.IdUser,
+                        Username = i.Username,
+                        UserImage = i.UserImage,
+                        Address = i.Address,
+                        Name = i.Name,
+                        Email = i.Email,
+                        Role = _userReponsitory.GetRoleById(i.RoleId).RoleName,
+                        Contact = i.Contact
+                    };
+                    result.Add(add);
                 };
-                result.Add(add);
-            };
+            }
             MemberAPI rs = new MemberAPI
             {
                 data = result
@@ -120,72 +172,76 @@ namespace BookStore.API.Services
         public UserDTO GetUserByUserName(string name)
         {
             var user = _userReponsitory.GetUserByUsername(name);
-            if(user == null) { return null; }
-            var add = new UserDTO
+            var add = new UserDTO();
+            if (user != null) 
             {
-                IdUser = user.IdUser,
-                Username = user.Username,
-                UserImage = user.UserImage,
-                Address = user.Address,
-                Name = user.Name,
-                Email = user.Email,
-                Role = _userReponsitory.GetRoleById(user.RoleId).RoleName,
-                Contact = user.Contact
-            };
+                add.IdUser = user.IdUser;
+                add.Username = user.Username;
+                add.UserImage = user.UserImage;
+                add.Address = user.Address;
+                add.Name = user.Name;
+                add.Email = user.Email;
+                add.Role = _userReponsitory.GetRoleById(user.RoleId).RoleName;
+                add.Contact = user.Contact;
+            }
             return add;
         }
 
         public UserDTO GetUserById(int id)
         {
             var user = _userReponsitory.GetUserById(id);
-            if (user == null) { return null; }
-            var add = new UserDTO
+            var add = new UserDTO();
+            if (user != null)
             {
-                IdUser = user.IdUser,
-                Username = user.Username,
-                UserImage = user.UserImage,
-                Address = user.Address,
-                Name = user.Name,
-                Email = user.Email,
-                Role = _userReponsitory.GetRoleById(user.RoleId).RoleName,
-                Contact = user.Contact
-            };
+                add.IdUser = user.IdUser;
+                add.Username = user.Username;
+                add.UserImage = user.UserImage;
+                add.Address = user.Address;
+                add.Name = user.Name;
+                add.Email = user.Email;
+                add.Role = _userReponsitory.GetRoleById(user.RoleId).RoleName;
+                add.Contact = user.Contact;
+            }
             return add;
         }
 
         public User UpdateUser(int id, AuthUpdateDTO authUpdateDTO)
         {
             var user = _userReponsitory.GetUserById(id);
-            if (user == null) return null;
-            user.Name = authUpdateDTO.Name;
-            user.Address = authUpdateDTO.Address;
-            user.Contact = authUpdateDTO.Contact;
-            user.Email = authUpdateDTO.Email;
-            _userReponsitory.UpdateUser(user);
-            _userReponsitory.IsSaveChanges();
+            if (user != null)
+            {
+                user.Name = authUpdateDTO.Name;
+                user.Address = authUpdateDTO.Address;
+                user.Contact = authUpdateDTO.Contact;
+                user.Email = authUpdateDTO.Email;
+                _userReponsitory.UpdateUser(user);
+                _userReponsitory.IsSaveChanges();
+            };
             return user;
         }
 
         public User UpdateImage(int id, UserImage userImage)
         {
             var user = _userReponsitory.GetUserById(id);
-            if (user == null) return null;
-            user.UserImage = userImage.Userimage;
-            _userReponsitory.UpdateUser(user);
-            _userReponsitory.IsSaveChanges();
+            if (user != null) {
+                user.UserImage = userImage.Userimage;
+                _userReponsitory.UpdateUser(user);
+                _userReponsitory.IsSaveChanges();
+            }
             return user;
         }
 
         public UserPay CreatePay(PayUserDTO payUserDto)
         {
-            var userpay = new UserPay
+            var user = _userReponsitory.GetUserById(payUserDto.UserId);
+            var userpay = new UserPay();
+            if (user != null)
             {
-                UserId = payUserDto.UserId,
-                PayType = payUserDto.PayType
-            };
-            _userReponsitory.InsertPay(userpay);
-            _userReponsitory.IsSaveChanges();
-
+                userpay.UserId = payUserDto.UserId;
+                userpay.PayType = payUserDto.PayType;
+                _userReponsitory.InsertPay(userpay);
+                _userReponsitory.IsSaveChanges();
+            }
             return userpay;
         }
     }

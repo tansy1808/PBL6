@@ -4,11 +4,9 @@ namespace BookStore.API.DTO.Cart
 {
     public class CartItemDTO
     {
-        [Required]
+        public int id { get; set; }
         public int IdProduct {get; set;}
-        [Required]
         public int IdCart {get; set;}
-        [Required]
         public int Quantity {get; set;}
         
     }

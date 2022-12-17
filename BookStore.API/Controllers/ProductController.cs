@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace BookStore.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/products")]
     [ApiController]
     public class ProductController : Controller
     {
@@ -36,6 +36,13 @@ namespace BookStore.API.Controllers
         public ActionResult<ProductAPI> GetFindBookByName(string name)
         {
             var pro = _productService.GetProductByName(name);
+            if (pro == null) return NotFound();
+            return pro;
+        }
+        [HttpGet("Product/{id}")]
+        public ActionResult<ProductView> GetFindBookById(int id)
+        {
+            var pro = _productService.GetProductById(id);
             if (pro == null) return NotFound();
             return pro;
         }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\DoAn\\PBL\\BookStore.API\\BookStore.API\\BookStore.API.csproj": {}
+    "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\BookStore.API.csproj": {}
   },
   "projects": {
-    "D:\\DoAn\\PBL\\BookStore.API\\BookStore.API\\BookStore.API.csproj": {
+    "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\BookStore.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DoAn\\PBL\\BookStore.API\\BookStore.API\\BookStore.API.csproj",
+        "projectUniqueName": "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\BookStore.API.csproj",
         "projectName": "BookStore.API",
-        "projectPath": "D:\\DoAn\\PBL\\BookStore.API\\BookStore.API\\BookStore.API.csproj",
+        "projectPath": "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\BookStore.API.csproj",
         "packagesPath": "C:\\Users\\tranv\\.nuget\\packages\\",
-        "outputPath": "D:\\DoAn\\PBL\\BookStore.API\\BookStore.API\\obj\\",
+        "outputPath": "D:\\DoAn\\PBL\\PLB6\\BookStore.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tranv\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -45,6 +45,10 @@
               "version": "[12.0.0, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.12, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
               "version": "[6.0.12, )"
             },

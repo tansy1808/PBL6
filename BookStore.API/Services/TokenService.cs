@@ -14,9 +14,11 @@ namespace BookStore.API.Services
         }
         public string CreateToken(string username)
         {
+            
             var claims = new List<Claim>()
             {
-                new Claim(JwtRegisteredClaimNames.NameId,username)
+                new Claim(JwtRegisteredClaimNames.NameId,username),
+                
             };
             var symmetricKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_configuration["TokenKey"]));

@@ -22,49 +22,61 @@ namespace BookStore.API.Services
 
         public ProductFeed AddProductFeed( ProductFeedDTO productFeedDTOs)
         {
-            var feed = new ProductFeed
+            var user = _context.Users.FirstOrDefault(c=>c.IdUser==productFeedDTOs.UserID);
+            var feed = new ProductFeed();
+            if (user != null) 
             {
-                Star = productFeedDTOs.star,
-                Comment = productFeedDTOs.Comment,
-                ProductID = productFeedDTOs.ProductID,
-                UserID = productFeedDTOs.UserID,
-                FeedDate = DateTime.Now
-            };
-            _productReponsitory.InsertProductFeed(feed);
-            _productReponsitory.IsSaveChanges();
-            return feed;
+                var pro = _productReponsitory.GetProductsByIdpro(productFeedDTOs.ProductID);
+                if (pro != null)
+                {
+                    feed.Star = productFeedDTOs.star;
+                    feed.Comment = productFeedDTOs.Comment;
+                    feed.ProductID = productFeedDTOs.ProductID;
+                    feed.UserID = productFeedDTOs.UserID;
+                    feed.FeedDate = DateTime.Now;
+                    _productReponsitory.InsertProductFeed(feed);
+                    _productReponsitory.IsSaveChanges();
+                }
+            }
+            return feed;  
         }
 
         public Products CreateProduct(ProductDTO productDTO)
         {
-            var products = new Products
+            var pro = _context.Categories.FirstOrDefault(c => c.Id == productDTO.IdCate);
+            var products = new Products();
+            if (pro != null)
             {
-                Name = productDTO.Name,
-                Desc = productDTO.Desc,
-                Image = productDTO.Image,
-                Price = productDTO.Price,
-                Quantity = productDTO.Quantity,
-                DateCreate = DateTime.Now,
-                Discount = productDTO.Discount,
-                IdCate = productDTO.IdCate
-            };
-            _productReponsitory.InsertProduct(products);
-            _productReponsitory.IsSaveChanges();
-
+                products.Name = productDTO.Name;
+                products.Desc = productDTO.Desc;
+                products.Image = productDTO.Image;
+                products.Price = productDTO.Price;
+                products.Quantity = productDTO.Quantity;
+                products.DateCreate = DateTime.Now;
+                products.Discount = productDTO.Discount;
+                products.IdCate = productDTO.IdCate;
+                _productReponsitory.InsertProduct(products);
+                _productReponsitory.IsSaveChanges();
+            }
             return products;
         }
 
         public Products Delete(int id)
         {
             var product = _productReponsitory.GetProductsByIdpro(id);
-            if (product == null) throw new UnauthorizedAccessException("Không có sản phẩm");
-            var feed = _productReponsitory.GetProductFeedById(id);
-            foreach (ProductFeed i in feed)
+            if (product != null)
             {
-                _productReponsitory.DeteleFeed(i);
+                var feed = _productReponsitory.GetProductFeedById(id);
+                if (feed != null)
+                {
+                    foreach (ProductFeed i in feed)
+                    {
+                        _productReponsitory.DeteleFeed(i);
+                    }
+                }                
+                _productReponsitory.DeteleProduct(product);
+                _productReponsitory.IsSaveChanges();
             }
-            _productReponsitory.DeteleProduct(product);
-            _productReponsitory.IsSaveChanges();
             return product;
             
         }
@@ -105,27 +117,50 @@ namespace BookStore.API.Services
             return view;
         }
 
+        public ProductView GetProductById(int id)
+        {
+            var product = _productReponsitory.GetProductsByIdpro(id);
+            var view = new ProductView();
+            if (product != null) 
+            {
+                view.Name = product.Name;
+                view.IdProduct= product.IdProduct;
+                view.Image = product.Image;
+                view.Desc = product.Desc;
+                view.Feedback = product.Feedback;
+                view.Price = product.Price;
+                view.Quantity = product.Quantity;
+                view.DateCreate = product.DateCreate;
+                view.Discount = product.Discount;
+                view.Cate = _context.Categories.FirstOrDefault(c => c.Id == product.IdCate).CategoryType;
+            }
+            return view;
+        }
+
         public ProductAPI GetProductByName(string name)
         {
             var pro = _productReponsitory.GetProductsbyName(name);
             List<ProductView> list = new List<ProductView> { };
-            foreach(Products i in pro) 
+            if(pro != null)
             {
-                var add = new ProductView
+                foreach (Products i in pro)
                 {
-                    IdProduct = i.IdProduct,
-                    Name = i.Name,
-                    Image = i.Image,
-                    Desc = i.Desc,
-                    Feedback = i.Feedback,
-                    Price = i.Price,
-                    Quantity = i.Quantity,
-                    DateCreate = i.DateCreate,
-                    Discount = i.Discount,
-                    Cate = _productReponsitory.GetCateById(i.IdCate).CategoryType
+                    var add = new ProductView
+                    {
+                        IdProduct = i.IdProduct,
+                        Name = i.Name,
+                        Image = i.Image,
+                        Desc = i.Desc,
+                        Feedback = i.Feedback,
+                        Price = i.Price,
+                        Quantity = i.Quantity,
+                        DateCreate = i.DateCreate,
+                        Discount = i.Discount,
+                        Cate = _productReponsitory.GetCateById(i.IdCate).CategoryType
+                    };
+                    list.Add(add);
                 };
-                list.Add(add);
-            };
+            }
             ProductAPI rs = new ProductAPI
             {
                 keyword = name,
@@ -143,17 +178,21 @@ namespace BookStore.API.Services
         {
             var feed = _productReponsitory.GetProductFeedById(id);
             List<FeedDTO> list = new List<FeedDTO> { };
-            foreach(ProductFeed i in feed)
+            if(feed != null)
             {
-                FeedDTO rs = new FeedDTO {
-                    Comment = i.Comment,
-                    star = i.Star,
-                    ProductID = i.ProductID,
-                    FeedDate = i.FeedDate,
-                    Name = _context.Users.FirstOrDefault(c=> c.IdUser == i.UserID).Name
+                foreach (ProductFeed i in feed)
+                {
+                    FeedDTO rs = new FeedDTO
+                    {
+                        Comment = i.Comment,
+                        star = i.Star,
+                        ProductID = i.ProductID,
+                        FeedDate = i.FeedDate,
+                        Name = _context.Users.FirstOrDefault(c => c.IdUser == i.UserID).Name
+                    };
+                    list.Add(rs);
                 };
-                list.Add(rs);
-            };
+            }           
             return list;
         }
 

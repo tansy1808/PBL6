@@ -1,4 +1,5 @@
 ﻿using API.DatingApp.API.DTO;
+using BookStore.API.DTO;
 using BookStore.API.DTO.User;
 using BookStore.API.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -31,7 +32,7 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromForm] AuthUserLogin authUserLogin)
+        public ActionResult<ViewBag> Login([FromForm] AuthUserLogin authUserLogin)
         {
             try
             {
@@ -76,8 +77,8 @@ namespace BookStore.API.Controllers
             if (members == null) return NotFound();
             return members;
         }
-        [HttpGet("{id}")]
-        public ActionResult<UserDTO> GetUserName(int id)
+        [HttpGet("user/{id}")]
+        public ActionResult<UserDTO> GetUserByID(int id)
         {
             var members = _authService.GetUserById(id);
             if (members == null) return NotFound();

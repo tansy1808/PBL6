@@ -14,6 +14,7 @@ namespace BookStore.API.Services
         CategoryAPI GetProductsByCategory(int categoryId, int page, int size);
         List<FeedDTO> GetProductFeedById(int id);
         List<ProductCate> GetProductCate();
+        ProductView GetProductById(int id);
         Products UpdateProduct(int id, ProductDTO productDTOs);
         Products Delete(int id);
     }
