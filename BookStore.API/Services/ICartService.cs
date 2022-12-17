@@ -6,7 +6,7 @@ namespace BookStore.API.Services
     public interface ICartService
     {
         Carts AddCart(CartDTO cartDTO);
-        CartItem AddCartItem(CartItemDTO cartItemDTO);
+        CartItem AddCartItem(AddItemDTO addItemDTO);
         CartView GetCartId(int id);
         
         CartItem DeleteItem(int id);

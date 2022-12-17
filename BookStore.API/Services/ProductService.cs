@@ -28,17 +28,21 @@ namespace BookStore.API.Services
             var feed = new ProductFeed();
             if (user != null) 
             {
+                feed.Star = productFeedDTOs.star;
+                feed.Comment = productFeedDTOs.Comment;
+                feed.ProductID = productFeedDTOs.ProductID;
+                feed.UserID = productFeedDTOs.UserID;
+                feed.FeedDate = DateTime.Now;
+                _productReponsitory.InsertProductFeed(feed);
                 var pro = _productReponsitory.GetProductsByIdpro(productFeedDTOs.ProductID);
                 if (pro != null)
                 {
-                    feed.Star = productFeedDTOs.star;
-                    feed.Comment = productFeedDTOs.Comment;
-                    feed.ProductID = productFeedDTOs.ProductID;
-                    feed.UserID = productFeedDTOs.UserID;
-                    feed.FeedDate = DateTime.Now;
-                    _productReponsitory.InsertProductFeed(feed);
+                    double st = ((((int)productFeedDTOs.star) + ((int)pro.Feedback)) / 2);
+                    pro.Feedback = (int)st;
+                    _productReponsitory.UpdateProduct(pro);
                     _productReponsitory.IsSaveChanges();
                 }
+                
             }
             return feed;  
         }

@@ -60,7 +60,7 @@ namespace BookStore.API.Services
                 var pro = _productReponsitory.GetProductsByIdpro(orderProductDTO.IdProduct);
                 if(pro != null)
                 {
-                    int pri = (((int)pro.Price) / 100) * ((int)pro.Discount) * ((int)orderProductDTO.Quantity);
+                    int pri = (((int)pro.Price) / 100) * (100-(int)pro.Discount) * ((int)orderProductDTO.Quantity);
                     order.IdOrder = orderProductDTO.IdOrder;
                     order.IdProduct = orderProductDTO.IdProduct;
                     order.Quantity = orderProductDTO.Quantity;

@@ -79,14 +79,6 @@ namespace BookStore.API.Controllers
             return members;
         }
 
-        [HttpGet("orderProduct/{id}")]
-        public ActionResult<List<OrderProductAPI>> FindOrderProductId(int id)
-        {
-            var members = _orderService.FindOrderProductById(id);
-            if (members == null) return NotFound();
-            return members;
-        }
-
         [HttpGet]
         public ActionResult<List<OrderView>> GetOrder()
         {

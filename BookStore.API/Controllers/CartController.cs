@@ -33,11 +33,11 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPost("cartItem")]
-        public IActionResult CreateCartItem([FromForm] CartItemDTO cartItemDTOs)
+        public IActionResult CreateCartItem([FromForm] AddItemDTO addItemDTO)
         {
             try
             {
-                return Ok(_cartService.AddCartItem(cartItemDTOs));
+                return Ok(_cartService.AddCartItem(addItemDTO));
             }
             catch (BadHttpRequestException ex)
             {
@@ -62,9 +62,9 @@ namespace BookStore.API.Controllers
         }
 
         [HttpDelete("{iduser}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(int iduser)
         {
-            return Ok(_cartService.DeleteCart(id));
+            return Ok(_cartService.DeleteCart(iduser));
         }
 
     }

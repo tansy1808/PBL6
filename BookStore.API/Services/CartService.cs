@@ -23,7 +23,7 @@ namespace BookStore.API.Services
         {
             var user = _context.Users.FirstOrDefault(c=>c.IdUser == cartDTO.IdUser);
             var cart = new Carts();
-            if (user == null)
+            if (user != null)
             {
                 cart.IdUser = cartDTO.IdUser;
                 _cartReponsitory.InsertCart(cart);
@@ -32,14 +32,14 @@ namespace BookStore.API.Services
             return cart;
         }
 
-        public CartItem AddCartItem(CartItemDTO cartItemDTO)
+        public CartItem AddCartItem(AddItemDTO addItemDTO)
         {
-            var id = _context.Products.FirstOrDefault(c => c.IdProduct == cartItemDTO.IdProduct);
+            var id = _context.Products.FirstOrDefault(c => c.IdProduct == addItemDTO.IdProduct);
             var cartItem = new CartItem();
             if (id != null) {
-                cartItem.IdProduct = cartItemDTO.IdProduct;
-                cartItem.IdCart = cartItemDTO.IdCart;
-                cartItem.Quantity = cartItemDTO.Quantity;
+                cartItem.IdProduct = addItemDTO.IdProduct;
+                cartItem.IdCart = addItemDTO.IdCart;
+                cartItem.Quantity = addItemDTO.Quantity;
                 _cartReponsitory.InsertCartItem(cartItem);
                 _cartReponsitory.IsSaveChanges();
             }

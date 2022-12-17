@@ -8,7 +8,6 @@ namespace BookStore.API.DTO.Product
         public string Name { get; set; }
         public string Image { get; set; }
         public string Desc { get; set; }
-        public int Feedback { get; set; }
         [Required]
         public decimal Price { get; set; }
         [Required]
