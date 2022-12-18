@@ -1,6 +1,6 @@
 using BookStore.API.DTO.User;
 
-namespace API.DatingApp.API.DTO
+namespace BookStore.API.DTO
 {
     public class MemberAPI
     {

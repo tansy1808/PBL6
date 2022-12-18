@@ -1,10 +1,7 @@
-using API.DatingApp.API.DTO;
-using BookStore.API.Data;
 using BookStore.API.Data.Enities.Auth;
 using BookStore.API.DATA.Reponsitories;
 using BookStore.API.DTO;
 using BookStore.API.DTO.User;
-using BookStore.API.Services;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
