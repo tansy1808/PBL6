@@ -51,6 +51,19 @@ namespace BookStore.API.Services
             return cartItem;
         }
 
+        public CartItem UpdateCartItem(int id, CartItemView cartItemView)
+        {
+            var item = _cartReponsitory.GetCartItemId(id);
+            var cartitem = new CartItem();
+            if (item != null)
+            {
+                cartitem.Quantity = cartItemView.quantity;
+                _cartReponsitory.UpdateCartItem(cartitem);
+                _cartReponsitory.IsSaveChanges();
+            }
+            return cartitem;
+        }
+
         public Carts DeleteCart(int id)
         {
             var cart = _cartReponsitory.GetCarts(id);
@@ -88,13 +101,13 @@ namespace BookStore.API.Services
             if (cart != null)
             {
                 var item = _cartReponsitory.getCartItem(cart.Id);
-                var list = new List<ProductView>();
+                var list = new List<CartItemDTO>();
                 if (item != null)
                 {
                     foreach (CartItem i in item)
                     {
                         var pro = _context.Products.FirstOrDefault(c => c.IdProduct == i.IdProduct);
-                        var tem = new ProductView
+                        var produ = new ProductView 
                         {
                             IdProduct = pro.IdProduct,
                             Name = pro.Name,
@@ -102,10 +115,17 @@ namespace BookStore.API.Services
                             Desc = pro.Desc,
                             Feedback = pro.Feedback,
                             Price = pro.Price,
-                            Quantity = i.Quantity,
+                            Quantity = pro.Quantity,
                             DateCreate = pro.DateCreate,
                             Discount = pro.Discount,
-                            Cate = _context.Categories.FirstOrDefault(c => c.Id==pro.IdCate).CategoryType
+                            Cate = _context.Categories.FirstOrDefault(c => c.Id == pro.IdCate).CategoryType
+                        };
+                        var tem = new CartItemDTO
+                        {
+                            id= i.Id,
+                            QuantityCart=i.Quantity,
+                            Product = produ
+                            
                         };
                         list.Add(tem);
                     }

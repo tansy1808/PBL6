@@ -8,6 +8,7 @@ namespace BookStore.API.Services
         Carts AddCart(CartDTO cartDTO);
         CartItem AddCartItem(AddItemDTO addItemDTO);
         CartView GetCartId(int id);
+        CartItem UpdateCartItem(int id, CartItemView cartItemView);
         CartItem DeleteItem(int id);
         Carts DeleteCart(int id);
 

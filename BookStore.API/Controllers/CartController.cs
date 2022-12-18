@@ -67,5 +67,12 @@ namespace BookStore.API.Controllers
             return Ok(_cartService.DeleteCart(iduser));
         }
 
+        [HttpPut("cartItem/{iditem}")]
+        public IActionResult UpdateItem(int iditem, CartItemView cartItemView)
+        {
+            var members = _cartService.UpdateCartItem(iditem, cartItemView);
+            if (members == null) return NotFound();
+            return Ok(members);
+        }
     }
 }

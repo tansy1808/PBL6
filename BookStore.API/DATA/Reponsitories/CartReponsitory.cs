@@ -55,5 +55,10 @@ namespace BookStore.API.DATA.Reponsitories
         {
             _context.Carts.Update(carts);
         }
+
+        public void UpdateCartItem(CartItem cartItem)
+        {
+            _context.CartItems.Update(cartItem);
+        }
     }
 }

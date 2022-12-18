@@ -1,6 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BookStore.API.DATA.Reponsitories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BookStore.API.Services
@@ -8,16 +10,26 @@ namespace BookStore.API.Services
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
-        public TokenService(IConfiguration configuration)
+        private readonly IUserReponsitory _userReponsitory;
+
+        public TokenService(IConfiguration configuration, IUserReponsitory userReponsitory)
         {
             _configuration = configuration;
+            _userReponsitory = userReponsitory;
         }
         public string CreateToken(string username)
         {
-            
+            IdentityOptions _options = new IdentityOptions();
+            var user = _userReponsitory.GetUserByUsername(username);
+            var role = _userReponsitory.GetRoleById(user.RoleId);
+
             var claims = new List<Claim>()
             {
-                new Claim(JwtRegisteredClaimNames.NameId,username)
+                new Claim("iduser", user.IdUser.ToString()),
+                new Claim(JwtRegisteredClaimNames.NameId,username),
+                new Claim("email", user.Email.ToString()),
+                new Claim("name", user.Name.ToString()),
+                new Claim("role", role.RoleName)
 
             };
             var symmetricKey = new SymmetricSecurityKey(

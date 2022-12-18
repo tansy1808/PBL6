@@ -7,6 +7,7 @@ namespace BookStore.API.DATA.Reponsitories
         void InsertCart(Carts carts);
         void InsertCartItem(CartItem cartitem);
         void UpdateCart(Carts carts);
+        void UpdateCartItem(CartItem cartItem);
         void DeleteCart(Carts carts);
         void DeleteItem(CartItem cartitem);
         List<CartItem> getCartItem(int id);
