@@ -17,34 +17,6 @@ namespace BookStore.API.Services
             _productReponsitory = productReponsitory;
         }
 
-
-        public List<ProductView> GetProductByDate( int size)
-        {
-            var pros = from s in _context.Products
-                       orderby s.DateCreate descending
-                       select s;
-            var data = pros.Skip(0).Take(size).ToList();
-            var list = new List<ProductView>();
-            foreach (Products i in data)
-            {
-                var add = new ProductView
-                {
-                    IdProduct = i.IdProduct,
-                    Name = i.Name,
-                    Image = i.Image,
-                    Desc = i.Desc,
-                    Feedback = i.Feedback,
-                    Price = i.Price,
-                    Quantity = i.Quantity,
-                    DateCreate = i.DateCreate,
-                    Discount = i.Discount,
-                    Cate = _productReponsitory.GetCateById(i.IdCate).CategoryType
-                };
-                list.Add(add);
-            };
-            return list;
-        }
-
         public ProductFeed AddProductFeed( ProductFeedDTO productFeedDTOs)
         {
             var user = _context.Users.FirstOrDefault(c=>c.IdUser==productFeedDTOs.UserID);
@@ -296,7 +268,107 @@ namespace BookStore.API.Services
             }
             return product;
         }
+        public List<ProductView> GetProductByDate(int size)
+        {
+            var pros = from s in _context.Products
+                       orderby s.DateCreate descending
+                       select s;
+            var data = pros.Skip(0).Take(size).ToList();
+            var list = new List<ProductView>();
+            foreach (Products i in data)
+            {
+                var add = new ProductView
+                {
+                    IdProduct = i.IdProduct,
+                    Name = i.Name,
+                    Image = i.Image,
+                    Desc = i.Desc,
+                    Feedback = i.Feedback,
+                    Price = i.Price,
+                    Quantity = i.Quantity,
+                    DateCreate = i.DateCreate,
+                    Discount = i.Discount,
+                    Cate = _productReponsitory.GetCateById(i.IdCate).CategoryType
+                };
+                list.Add(add);
+            };
+            return list;
+        }
 
+        public ProductPage GetProductByName(int categoryId, int page, int size)
+        {
+            var pros = from s in _context.Products.Where(c =>c.IdCate == categoryId)
+                       orderby s.Name select s;
+            int total = pros.Count();
+            int pagecount = total / size;
+            float Page = total % size;
+            if (Page > 0) { pagecount = pagecount + 1; }
+            var data = pros.Skip(((page) - 1) * size).Take(size).ToList();
+            List<ProductView> list = new List<ProductView>();
+            foreach (Products i in data)
+            {
+                var proview = new ProductView
+                {
+                    IdProduct = i.IdProduct,
+                    Name = i.Name,
+                    Image = i.Image,
+                    Desc = i.Desc,
+                    Feedback = i.Feedback,
+                    Price = i.Price,
+                    Quantity = i.Quantity,
+                    DateCreate = i.DateCreate,
+                    Discount = i.Discount,
+                    Cate = _context.Categories.FirstOrDefault(c => c.Id == i.IdCate).CategoryType
+                };
+                list.Add(proview);
+            }
+            var view = new ProductPage
+            {
+                Size = size,
+                Page = page,
+                TotalPage = pagecount,
+                data = list
+            };
+            return view;
+        }
 
+        public ProductPage GetProductByPrice(int categoryId, int st, int end, int page, int size)
+        {
+            var pros = from s in _context.Products.Where(c => c.IdCate == categoryId)
+                       orderby s.Price select s;
+            var proprice = pros.Where(c => c.Price > st).Where(c => c.Price < end);
+
+            int total = proprice.Count();
+            int pagecount = total / size;
+            float Page = total % size;
+            if (Page > 0) { pagecount = pagecount + 1; }
+            var data = proprice.Skip(((page) - 1) * size).Take(size).ToList();
+            List<ProductView> list = new List<ProductView>();
+            foreach (Products i in data)
+            {
+                var proview = new ProductView
+                {
+                    IdProduct = i.IdProduct,
+                    Name = i.Name,
+                    Image = i.Image,
+                    Desc = i.Desc,
+                    Feedback = i.Feedback,
+                    Price = i.Price,
+                    Quantity = i.Quantity,
+                    DateCreate = i.DateCreate,
+                    Discount = i.Discount,
+                    Cate = _context.Categories.FirstOrDefault(c => c.Id == i.IdCate).CategoryType
+                };
+                list.Add(proview);
+            }
+            var view = new ProductPage
+            {
+                Size = size,
+                Page = page,
+                TotalPage = pagecount,
+                data = list
+            };
+            return view;
+        }
     }
 }

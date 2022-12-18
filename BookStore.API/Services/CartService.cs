@@ -54,14 +54,13 @@ namespace BookStore.API.Services
         public CartItem UpdateCartItem(int id, CartItemView cartItemView)
         {
             var item = _cartReponsitory.GetCartItemId(id);
-            var cartitem = new CartItem();
             if (item != null)
             {
-                cartitem.Quantity = cartItemView.quantity;
-                _cartReponsitory.UpdateCartItem(cartitem);
+                item.Quantity = cartItemView.quantity;
+                _cartReponsitory.UpdateCartItem(item);
                 _cartReponsitory.IsSaveChanges();
             }
-            return cartitem;
+            return item;
         }
 
         public Carts DeleteCart(int id)

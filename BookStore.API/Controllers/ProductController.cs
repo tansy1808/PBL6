@@ -46,10 +46,27 @@ namespace BookStore.API.Controllers
             if (pro == null) return NotFound();
             return pro;
         }
+
         [HttpGet("orderby/{size}")]
         public ActionResult<List<ProductView>> GetProductByDate(int size)
         {
             var pro = _productService.GetProductByDate(size);
+            if (pro == null) return NotFound();
+            return pro;
+        }
+
+        [HttpGet("orderby/name/{idcate}")]
+        public ActionResult<ProductPage> GetProductByName(int idcate, int page, int size)
+        {
+            var pro = _productService.GetProductByName(idcate, page,size);
+            if (pro == null) return NotFound();
+            return pro;
+        }
+
+        [HttpGet("orderby/Price/{idcate}")]
+        public ActionResult<ProductPage> GetProductByPrice(int idcate, int star, int end, int page, int size)
+        {
+            var pro = _productService.GetProductByPrice(idcate, star,end, page, size);
             if (pro == null) return NotFound();
             return pro;
         }
