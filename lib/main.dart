@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:pbl6/screens/login_screen/cart_screen.dart';
+import 'package:pbl6/screens/login_screen/home_screen.dart';
+import 'package:pbl6/screens/login_screen/item_screen.dart';
 import 'package:pbl6/utils/constants.dart';
 
 import 'screens/login_screen/login_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
 
   @override
@@ -23,7 +25,13 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Montserrat',
         ),
       ),
-      home: const LoginScreen(),
+      routes: {
+        "/" : (context) => LoginScreen(),
+        "homeScreen" : (context) => HomeScreen(),
+        "cartScreen" :(context) => CartScreen(),
+        "itemScreen" :(context) => ItemScreen(),
+      },
+      //home: LoginScreen(),
     );
   }
 }

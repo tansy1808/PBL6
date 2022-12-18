@@ -4,6 +4,7 @@ import 'package:pbl6/utils/helper_functions.dart';
 
 import '../../../utils/constants.dart';
 import '../animations/change_screen_animation.dart';
+import '../home_screen.dart';
 import 'bottom_text.dart';
 import 'top_text.dart';
 
@@ -85,11 +86,15 @@ class _LoginContentState extends State<LoginContent>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 135, vertical: 16),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
+        },
         style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: const EdgeInsets.symmetric(vertical: 14), backgroundColor: kSecondaryColor,
           shape: const StadiumBorder(),
-          primary: kSecondaryColor,
           elevation: 8,
           shadowColor: Colors.black87,
         ),
