@@ -1,4 +1,5 @@
-﻿using BookStore.API.DTO.Store;
+﻿using BookStore.API.DTO;
+using BookStore.API.DTO.Store;
 using BookStore.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,7 +68,7 @@ namespace BookStore.API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("Find/{id}")]
         public ActionResult<OrderView> FindOrderId(int id)
         {
             var members = _orderService.FindOrderById(id);
@@ -76,9 +77,17 @@ namespace BookStore.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<OrderView>> GetOrder()
+        public ActionResult<View> GetOrder(int page, int size)
         {
-            var members = _orderService.GetOrder();
+            var members = _orderService.GetOrder(page,size);
+            if (members == null) return NotFound();
+            return members;
+        }
+
+        [HttpGet("Income")]
+        public ActionResult<Income> GetPrice(int page, int size)
+        {
+            var members = _orderService.GetIncome(page,size);
             if (members == null) return NotFound();
             return members;
         }

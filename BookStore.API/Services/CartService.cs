@@ -54,7 +54,7 @@ namespace BookStore.API.Services
                 var pro = _context.CartItems.Where(c=>c.IdCart == user.Id).FirstOrDefault(c=>c.IdProduct == addItemDTO.IdProduct);
                 if(pro != null )
                 {
-                    var view1 = new ViewCartItemDTO()
+                    var view1 = new ViewCartItemDTO
                     {
                         Status = "Error",
                         Message = "Sản phẩm đã có trong giỏ.",

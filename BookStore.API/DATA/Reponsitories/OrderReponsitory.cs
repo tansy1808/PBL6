@@ -1,5 +1,6 @@
 ﻿using BookStore.API.Data;
 using BookStore.API.Data.Enities.Order;
+using BookStore.API.DTO;
 
 namespace BookStore.API.DATA.Reponsitories
 {
@@ -25,6 +26,34 @@ namespace BookStore.API.DATA.Reponsitories
         public List<Orders> GetAllOrders()
         {
             return _context.Orders.ToList();
+        }
+
+        public List<Thongke> GetIncomeByPrice()
+        {
+            var pro = from s in _context.OrderProducts
+                    group s by s.IdProduct;
+            var list = new List<Thongke>();
+            foreach(var i in pro)
+            {
+                var n = _context.Products.FirstOrDefault(c=>c.IdProduct == i.Key); 
+                if(n != null)
+                {
+                    var tem = new Thongke();
+                    tem.Id = i.Key;
+                    tem.Name = n.Name;
+                    int q = 0;
+                    decimal t = 0;
+                    foreach(OrderProduct j in i)
+                    {
+                        q = q + j.Quantity;
+                        t = t + j.Price;
+                    }
+                    tem.Quantity = q;
+                    tem.Total = t;
+                    list.Add(tem);
+                }
+            }
+            return list;
         }
 
         public List<OrderProduct> GetOrderProductId(int id)

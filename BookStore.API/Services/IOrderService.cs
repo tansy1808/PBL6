@@ -13,7 +13,8 @@ namespace BookStore.API.Services
         Orders DeleteOrder(int id);
         OrderView FindOrderById(int id);
         List<OrderProductAPI> FindOrderProductById(int id);
-        List<OrderView> GetOrder();
+        View GetOrder(int page, int size);
+        Income GetIncome(int page, int size);
         
     }
 }

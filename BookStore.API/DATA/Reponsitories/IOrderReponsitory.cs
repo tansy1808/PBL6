@@ -1,4 +1,5 @@
 ﻿using BookStore.API.Data.Enities.Order;
+using BookStore.API.DTO;
 
 namespace BookStore.API.DATA.Reponsitories
 {
@@ -13,6 +14,7 @@ namespace BookStore.API.DATA.Reponsitories
         Payment GetPaymentId(int id);
         Orders GetOrdersId(int id);
         List<Orders> GetAllOrders();
+        List<Thongke> GetIncomeByPrice();
         void DeleteOrders(Orders orders);
         void DeleteItem(OrderProduct orderProduct);
         bool IsSaveChanges();

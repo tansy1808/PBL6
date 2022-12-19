@@ -203,13 +203,18 @@ namespace BookStore.API.Services
             return list;
         }
 
-        public List<OrderView> GetOrder()
+        public View GetOrder(int page , int size)
         {
-            var order = _orderReponsitory.GetAllOrders();
+            var query = _context.Orders;
+            int total = query.Count();
+            int pagecount = total / size;
+            float Page = total % size;
+            if (Page > 0) { pagecount = pagecount + 1; }
+            var data = query.Skip(((page) - 1) * size).Take(size).ToList();
             var list2 = new List<OrderView>();
-            if(order != null)
+            if(data != null)
             {
-                foreach (Orders i in order)
+                foreach (Orders i in data)
                 {
                     var item = _orderReponsitory.GetOrderProductId(i.IdOrder);
                     var list = new List<OrderProductAPI>();
@@ -239,7 +244,34 @@ namespace BookStore.API.Services
                     list2.Add(rs);
                 }
             }
-            return list2;
+            var view = new View() 
+            {
+                Page = page,
+                Size = size,
+                TotalPage = pagecount,
+                Data = list2
+            };
+            return view;
+        }
+
+        public Income GetIncome(int page, int size)
+        {
+            var income = _orderReponsitory.GetIncomeByPrice();
+            int total = income.Count();
+            int pagecount = total / size;
+            float Page = total % size;
+            if (Page > 0) { pagecount = pagecount + 1; }
+            var orderby = income.OrderByDescending(c=>c.Total);
+            var data = orderby.Skip(((page) - 1) * size).Take(size).ToList();
+            var view = new Income();
+            if (data != null)
+            {
+                view.Page = page;
+                view.Size = size;
+                view.TotalPage = pagecount;
+                view.Data = data;
+            }
+            return view;
         }
     }
 }
