@@ -57,7 +57,7 @@ namespace BookStore.API.Services
                     cartItem.IdCart = user.Id;
                     cartItem.Quantity = addItemDTO.Quantity;
                     _cartReponsitory.InsertCartItem(cartItem);
-                    _context.SaveChangesAsync();
+                    _cartReponsitory.IsSaveChanges();
                     view.Status = "Success";
                     view.Message = "Thành công";
                     view.data = cartItem;

@@ -78,8 +78,8 @@ namespace BookStore.API.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<OrderProduct>()
-            .HasOne(p => p.products)
-            .WithMany(c => c.orderProducts)
+            .HasMany(p => p.products)
+            .WithOne(c => c.orderProducts)
             .HasForeignKey(c => c.IdProduct);
             base.OnModelCreating(modelBuilder);
 
@@ -91,8 +91,8 @@ namespace BookStore.API.Data
 
             modelBuilder.Entity<Products>()
             .HasOne(p => p.cartItems)
-            .WithOne(c => c.products)
-            .HasForeignKey<CartItem>(c => c.IdProduct);
+            .WithMany(c => c.products)
+            .HasForeignKey(c => c.IdProduct);
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Carts>()

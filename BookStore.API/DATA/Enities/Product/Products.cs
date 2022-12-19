@@ -27,7 +27,7 @@ namespace BookStore.API.Data.Enities.Product
         public ProductCate productCates {get; set;}
         public CartItem cartItems {get; set;}
         public List<ProductFeed> productFeeds {get; set;}
-        public List<OrderProduct> orderProducts {get; set;}
+        public OrderProduct orderProducts {get; set;}
 
 
     }
