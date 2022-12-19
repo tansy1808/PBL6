@@ -1,9 +1,5 @@
-﻿using BookStore.API.Data.Enities.Order;
-using BookStore.API.DTO;
-using BookStore.API.DTO.Store;
-using BookStore.API.DTO.User;
+﻿using BookStore.API.DTO.Store;
 using BookStore.API.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
@@ -20,7 +16,7 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPost("order")]
-        public IActionResult CreateOrder([FromForm] OrderDTO orderDTOs)
+        public ActionResult<ViewOrderDTO> CreateOrder([FromForm] OrderDTO orderDTOs)
         {
             try
             {
@@ -33,7 +29,7 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPost("orderProduct")]
-        public IActionResult CreateOrderProduct([FromForm] OrderProductDTO orderProductDTOs)
+        public ActionResult<ViewOrderProductDTO> CreateOrderProduct([FromForm] OrderProductDTO orderProductDTOs)
         {
             try
             {
@@ -46,7 +42,7 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPost("payment")]
-        public IActionResult CreatePayment([FromForm] PaymentDTO paymentDTOs)
+        public ActionResult<ViewOrderPayDTO> CreatePayment([FromForm] PaymentDTO paymentDTOs)
         {
             try
             {
@@ -59,7 +55,7 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPost("methodPay")]
-        public IActionResult CreateMethodPay([FromForm] MethodPayDTO methodPayDTOs)
+        public ActionResult<ViewProductMethodDTO> CreateMethodPay([FromForm] MethodPayDTO methodPayDTOs)
         {
             try
             {

@@ -3,7 +3,6 @@ using BookStore.API.DTO;
 using BookStore.API.DTO.User;
 using BookStore.API.Services;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
@@ -19,7 +18,7 @@ namespace BookStore.API.Controllers
             _authService = authService;
         }
         [HttpPost("register")]
-        public IActionResult Register([FromBody] AuthUserDTO authUserDto)
+        public ActionResult<ViewBag> Register([FromBody] AuthUserDTO authUserDto)
         {
             try
             {
@@ -45,7 +44,7 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPost("pay")]
-        public IActionResult CreatePay([FromForm] PayUserDTO payUserDto)
+        public ActionResult<ViewBag> CreatePay([FromForm] PayUserDTO payUserDto)
         {
             try
             {
@@ -57,7 +56,7 @@ namespace BookStore.API.Controllers
             }
         }
 
-            [HttpGet("logout")]
+        [HttpGet("logout")]
         public async Task<IActionResult> logout()
         {
             await HttpContext.SignOutAsync();
@@ -86,21 +85,21 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateInfoUser(int id, AuthUpdateDTO authUserDto)
+        public ActionResult<ViewBag> UpdateInfoUser(int id, AuthUpdateDTO authUserDto)
         {
 
             return Ok(_authService.UpdateUser(id,authUserDto));
         }
 
         [HttpPut("image/{id}")]
-        public IActionResult UpdateUserImage(int id, UserImage userImage)
+        public ActionResult<ViewBag> UpdateUserImage(int id, UserImage userImage)
         {
 
             return Ok(_authService.UpdateImage(id,userImage));
         }
 
         [HttpPut("password/{id}")]
-        public IActionResult ChangePass(int id, [FromForm] ChangePass changePass)
+        public ActionResult<ViewBag> ChangePass(int id, [FromForm] ChangePass changePass)
         {
             try
             {

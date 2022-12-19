@@ -1,5 +1,4 @@
 ﻿using BookStore.API.Data.Enities.Product;
-using BookStore.API.DTO.Product;
 
 namespace BookStore.API.DATA.Reponsitories
 {

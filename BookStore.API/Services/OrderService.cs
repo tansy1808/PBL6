@@ -1,12 +1,8 @@
 ﻿using BookStore.API.Data;
-using BookStore.API.Data.Enities.Auth;
 using BookStore.API.Data.Enities.Order;
 using BookStore.API.DATA.Reponsitories;
 using BookStore.API.DTO;
 using BookStore.API.DTO.Store;
-using BookStore.API.DTO.User;
-using BookStore.API.Services;
-using System.Net;
 
 namespace BookStore.API.Services
 {
@@ -23,21 +19,31 @@ namespace BookStore.API.Services
             _productReponsitory = productReponsitory;
         }
 
-        public MethodPay CreateMethodPay(MethodPayDTO methodPayDTO)
+        public ViewProductMethodDTO CreateMethodPay(MethodPayDTO methodPayDTO)
         {
+            var view = new ViewProductMethodDTO();
             var mpay = new MethodPay
             {
                 TypeName = methodPayDTO.TypeName
             };
             _orderReponsitory.InsertMethodPay(mpay);
             _orderReponsitory.IsSaveChanges();
-            return mpay;
+            view.Status = "Success";
+            view.Message = "Thành công";
+            view.data = mpay;
+            return view;
         }
 
-        public Orders CreateOrder(OrderDTO orderDTO)
+        public ViewOrderDTO CreateOrder(OrderDTO orderDTO)
         {
             var user = _context.Users.FirstOrDefault(c=> c.IdUser == orderDTO.IdUser);
             var order = new Orders();
+            var view = new ViewOrderDTO()
+            {
+                Status= "Error",
+                Message= "Thêm thất bại",
+                data = null
+            };
             if (user != null)
             {
                 order.IdUser = orderDTO.IdUser;
@@ -46,14 +52,23 @@ namespace BookStore.API.Services
                 order.DateOrder = DateTime.Now; 
                 _orderReponsitory.InsertOrder(order);
                 _orderReponsitory.IsSaveChanges();
+                view.Status = "Success";
+                view.Message = "Thành công";
+                view.data = order;
             }            
-            return order;
+            return view;
         }
 
-        public OrderProduct CreateOrderProduct(OrderProductDTO orderProductDTO)
+        public ViewOrderProductDTO CreateOrderProduct(OrderProductDTO orderProductDTO)
         {
             var tem = _orderReponsitory.GetOrdersId(orderProductDTO.IdOrder);
             var order = new OrderProduct();
+            var view = new ViewOrderProductDTO()
+            {
+                Status= "Error",
+                Message= "Thêm thất bại",
+                data = null
+            };
             if (tem != null)
             {
                 int total = 0;
@@ -79,14 +94,23 @@ namespace BookStore.API.Services
                     _orderReponsitory.UpdateOrder(tem);
                     _orderReponsitory.IsSaveChanges();
                 }
+                view.Status = "Success";
+                view.Message = "Thành công";
+                view.data = order;
 
             }
-            return order;  
+            return view;  
         }
 
-        public Payment CreatePay(PaymentDTO paymentDTO)
+        public ViewOrderPayDTO CreatePay(PaymentDTO paymentDTO)
         {
             var order = _context.Orders.FirstOrDefault(c => c.IdOrder == paymentDTO.IdOrder);
+            var view = new ViewOrderPayDTO()
+            {
+                Status= "Error",
+                Message= "Thêm thất bại",
+                data = null
+            };
             var pay = new Payment();
             if (order != null)
             {
@@ -96,8 +120,11 @@ namespace BookStore.API.Services
                 pay.TypePay = paymentDTO.TypePay;
                 _orderReponsitory.InsertPayment(pay);
                 _orderReponsitory.IsSaveChanges();
+                view.Status = "Success";
+                view.Message = "Thành công";
+                view.data = pay;
             }
-            return pay;
+            return view;
         }
 
         public Orders DeleteOrder(int id)

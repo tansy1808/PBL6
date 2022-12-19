@@ -1,11 +1,8 @@
 ﻿using BookStore.API.Data;
-using BookStore.API.Data.Enities.Auth;
 using BookStore.API.Data.Enities.Cart;
 using BookStore.API.DATA.Reponsitories;
 using BookStore.API.DTO.Cart;
 using BookStore.API.DTO.Product;
-using BookStore.API.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Services
 {
@@ -20,23 +17,38 @@ namespace BookStore.API.Services
             _cartReponsitory = cartReponsitory;
         }
 
-        public Carts AddCart(CartDTO cartDTO)
+        public ViewCartDTO AddCart(CartDTO cartDTO)
         {
             var user = _context.Users.FirstOrDefault(c=>c.IdUser == cartDTO.IdUser);
             var cart = new Carts();
+            var view = new ViewCartDTO()
+            {
+                Status= "Error",
+                Message= "Thêm thất bại",
+                data = null
+            };
             if (user != null)
             {
                 cart.IdUser = cartDTO.IdUser;
                 _cartReponsitory.InsertCart(cart);
                 _cartReponsitory.IsSaveChanges();
+                view.Status = "Success";
+                view.Message = "Thành công";
+                view.data = cart;
             }            
-            return cart;
+            return view;
         }
 
-        public CartItem AddCartItem(AddItemDTO addItemDTO)
+        public ViewCartItemDTO AddCartItem(AddItemDTO addItemDTO)
         {
             var id = _context.Products.FirstOrDefault(c => c.IdProduct == addItemDTO.IdProduct);
             var cartItem = new CartItem();
+            var view = new ViewCartItemDTO()
+            {
+                Status = "Error",
+                Message = "Thêm thất bại",
+                data = null
+            };
             if (id != null) {
                 var user = _context.Carts.FirstOrDefault(c => c.IdUser == addItemDTO.IdUser);
                 if (user != null)
@@ -45,22 +57,34 @@ namespace BookStore.API.Services
                     cartItem.IdCart = user.Id;
                     cartItem.Quantity = addItemDTO.Quantity;
                     _cartReponsitory.InsertCartItem(cartItem);
-                    _cartReponsitory.IsSaveChanges();
+                    _context.SaveChangesAsync();
+                    view.Status = "Success";
+                    view.Message = "Thành công";
+                    view.data = cartItem;
                 }
             }
-            return cartItem;
+            return view;
         }
 
-        public CartItem UpdateCartItem(int id, CartItemView cartItemView)
+        public ViewCartItemDTO UpdateCartItem(int id, CartItemView cartItemView)
         {
             var item = _cartReponsitory.GetCartItemId(id);
+            var view = new ViewCartItemDTO()
+            {
+                Status = "Error",
+                Message = "Thêm thất bại",
+                data = null
+            };
             if (item != null)
             {
                 item.Quantity = cartItemView.quantity;
                 _cartReponsitory.UpdateCartItem(item);
                 _cartReponsitory.IsSaveChanges();
+                view.Status = "Success";
+                view.Message = "Thành công";
+                view.data = item;
             }
-            return item;
+            return view;
         }
 
         public Carts DeleteCart(int id)

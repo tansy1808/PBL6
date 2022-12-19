@@ -1,8 +1,7 @@
-using BookStore.API.Data.Enities.Auth;
+﻿using BookStore.API.Data.Enities.Auth;
 using BookStore.API.DATA.Reponsitories;
 using BookStore.API.DTO;
 using BookStore.API.DTO.User;
-using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -211,9 +210,15 @@ namespace BookStore.API.Services
             return add;
         }
 
-        public User UpdateUser(int id, AuthUpdateDTO authUpdateDTO)
+        public ViewBag UpdateUser(int id, AuthUpdateDTO authUpdateDTO)
         {
             var user = _userReponsitory.GetUserById(id);
+            var view = new ViewBag()
+            {
+                Status = "Error",
+                Message = "Cập nhập thất bại",
+                Title = null
+            };
             if (user != null)
             {
                 user.Name = authUpdateDTO.Name;
@@ -222,24 +227,42 @@ namespace BookStore.API.Services
                 user.Email = authUpdateDTO.Email;
                 _userReponsitory.UpdateUser(user);
                 _userReponsitory.IsSaveChanges();
+                view.Status = "Success";
+                view.Message = "Thành công";
+                view.Title = null;
             };
-            return user;
+            return view;
         }
 
-        public User UpdateImage(int id, UserImage userImage)
+        public ViewBag UpdateImage(int id, UserImage userImage)
         {
             var user = _userReponsitory.GetUserById(id);
+            var view = new ViewBag()
+            {
+                Status = "Error",
+                Message = "Cập nhập thất bại",
+                Title = null
+            };
             if (user != null) {
                 user.UserImage = userImage.Userimage;
                 _userReponsitory.UpdateUser(user);
                 _userReponsitory.IsSaveChanges();
+                view.Status = "Success";
+                view.Message = "Thành công";
+                view.Title = null;
             }
-            return user;
+            return view;
         }
 
-        public UserPay CreatePay(PayUserDTO payUserDto)
+        public ViewBag CreatePay(PayUserDTO payUserDto)
         {
             var user = _userReponsitory.GetUserById(payUserDto.UserId);
+            var view = new ViewBag()
+            {
+                Status = "Error",
+                Message = "Cập nhập thất bại",
+                Title = null
+            };
             var userpay = new UserPay();
             if (user != null)
             {
@@ -247,8 +270,11 @@ namespace BookStore.API.Services
                 userpay.PayType = payUserDto.PayType;
                 _userReponsitory.InsertPay(userpay);
                 _userReponsitory.IsSaveChanges();
+                view.Status = "Success";
+                view.Message = "Thành công";
+                view.Title = null;
             }
-            return userpay;
+            return view;
         }
     }
 }

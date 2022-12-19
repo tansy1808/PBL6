@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace BookStore.API.DTO.Product
 {
     public class FeedDTO

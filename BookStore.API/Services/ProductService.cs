@@ -17,10 +17,17 @@ namespace BookStore.API.Services
             _productReponsitory = productReponsitory;
         }
 
-        public ProductFeed AddProductFeed( ProductFeedDTO productFeedDTOs)
+        public ViewProductFeedDTO AddProductFeed( ProductFeedDTO productFeedDTOs)
         {
             var user = _context.Users.FirstOrDefault(c=>c.IdUser==productFeedDTOs.UserID);
             var feed = new ProductFeed();
+            var view = new ViewProductFeedDTO()
+            {
+                Status = "Error",
+                Message = "Thêm thất bại",
+                data = null
+            };
+            
             if (user != null) 
             {
                 feed.Star = productFeedDTOs.star;
@@ -36,16 +43,25 @@ namespace BookStore.API.Services
                     pro.Feedback = (int)st;
                     _productReponsitory.UpdateProduct(pro);
                     _productReponsitory.IsSaveChanges();
+                    view.Status = "Success";
+                    view.Message = "Thành công";
+                    view.data = feed;
                 }
                 
             }
-            return feed;  
+            return view;  
         }
 
-        public Products CreateProduct(ProductDTO productDTO)
+        public ViewProductDTO CreateProduct(ProductDTO productDTO)
         {
             var pro = _context.Categories.FirstOrDefault(c => c.Id == productDTO.IdCate);
             var products = new Products();
+            var view = new ViewProductDTO()
+            {
+                Status = "Error",
+                Message = "Tạo thất bại",
+                data = null
+            };
             if (pro != null)
             {
                 products.Name = productDTO.Name;
@@ -58,8 +74,11 @@ namespace BookStore.API.Services
                 products.IdCate = productDTO.IdCate;
                 _productReponsitory.InsertProduct(products);
                 _productReponsitory.IsSaveChanges();
+                view.Status = "Success";
+                view.Message = "Thành công";
+                view.data = products;
             }
-            return products;
+            return view;
         }
 
         public Products Delete(int id)
@@ -138,7 +157,7 @@ namespace BookStore.API.Services
             return view;
         }
 
-        public ProductAPI GetProductByName(string name,int page, int size)
+        public ProductAPI GetProductsByName(string name,int page, int size)
         {
             var pro = _productReponsitory.GetProductsbyName(name);
             ProductAPI rs = new ProductAPI();
@@ -251,9 +270,15 @@ namespace BookStore.API.Services
             };
             return view;
         }
-        public Products UpdateProduct(int id, ProductDTO productDTOs)
+        public ViewProductDTO UpdateProduct(int id, ProductDTO productDTOs)
         {
             var product = _productReponsitory.GetProductsByIdpro(id);
+            var view = new ViewProductDTO()
+            {
+                Status = "Error",
+                Message = "Cập nhập thất bại",
+                data = null
+            };
             if (product != null)
             {
                 product.Name = productDTOs.Name;
@@ -265,8 +290,11 @@ namespace BookStore.API.Services
                 product.IdCate = productDTOs.IdCate;
                 _productReponsitory.UpdateProduct(product);
                 _productReponsitory.IsSaveChanges();
+                view.Status = "Success";
+                view.Message = "Thành công";
+                view.data = product;
             }
-            return product;
+            return view;
         }
         public List<ProductView> GetProductByDate(int size)
         {
@@ -295,7 +323,7 @@ namespace BookStore.API.Services
             return list;
         }
 
-        public ProductPage GetProductByName(int categoryId, int page, int size)
+        public ProductPage GetProductByCate(int categoryId, int page, int size)
         {
             var pros = from s in _context.Products.Where(c =>c.IdCate == categoryId)
                        orderby s.Name select s;

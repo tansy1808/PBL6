@@ -1,7 +1,4 @@
 ﻿
-
-using BookStore.API.DTO.Product;
-
 namespace BookStore.API.DTO.Cart
 {
     public class CartView

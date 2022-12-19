@@ -1,5 +1,4 @@
 using BookStore.API.DTO.Product;
-using System.ComponentModel.DataAnnotations;
 
 namespace BookStore.API.DTO.Cart
 {

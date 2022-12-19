@@ -1,11 +1,8 @@
-﻿using AutoMapper.Execution;
-using BookStore.API.Data.Enities.Product;
+﻿using BookStore.API.Data.Enities.Product;
 using BookStore.API.DTO;
 using BookStore.API.DTO.Product;
 using BookStore.API.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Drawing;
 
 namespace BookStore.API.Controllers
 {
@@ -21,13 +18,13 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddBook([FromForm] ProductDTO productDTO)
+        public ActionResult<ViewProductDTO> AddBook([FromForm] ProductDTO productDTO)
         {
             return Ok(_productService.CreateProduct(productDTO));
         }
 
         [HttpPost("productFeed")]
-        public IActionResult AddProductFeed([FromForm] ProductFeedDTO productFeedDTOs)
+        public ActionResult<ViewProductFeedDTO> AddProductFeed([FromForm] ProductFeedDTO productFeedDTOs)
         {
             return Ok(_productService.AddProductFeed(productFeedDTOs));
         }
@@ -35,7 +32,7 @@ namespace BookStore.API.Controllers
         [HttpGet("{name}")]
         public ActionResult<ProductAPI> GetFindBookByName(string name, int page, int size)
         {
-            var pro = _productService.GetProductByName(name,page,size);
+            var pro = _productService.GetProductsByName(name,page,size);
             if (pro == null) return NotFound();
             return pro;
         }
@@ -47,7 +44,7 @@ namespace BookStore.API.Controllers
             return pro;
         }
 
-        [HttpGet("orderby/{size}")]
+        [HttpGet("orderby")]
         public ActionResult<List<ProductView>> GetProductByDate(int size)
         {
             var pro = _productService.GetProductByDate(size);
@@ -55,10 +52,10 @@ namespace BookStore.API.Controllers
             return pro;
         }
 
-        [HttpGet("orderby/name/{idcate}")]
-        public ActionResult<ProductPage> GetProductByName(int idcate, int page, int size)
+        [HttpGet("orderby/{name}")]
+        public ActionResult<ProductAPI> GetProductName(string name, int page, int size)
         {
-            var pro = _productService.GetProductByName(idcate, page,size);
+            var pro = _productService.GetProductsByName(name, page,size);
             if (pro == null) return NotFound();
             return pro;
         }
@@ -98,7 +95,7 @@ namespace BookStore.API.Controllers
         public ActionResult<ProductCate> GetAllCate() => Ok(_productService.GetProductCate());
 
         [HttpPut("{id}")]
-        public IActionResult UpdateBook(int id, [FromForm] ProductDTO productDTOs)
+        public ActionResult<ViewProductDTO> UpdateBook(int id, [FromForm] ProductDTO productDTOs)
         {
             return Ok(_productService.UpdateProduct(id, productDTOs));
         }

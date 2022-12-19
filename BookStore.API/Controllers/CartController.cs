@@ -1,9 +1,5 @@
-﻿using BookStore.API.Data;
-using BookStore.API.Data.Enities.Cart;
-using BookStore.API.DTO.Cart;
-using BookStore.API.DTO.User;
+﻿using BookStore.API.DTO.Cart;
 using BookStore.API.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
@@ -20,7 +16,7 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateCart([FromForm] CartDTO cartDTO)
+        public ActionResult<ViewCartDTO> CreateCart([FromForm] CartDTO cartDTO)
         {
             try
             {
@@ -33,7 +29,7 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPost("cartItem")]
-        public IActionResult CreateCartItem([FromForm] AddItemDTO addItemDTO)
+        public ActionResult<ViewCartItemDTO> CreateCartItem([FromForm] AddItemDTO addItemDTO)
         {
             try
             {
@@ -68,7 +64,7 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPut("cartItem/{iditem}")]
-        public IActionResult UpdateItem(int iditem, CartItemView cartItemView)
+        public ActionResult<ViewCartItemDTO> UpdateItem(int iditem, CartItemView cartItemView)
         {
             var members = _cartService.UpdateCartItem(iditem, cartItemView);
             if (members == null) return NotFound();

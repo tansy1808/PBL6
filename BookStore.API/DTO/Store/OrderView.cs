@@ -1,6 +1,4 @@
-﻿
-
-namespace BookStore.API.DTO.Store
+﻿namespace BookStore.API.DTO.Store
 {
     public class OrderView
     {
