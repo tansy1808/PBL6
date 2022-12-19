@@ -24,7 +24,7 @@ namespace BookStore.API.Services
             var view = new ViewProductFeedDTO()
             {
                 Status = "Error",
-                Message = "Thêm thất bại",
+                Message = "User không tồn tại",
                 data = null
             };
             
@@ -37,6 +37,9 @@ namespace BookStore.API.Services
                 feed.FeedDate = DateTime.Now;
                 _productReponsitory.InsertProductFeed(feed);
                 var pro = _productReponsitory.GetProductsByIdpro(productFeedDTOs.ProductID);
+                view.Status = "Error";
+                view.Message = "Sản phẩm không tồn tại";
+                view.data = null;
                 if (pro != null)
                 {
                     double st = ((((int)productFeedDTOs.star) + ((int)pro.Feedback)) / 2);
@@ -59,7 +62,7 @@ namespace BookStore.API.Services
             var view = new ViewProductDTO()
             {
                 Status = "Error",
-                Message = "Tạo thất bại",
+                Message = "Không có loại hàng này.",
                 data = null
             };
             if (pro != null)
@@ -276,7 +279,7 @@ namespace BookStore.API.Services
             var view = new ViewProductDTO()
             {
                 Status = "Error",
-                Message = "Cập nhập thất bại",
+                Message = "Sản phẩm không tồn tại",
                 data = null
             };
             if (product != null)

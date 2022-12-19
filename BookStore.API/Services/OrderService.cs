@@ -41,7 +41,7 @@ namespace BookStore.API.Services
             var view = new ViewOrderDTO()
             {
                 Status= "Error",
-                Message= "Thêm thất bại",
+                Message= "User không tồn tại",
                 data = null
             };
             if (user != null)
@@ -66,13 +66,16 @@ namespace BookStore.API.Services
             var view = new ViewOrderProductDTO()
             {
                 Status= "Error",
-                Message= "Thêm thất bại",
+                Message= "Đơn hàng không tồn tại.",
                 data = null
             };
             if (tem != null)
             {
                 int total = 0;
                 var pro = _productReponsitory.GetProductsByIdpro(orderProductDTO.IdProduct);
+                view.Status = "Error";
+                view.Message = "Sản phẩm không tồn tại hoặc không có trong đơn hàng.";
+                view.data = order;
                 if(pro != null)
                 {
                     int pri = (((int)pro.Price) / 100) * (100-(int)pro.Discount) * ((int)orderProductDTO.Quantity);
@@ -93,11 +96,10 @@ namespace BookStore.API.Services
                     tem.Total = total;
                     _orderReponsitory.UpdateOrder(tem);
                     _orderReponsitory.IsSaveChanges();
+                    view.Status = "Success";
+                    view.Message = "Thành công";
+                    view.data = order;
                 }
-                view.Status = "Success";
-                view.Message = "Thành công";
-                view.data = order;
-
             }
             return view;  
         }
@@ -108,7 +110,7 @@ namespace BookStore.API.Services
             var view = new ViewOrderPayDTO()
             {
                 Status= "Error",
-                Message= "Thêm thất bại",
+                Message= "Đơn hàng không tồn tại",
                 data = null
             };
             var pay = new Payment();

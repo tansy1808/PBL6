@@ -24,7 +24,7 @@ namespace BookStore.API.Services
             var view = new ViewCartDTO()
             {
                 Status= "Error",
-                Message= "Thêm thất bại",
+                Message= "User không tồn tại.",
                 data = null
             };
             if (user != null)
@@ -46,11 +46,22 @@ namespace BookStore.API.Services
             var view = new ViewCartItemDTO()
             {
                 Status = "Error",
-                Message = "Thêm thất bại",
+                Message = "Không có sản phẩm.",
                 data = null
             };
             if (id != null) {
                 var user = _context.Carts.FirstOrDefault(c => c.IdUser == addItemDTO.IdUser);
+                var pro = _context.CartItems.Where(c=>c.IdCart == user.Id).FirstOrDefault(c=>c.IdProduct == addItemDTO.IdProduct);
+                if(pro != null )
+                {
+                    var view1 = new ViewCartItemDTO()
+                    {
+                        Status = "Error",
+                        Message = "Sản phẩm đã có trong giỏ.",
+                        data = null
+                    };
+                    return view1;
+                }
                 if (user != null)
                 {
                     cartItem.IdProduct = addItemDTO.IdProduct;
@@ -72,7 +83,7 @@ namespace BookStore.API.Services
             var view = new ViewCartItemDTO()
             {
                 Status = "Error",
-                Message = "Thêm thất bại",
+                Message = "Item không tồn tại.",
                 data = null
             };
             if (item != null)

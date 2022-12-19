@@ -26,7 +26,7 @@ namespace BookStore.API.Services
                 var view1 = new ViewBag()
                 {
                     Status = "Error",
-                    Message = "Correct UserNAme and Password",
+                    Message = "Correct UserName and Password",
                     Title = null
                 };
                 return view1;
@@ -42,7 +42,7 @@ namespace BookStore.API.Services
                     var view2 = new ViewBag()
                     {
                         Status = "Error",
-                        Message = "Correct UserNAme and Password",
+                        Message = "Correct UserName and Password",
                         Title = null
                     };
                     return view2;
@@ -51,7 +51,7 @@ namespace BookStore.API.Services
             var view = new ViewBag()
             {
                 Status = "Success",
-                Message = null,
+                Message = "Thành công",
                 Title = _tokenService.CreateToken(currentUser.Username)
             };
             return view;
@@ -69,7 +69,7 @@ namespace BookStore.API.Services
                     var view1 = new ViewBag()
                     {
                         Status = "Error",
-                        Message = "Correst Password",
+                        Message = "Sai mật khẩu",
                         Title = null
                     };
                     return view1;
@@ -84,7 +84,7 @@ namespace BookStore.API.Services
                     var view3 = new ViewBag()
                     {
                         Status = "Success",
-                        Message = null,
+                        Message = "Thành công",
                         Title = _tokenService.CreateToken(pass.Username)
                     };
                     return view3;
@@ -94,7 +94,7 @@ namespace BookStore.API.Services
                     var view2 = new ViewBag()
                     {
                         Status = "Error",
-                        Message = "Password is unlike",
+                        Message = "Mật khẩu mới không giống nhau",
                         Title = null
                     };
                     return view2;
@@ -103,7 +103,7 @@ namespace BookStore.API.Services
             var view = new ViewBag()
             {
                 Status = "Success",
-                Message = null,
+                Message = "Thành công",
                 Title = _tokenService.CreateToken(pass.Username)
             };
             return view;
@@ -139,7 +139,7 @@ namespace BookStore.API.Services
             var view = new ViewBag()
             {
                 Status = "Success",
-                Message =null,
+                Message = "Thành công",
                 Title = _tokenService.CreateToken(user.Username)
             };
             return view;
@@ -216,7 +216,7 @@ namespace BookStore.API.Services
             var view = new ViewBag()
             {
                 Status = "Error",
-                Message = "Cập nhập thất bại",
+                Message = "Không tìm thấy User.",
                 Title = null
             };
             if (user != null)
@@ -240,7 +240,7 @@ namespace BookStore.API.Services
             var view = new ViewBag()
             {
                 Status = "Error",
-                Message = "Cập nhập thất bại",
+                Message = "Không tìm thấy User.",
                 Title = null
             };
             if (user != null) {
@@ -260,7 +260,7 @@ namespace BookStore.API.Services
             var view = new ViewBag()
             {
                 Status = "Error",
-                Message = "Cập nhập thất bại",
+                Message = "Không tìm thấy User.",
                 Title = null
             };
             var userpay = new UserPay();
