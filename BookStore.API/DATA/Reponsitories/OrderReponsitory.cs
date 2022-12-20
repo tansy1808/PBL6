@@ -37,7 +37,7 @@ namespace BookStore.API.DATA.Reponsitories
             {
                 TimeSpan time = DateTime.Now - a.DateOrder;
                 int day = time.Days;
-                if(day < date)
+                if(day <= date)
                 {
                     listpay.Add(a);
                 }
