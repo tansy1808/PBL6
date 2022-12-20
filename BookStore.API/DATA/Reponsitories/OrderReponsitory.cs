@@ -30,7 +30,18 @@ namespace BookStore.API.DATA.Reponsitories
 
         public List<Thongke> GetIncomeByPrice()
         {
-            var pro = _context.OrderProducts.GroupBy(a=>a.IdProduct).ToList();
+            var Sta = "Paid";
+            var pay = _context.Orders.Where(s=> s.Status == Sta).ToList();
+            var list1 = new List<OrderProduct>();
+            foreach(Orders a in pay)
+            {
+                var id = _context.OrderProducts.Where(t=>t.IdOrder == a.IdOrder).ToList();
+                foreach(OrderProduct b in id)
+                {
+                    list1.Add(b);
+                }
+            }
+            var pro = list1.GroupBy(a=>a.IdProduct).ToList();
             var list = new List<Thongke>();
             foreach(var i in pro)
             {

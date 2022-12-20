@@ -68,6 +68,19 @@ namespace BookStore.API.Controllers
             }
         }
 
+        [HttpPost("{iduser}")]
+        public ActionResult<ViewOrders> CreateOrdersByCart(int iduser, string address)
+        {
+            try
+            {
+                return Ok(_orderService.CreateOrderByCart(iduser,address));
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("Find/{id}")]
         public ActionResult<OrderView> FindOrderId(int id)
         {
@@ -76,10 +89,10 @@ namespace BookStore.API.Controllers
             return members;
         }
 
-        [HttpGet]
-        public ActionResult<View> GetOrder(int page, int size)
+        [HttpGet("{iduser}")]
+        public ActionResult<View> GetOrder(int iduser, int page, int size)
         {
-            var members = _orderService.GetOrder(page,size);
+            var members = _orderService.GetOrderByUser(iduser,page,size);
             if (members == null) return NotFound();
             return members;
         }
@@ -100,5 +113,12 @@ namespace BookStore.API.Controllers
             return Ok(members);
         }
 
+        [HttpPut("{idorder}")]
+        public IActionResult UpdateOrder(int idorder, int vnpay)
+        {
+            var members = _orderService.UpdateStatus(idorder,vnpay);
+            if (members == null) return NotFound();
+            return Ok(members);
+        }
     }
 }

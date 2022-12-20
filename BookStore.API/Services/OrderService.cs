@@ -1,4 +1,5 @@
 ﻿using BookStore.API.Data;
+using BookStore.API.Data.Enities.Cart;
 using BookStore.API.Data.Enities.Order;
 using BookStore.API.DATA.Reponsitories;
 using BookStore.API.DTO;
@@ -11,12 +12,47 @@ namespace BookStore.API.Services
         private readonly DataContext _context;
         private readonly IOrderReponsitory _orderReponsitory;
         private readonly IProductReponsitory _productReponsitory;
+        private readonly ICartService _cartService;
 
-        public OrderService(DataContext context, IOrderReponsitory orderReponsitory, IProductReponsitory productReponsitory)
+        public OrderService(DataContext context, IOrderReponsitory orderReponsitory, IProductReponsitory productReponsitory, ICartService cartService)
         {
+            _cartService = cartService;
             _context = context;
             _orderReponsitory = orderReponsitory;
             _productReponsitory = productReponsitory;
+        }
+
+        public ViewOrderDTO UpdateStatus(int idorder, int vnpay)
+        {
+            var order = _context.Orders.FirstOrDefault(c=>c.IdOrder== idorder);
+            var view = new ViewOrderDTO
+            {
+                Status ="Error",
+                Message = "Đơn hàng không tồn tại.",
+                data = null
+            };
+            if(order!= null)
+            {
+                if(vnpay == 0 || vnpay == 7 )
+                {
+                    order.Status = "Paid";
+                    _orderReponsitory.UpdateOrder(order);
+                    _orderReponsitory.IsSaveChanges();
+                    view.Status = "Success";
+                    view.Message = "Thanh toán thành công.";
+                    view.data = order;
+                }
+                else
+                {
+                    order.Status = "Payment failed";
+                    _orderReponsitory.UpdateOrder(order);
+                    _orderReponsitory.IsSaveChanges();
+                    view.Status = "Error";
+                    view.Message = "Thanh toán thất bại.";
+                    view.data = order;
+                }
+            }
+            return view;
         }
 
         public ViewProductMethodDTO CreateMethodPay(MethodPayDTO methodPayDTO)
@@ -203,6 +239,57 @@ namespace BookStore.API.Services
             return list;
         }
 
+        public View GetOrderByUser(int id, int page, int size)
+        {
+            var query = _context.Orders.Where(a=>a.IdUser==id).ToList();
+            int total = query.Count();
+            int pagecount = total / size;
+            float Page = total % size;
+            if (Page > 0) { pagecount = pagecount + 1; }
+            var data = query.Skip(((page) - 1) * size).Take(size).ToList();
+            var list2 = new List<OrderView>();
+            if(data != null)
+            {
+                foreach (Orders i in data)
+                {
+                    var item = _orderReponsitory.GetOrderProductId(i.IdOrder);
+                    var list = new List<OrderProductAPI>();
+                    if(item != null)
+                    {
+                        foreach (OrderProduct j in item)
+                        {
+                            var add = new OrderProductAPI
+                            {
+                                IdOrder = j.IdOrder,
+                                IdProduct = j.IdProduct,
+                                Quantity = j.Quantity,
+                                Price = j.Price
+                            };
+                            list.Add(add);
+                        };
+                    }
+                    var rs = new OrderView
+                    {
+                        IdOrder = i.IdOrder,
+                        Address = i.Address,
+                        Status = i.Status,
+                        Total = i.Total,
+                        DateOrder = i.DateOrder,
+                        orders = list
+                    };
+                    list2.Add(rs);
+                }
+            }
+            var view = new View() 
+            {
+                Page = page,
+                Size = size,
+                TotalPage = pagecount,
+                Data = list2
+            };
+            return view;
+        }
+
         public View GetOrder(int page , int size)
         {
             var query = _context.Orders;
@@ -272,6 +359,73 @@ namespace BookStore.API.Services
                 view.Data = data;
             }
             return view;
+        }
+
+        public ViewOrders CreateOrderByCart(int iduser, string address)
+        {
+            var user = _context.Carts.FirstOrDefault(a=>a.IdUser == iduser);
+            var cart = _context.CartItems.Where(b=>b.IdCart == user.Id).ToList();
+            var order = new Orders();
+            var orderv1 = new ViewOrders()
+            {
+                Status= "Error",
+                Message= "User không tồn tại",
+                data = null
+            };
+            if (user != null)
+            {
+                order.IdUser = iduser;
+                order.Address = address;
+                order.Status = "Wait for pay";
+                order.DateOrder = DateTime.Now; 
+                _orderReponsitory.InsertOrder(order);
+                _orderReponsitory.IsSaveChanges();
+                var tem = _orderReponsitory.GetOrdersId(order.IdOrder);
+                var list = new List<OrderProductAPI>();
+                var data = new OrdersViewDTO();
+                foreach(CartItem i in cart)
+                {
+                    int total = 0;
+                    var pro = _productReponsitory.GetProductsByIdpro(i.IdProduct);
+                    int pri = (((int)pro.Price) / 100) * (100-(int)pro.Discount) * ((int)i.Quantity);
+                    var product = new OrderProduct
+                    {
+                        IdOrder = order.IdOrder,
+                        IdProduct = i.IdProduct,
+                        Quantity = i.Quantity,
+                        Price = pri
+                    };
+                    _orderReponsitory.InsertOrderProduct(product);
+                    _orderReponsitory.IsSaveChanges();
+                    var products = new OrderProductAPI
+                    {
+                        IdOrder = product.IdOrder,
+                        IdProduct = product.IdProduct,
+                        Quantity = product.Quantity,
+                        Price = product.Price
+                    };
+                    list.Add(products);
+                    var orders = _orderReponsitory.GetOrderProductId(order.IdOrder).ToList();
+                    foreach (OrderProduct j in orders)
+                    {
+                        total += ((int)j.Price);
+                    }
+                    tem.Total = total;
+                    _orderReponsitory.UpdateOrder(tem);
+                    _orderReponsitory.IsSaveChanges();
+                }
+                _cartService.DeleteCart(user.Id);
+                var ord = _orderReponsitory.GetOrdersId(order.IdOrder);
+                data.IdUser = ord.IdUser;
+                data.Address = ord.Address;
+                data.Status = ord.Status;
+                data.Total = ord.Total;
+                data.products = list;
+                orderv1.Status = "Success";
+                orderv1.Message = "Thành công";
+                orderv1.data = data;
+            }            
+            return orderv1;
         }
     }
 }
