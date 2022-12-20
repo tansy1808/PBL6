@@ -6,6 +6,6 @@ namespace BookStore.API.DTO.Cart
     {
         public string Status { get; set; }
         public string Message { get; set; }
-        public CartItem data { get; set; }
+        public CartViewDTO data { get; set; }
     }
 }

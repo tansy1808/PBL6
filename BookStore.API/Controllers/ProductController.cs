@@ -32,7 +32,6 @@ namespace BookStore.API.Controllers
             return Ok(_productService.AddProductFeed(productFeedDTOs));
         }
 
-        [Authorize(Roles = "Customer,Admin")]
         [HttpGet("{name}")]
         public ActionResult<ProductAPI> GetFindBookByName(string name, int page, int size)
         {
@@ -41,7 +40,7 @@ namespace BookStore.API.Controllers
             return pro;
         }
 
-        [Authorize(Roles = "Customer,Admin")]
+
         [HttpGet("{id:int}")]
         public ActionResult<ProductView> GetFindBookById(int id)
         {
@@ -50,7 +49,6 @@ namespace BookStore.API.Controllers
             return pro;
         }
 
-        [Authorize(Roles = "Customer,Admin")]
         [HttpGet("orderby")]
         public ActionResult<List<ProductView>> GetProductByDate(int size)
         {
@@ -59,7 +57,6 @@ namespace BookStore.API.Controllers
             return pro;
         }
 
-        [Authorize(Roles = "Customer,Admin")]
         [HttpGet("orderby/{name}")]
         public ActionResult<ProductAPI> GetProductName(string name, int page, int size)
         {
@@ -68,7 +65,6 @@ namespace BookStore.API.Controllers
             return pro;
         }
 
-        [Authorize(Roles = "Customer,Admin")]
         [HttpGet("orderby/Price/{idcate}")]
         public ActionResult<ProductPage> GetProductByPrice(int idcate, int star, int end, int page, int size)
         {
@@ -77,7 +73,6 @@ namespace BookStore.API.Controllers
             return pro;
         }
 
-        [Authorize(Roles = "Customer,Admin")]
         [HttpGet()]
         public ActionResult<ProductPage> GetProductPage(int page, int size)
         {
@@ -86,7 +81,6 @@ namespace BookStore.API.Controllers
             return pro;
         }
 
-        [Authorize(Roles = "Customer,Admin")]
         [HttpGet("category/{id}")]
         public ActionResult<CategoryAPI> GetFindBookByCategory(int id, int page, int size)
         {
@@ -95,7 +89,6 @@ namespace BookStore.API.Controllers
             return pro;
         }
 
-        [Authorize(Roles = "Customer,Admin")]
         [HttpGet("productFeed/{id}")]
         public ActionResult<List<FeedDTO>> GetFeedByBook(int id)
         {
@@ -104,7 +97,6 @@ namespace BookStore.API.Controllers
             return pro;
         }
 
-        [Authorize(Roles = "Customer,Admin")]
         [HttpGet("categories")]
         public ActionResult<ProductCate> GetAllCate() => Ok(_productService.GetProductCate());
 

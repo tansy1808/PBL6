@@ -43,6 +43,7 @@ namespace BookStore.API.Services
         {
             var id = _context.Products.FirstOrDefault(c => c.IdProduct == addItemDTO.IdProduct);
             var cartItem = new CartItem();
+            var cart = new CartViewDTO();
             var view = new ViewCartItemDTO()
             {
                 Status = "Error",
@@ -69,9 +70,14 @@ namespace BookStore.API.Services
                     cartItem.Quantity = addItemDTO.Quantity;
                     _cartReponsitory.InsertCartItem(cartItem);
                     _cartReponsitory.IsSaveChanges();
+                    cart.Id = cartItem.Id;
+                    cart.IdProduct = cartItem.IdProduct;
+                    cart.IdCart = cartItem.IdCart;
+                    cart.QuantityCart = cartItem.Quantity;
+                    cart.product = _context.Products.FirstOrDefault(a=>a.IdProduct== cartItem.IdProduct);
                     view.Status = "Success";
                     view.Message = "Thành công";
-                    view.data = cartItem;
+                    view.data = cart;
                 }
             }
             return view;
@@ -80,6 +86,7 @@ namespace BookStore.API.Services
         public ViewCartItemDTO UpdateCartItem(int id, CartItemView cartItemView)
         {
             var item = _cartReponsitory.GetCartItemId(id);
+            var cart = new CartViewDTO();
             var view = new ViewCartItemDTO()
             {
                 Status = "Error",
@@ -91,9 +98,14 @@ namespace BookStore.API.Services
                 item.Quantity = cartItemView.quantity;
                 _cartReponsitory.UpdateCartItem(item);
                 _cartReponsitory.IsSaveChanges();
+                cart.Id = item.Id;
+                cart.IdProduct = item.IdProduct;
+                cart.IdCart = item.IdCart;
+                cart.QuantityCart = item.Quantity;
+                cart.product = _context.Products.FirstOrDefault(a=>a.IdProduct== item.IdProduct);
                 view.Status = "Success";
                 view.Message = "Thành công";
-                view.data = item;
+                view.data = cart;
             }
             return view;
         }

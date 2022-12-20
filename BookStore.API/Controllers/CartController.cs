@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
 {
-    [Authorize(Roles = "Customer,Admin")]
+    //[Authorize(Roles = "Customer,Admin")]
     [Route("api/cart")]
     [ApiController]
     public class CartController : Controller
