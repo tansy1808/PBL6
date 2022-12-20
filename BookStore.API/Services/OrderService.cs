@@ -341,9 +341,9 @@ namespace BookStore.API.Services
             return view;
         }
 
-        public Income GetIncome(int page, int size)
+        public Income GetIncome(int date, int page, int size)
         {
-            var income = _orderReponsitory.GetIncomeByPrice();
+            var income = _orderReponsitory.GetIncomeByPrice(date);
             int total = income.Count();
             int pagecount = total / size;
             float Page = total % size;

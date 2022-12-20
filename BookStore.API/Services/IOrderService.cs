@@ -17,7 +17,7 @@ namespace BookStore.API.Services
         List<OrderProductAPI> FindOrderProductById(int id);
         View GetOrderByUser(int id, int page, int size);
         View GetOrder(int page, int size);
-        Income GetIncome(int page, int size);
+        Income GetIncome(int date,int page, int size);
         
     }
 }

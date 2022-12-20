@@ -28,12 +28,22 @@ namespace BookStore.API.DATA.Reponsitories
             return _context.Orders.ToList();
         }
 
-        public List<Thongke> GetIncomeByPrice()
+        public List<Thongke> GetIncomeByPrice(int date)
         {
             var Sta = "Paid";
             var pay = _context.Orders.Where(s=> s.Status == Sta).ToList();
-            var list1 = new List<OrderProduct>();
+            var listpay = new List<Orders>();
             foreach(Orders a in pay)
+            {
+                TimeSpan time = DateTime.Now - a.DateOrder;
+                int day = time.Days;
+                if(day < date)
+                {
+                    listpay.Add(a);
+                }
+            }
+            var list1 = new List<OrderProduct>();
+            foreach(Orders a in listpay)
             {
                 var id = _context.OrderProducts.Where(t=>t.IdOrder == a.IdOrder).ToList();
                 foreach(OrderProduct b in id)

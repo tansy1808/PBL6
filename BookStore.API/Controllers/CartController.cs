@@ -1,9 +1,11 @@
 ﻿using BookStore.API.DTO.Cart;
 using BookStore.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
 {
+    [Authorize(Roles = "Customer,Admin")]
     [Route("api/cart")]
     [ApiController]
     public class CartController : Controller

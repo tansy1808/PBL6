@@ -1,6 +1,7 @@
 ﻿using BookStore.API.DTO;
 using BookStore.API.DTO.Store;
 using BookStore.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
@@ -16,6 +17,7 @@ namespace BookStore.API.Controllers
             _orderService = orderService;
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpPost("order")]
         public ActionResult<ViewOrderDTO> CreateOrder([FromForm] OrderDTO orderDTOs)
         {
@@ -29,6 +31,7 @@ namespace BookStore.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpPost("orderProduct")]
         public ActionResult<ViewOrderProductDTO> CreateOrderProduct([FromForm] OrderProductDTO orderProductDTOs)
         {
@@ -42,6 +45,7 @@ namespace BookStore.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpPost("payment")]
         public ActionResult<ViewOrderPayDTO> CreatePayment([FromForm] PaymentDTO paymentDTOs)
         {
@@ -55,6 +59,7 @@ namespace BookStore.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpPost("methodPay")]
         public ActionResult<ViewProductMethodDTO> CreateMethodPay([FromForm] MethodPayDTO methodPayDTOs)
         {
@@ -68,6 +73,7 @@ namespace BookStore.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpPost("{iduser}")]
         public ActionResult<ViewOrders> CreateOrdersByCart(int iduser, string address)
         {
@@ -81,6 +87,7 @@ namespace BookStore.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("Find/{id}")]
         public ActionResult<OrderView> FindOrderId(int id)
         {
@@ -89,6 +96,7 @@ namespace BookStore.API.Controllers
             return members;
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpGet("{iduser}")]
         public ActionResult<View> GetOrder(int iduser, int page, int size)
         {
@@ -97,14 +105,16 @@ namespace BookStore.API.Controllers
             return members;
         }
 
-        [HttpGet("Income")]
-        public ActionResult<Income> GetPrice(int page, int size)
+        [Authorize(Roles = "Admin")]
+        [HttpGet("Income/{date}")]
+        public ActionResult<Income> GetPrice(int date,int page, int size)
         {
-            var members = _orderService.GetIncome(page,size);
+            var members = _orderService.GetIncome(date,page,size);
             if (members == null) return NotFound();
             return members;
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpDelete("{id}")]
         public IActionResult DeleteOrder(int id)
         {
@@ -113,8 +123,9 @@ namespace BookStore.API.Controllers
             return Ok(members);
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpPut("{idorder}")]
-        public IActionResult UpdateOrder(int idorder, int vnpay)
+        public ActionResult<ViewOrderDTO> UpdateOrder(int idorder, int vnpay)
         {
             var members = _orderService.UpdateStatus(idorder,vnpay);
             if (members == null) return NotFound();

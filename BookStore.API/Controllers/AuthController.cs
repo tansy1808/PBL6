@@ -3,6 +3,7 @@ using BookStore.API.DTO;
 using BookStore.API.DTO.User;
 using BookStore.API.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers
@@ -29,7 +30,7 @@ namespace BookStore.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        
         [HttpPost("login")]
         public ActionResult<ViewBag> Login([FromForm] AuthUserLogin authUserLogin)
         {
@@ -43,6 +44,7 @@ namespace BookStore.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpPost("pay")]
         public ActionResult<ViewBag> CreatePay([FromForm] PayUserDTO payUserDto)
         {
@@ -63,12 +65,14 @@ namespace BookStore.API.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpGet]
         public ActionResult<MemberAPI> GetAll()
         {
             return _authService.GetUserAll();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{username}")]
         public ActionResult<UserDTO> GetUserName(string username)
         {
@@ -76,6 +80,8 @@ namespace BookStore.API.Controllers
             if (members == null) return NotFound();
             return members;
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpGet("user/{id}")]
         public ActionResult<UserDTO> GetUserByID(int id)
         {
@@ -84,6 +90,7 @@ namespace BookStore.API.Controllers
             return members;
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpPut("{id}")]
         public ActionResult<ViewBag> UpdateInfoUser(int id, AuthUpdateDTO authUserDto)
         {
@@ -91,6 +98,7 @@ namespace BookStore.API.Controllers
             return Ok(_authService.UpdateUser(id,authUserDto));
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpPut("image/{id}")]
         public ActionResult<ViewBag> UpdateUserImage(int id, UserImage userImage)
         {
@@ -98,6 +106,7 @@ namespace BookStore.API.Controllers
             return Ok(_authService.UpdateImage(id,userImage));
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpPut("password/{id}")]
         public ActionResult<ViewBag> ChangePass(int id, [FromForm] ChangePass changePass)
         {

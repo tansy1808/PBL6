@@ -25,12 +25,8 @@ namespace BookStore.API.Services
 
             var claims = new List<Claim>()
             {
-                new Claim("iduser", user.IdUser.ToString()),
                 new Claim(JwtRegisteredClaimNames.NameId,username),
-                new Claim("email", user.Email.ToString()),
-                new Claim("name", user.Name.ToString()),
-                new Claim("role", role.RoleName)
-
+                new Claim(ClaimTypes.Role, role.RoleName)
             };
             var symmetricKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_configuration["TokenKey"]));
