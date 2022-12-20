@@ -7,6 +7,7 @@ namespace BookStore.API.DTO.Store
 {
     public class OrdersViewDTO
     {
+        public int IdOrder {get; set;}
         public int IdUser {get; set;}
         public string Address {get; set;}
         public string Status { get; set; }

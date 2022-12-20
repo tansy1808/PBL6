@@ -416,6 +416,7 @@ namespace BookStore.API.Services
                 }
                 _cartService.DeleteCart(user.Id);
                 var ord = _orderReponsitory.GetOrdersId(order.IdOrder);
+                data.IdOrder = ord.IdOrder;
                 data.IdUser = ord.IdUser;
                 data.Address = ord.Address;
                 data.Status = ord.Status;
