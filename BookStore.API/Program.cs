@@ -23,7 +23,16 @@ services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(c =>
     {
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger BookStore", Version = "v1" });
+        c.SwaggerDoc("v1", new OpenApiInfo { 
+            Title = "Swagger BookStore", 
+            Version = "v1",
+            Description = "An ASP.NET Core Web API for managing BookStore By Nguyen Tan Sy, Tran Van Toan, Duong Dinh Thanh, Nguyen Trong Duc, Sisanonh Thinnakone",
+            Contact = new OpenApiContact
+            {
+                Name = "Trần Văn Toàn",
+                Url = new Uri("https://www.facebook.com/toantran932001")
+            },
+        });
         c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {
             Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
@@ -36,22 +45,26 @@ services.AddSwaggerGen(c =>
         });
 
         c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+        {
+        {
+            new OpenApiSecurityScheme
             {
-            {
-                new OpenApiSecurityScheme
+            Reference = new OpenApiReference
                 {
-                Reference = new OpenApiReference
-                    {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                    },
-                    Scheme = "oauth2",
-                    Name = "Bearer",
-                    In = ParameterLocation.Header,
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer"
                 },
-                new List<string>()
-                }
-            });
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header,
+            },
+            new List<string>()
+            }
+        });
+        c.AddServer(new OpenApiServer
+        {
+            Url= "http://sisanonhkone-001-site1.atempurl.com"
+        });
     } );
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
