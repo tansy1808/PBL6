@@ -8,7 +8,7 @@ namespace BookStore.API.Services
     {
         ViewOrderDTO CreateOrder(OrderDTO orderDTO);
         ViewOrderProductDTO CreateOrderProduct(OrderProductDTO orderProductDTO);
-        ViewOrders CreateOrderByCart(int iduser, string address);
+        ViewOrders CreateOrderByCart(OrderDTO orderDTO);
         ViewOrderPayDTO CreatePay(PaymentDTO paymentDTO);
         ViewProductMethodDTO CreateMethodPay(MethodPayDTO methodPayDTO);
         ViewOrderDTO UpdateStatus(int idorder, int vnpay);

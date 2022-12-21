@@ -8,7 +8,7 @@ namespace BookStore.API.Data.Enities.Order
         public int IdPay {get; set;}
         [Required]
         public int IdOrder {get; set;}
-        public int Amount {get; set;}
+        public decimal Amount {get; set;}
         [Required]
         public DateTime Date {get; set;}
         public int TypePay {get; set;}

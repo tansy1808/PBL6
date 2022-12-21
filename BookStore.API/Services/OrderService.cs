@@ -84,6 +84,7 @@ namespace BookStore.API.Services
             {
                 order.IdUser = orderDTO.IdUser;
                 order.Address = orderDTO.Address;
+                order.SDT = orderDTO.SDT;
                 order.Status = "Wait for pay";
                 order.DateOrder = DateTime.Now; 
                 _orderReponsitory.InsertOrder(order);
@@ -361,9 +362,9 @@ namespace BookStore.API.Services
             return view;
         }
 
-        public ViewOrders CreateOrderByCart(int iduser, string address)
+        public ViewOrders CreateOrderByCart(OrderDTO orderDTO)
         {
-            var user = _context.Carts.FirstOrDefault(a=>a.IdUser == iduser);
+            var user = _context.Carts.FirstOrDefault(a=>a.IdUser == orderDTO.IdUser);
             var cart = _context.CartItems.Where(b=>b.IdCart == user.Id).ToList();
             var order = new Orders();
             var orderv1 = new ViewOrders()
@@ -374,8 +375,9 @@ namespace BookStore.API.Services
             };
             if (user != null)
             {
-                order.IdUser = iduser;
-                order.Address = address;
+                order.IdUser = orderDTO.IdUser;
+                order.Address = orderDTO.Address;
+                order.SDT = orderDTO.SDT;
                 order.Status = "Wait for pay";
                 order.DateOrder = DateTime.Now; 
                 _orderReponsitory.InsertOrder(order);
@@ -385,9 +387,9 @@ namespace BookStore.API.Services
                 var data = new OrdersViewDTO();
                 foreach(CartItem i in cart)
                 {
-                    int total = 0;
+                    decimal total = 0;
                     var pro = _productReponsitory.GetProductsByIdpro(i.IdProduct);
-                    int pri = (((int)pro.Price) / 100) * (100-(int)pro.Discount) * ((int)i.Quantity);
+                    decimal pri = (pro.Price) * (1-pro.Discount) * ((int)i.Quantity);
                     var product = new OrderProduct
                     {
                         IdOrder = order.IdOrder,
@@ -408,17 +410,18 @@ namespace BookStore.API.Services
                     var orders = _orderReponsitory.GetOrderProductId(order.IdOrder).ToList();
                     foreach (OrderProduct j in orders)
                     {
-                        total += ((int)j.Price);
+                        total += ((decimal)j.Price);
                     }
                     tem.Total = total;
                     _orderReponsitory.UpdateOrder(tem);
                     _orderReponsitory.IsSaveChanges();
+                    _cartService.DeleteItem(i.Id);
                 }
-                _cartService.DeleteCart(user.Id);
                 var ord = _orderReponsitory.GetOrdersId(order.IdOrder);
                 data.IdOrder = ord.IdOrder;
                 data.IdUser = ord.IdUser;
                 data.Address = ord.Address;
+                data.SDT = ord.SDT;
                 data.Status = ord.Status;
                 data.Total = ord.Total;
                 data.products = list;

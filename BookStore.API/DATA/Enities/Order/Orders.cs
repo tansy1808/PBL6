@@ -9,9 +9,12 @@ namespace BookStore.API.Data.Enities.Order
         public int IdOrder {get; set;}
         [Required]
         public int IdUser {get; set;}
-        public string? Address {get; set;}
+        [Required]
+        public string Address {get; set;}
+        [Required]
+        public string SDT {get; set;}
         public string? Status { get; set; }
-        public int Total {get; set;}
+        public decimal Total {get; set;}
         [Required]
         public DateTime DateOrder {get; set;}
         public List<OrderProduct> orderProducts {get; set;}

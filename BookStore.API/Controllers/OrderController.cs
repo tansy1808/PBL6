@@ -74,12 +74,12 @@ namespace BookStore.API.Controllers
         }
 
         [Authorize(Roles = "Customer,Admin")]
-        [HttpPost("{iduser}")]
-        public ActionResult<ViewOrders> CreateOrdersByCart(int iduser, string address)
+        [HttpPost("")]
+        public ActionResult<ViewOrders> CreateOrdersByCart(OrderDTO orderDTO)
         {
             try
             {
-                return Ok(_orderService.CreateOrderByCart(iduser,address));
+                return Ok(_orderService.CreateOrderByCart(orderDTO));
             }
             catch (BadHttpRequestException ex)
             {
