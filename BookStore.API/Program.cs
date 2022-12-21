@@ -61,10 +61,6 @@ services.AddSwaggerGen(c =>
             new List<string>()
             }
         });
-        c.AddServer(new OpenApiServer
-        {
-            Url= "http://sisanonhkone-001-site1.atempurl.com"
-        });
     } );
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

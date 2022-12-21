@@ -22,7 +22,28 @@ namespace BookStore.API.Services
             _productReponsitory = productReponsitory;
         }
 
-        public ViewOrderDTO UpdateStatus(int idorder, int vnpay)
+        public ViewOrderDTO UpdateStatus(int idorder, string status)
+        {
+            var order = _context.Orders.FirstOrDefault(c=>c.IdOrder== idorder);
+            var view = new ViewOrderDTO
+            {
+                Status ="Error",
+                Message = "Đơn hàng không tồn tại.",
+                data = null
+            };
+            if(order!= null)
+            {
+                order.Status = status;
+                order.DateOrder = DateTime.Now;
+                _orderReponsitory.UpdateOrder(order);
+                _orderReponsitory.IsSaveChanges();
+                view.Status = "Success";
+                view.Message = "Thanh toán thành công.";
+                view.data = order;
+            }
+            return view;
+        }
+        public ViewOrderDTO UpdateStatusVnPay(int idorder, int vnpay)
         {
             var order = _context.Orders.FirstOrDefault(c=>c.IdOrder== idorder);
             var view = new ViewOrderDTO
@@ -36,6 +57,7 @@ namespace BookStore.API.Services
                 if(vnpay == 0 || vnpay == 7 )
                 {
                     order.Status = "Paid";
+                    order.DateOrder = DateTime.Now;
                     _orderReponsitory.UpdateOrder(order);
                     _orderReponsitory.IsSaveChanges();
                     view.Status = "Success";
@@ -45,6 +67,7 @@ namespace BookStore.API.Services
                 else
                 {
                     order.Status = "Payment failed";
+                    order.DateOrder = DateTime.Now;
                     _orderReponsitory.UpdateOrder(order);
                     _orderReponsitory.IsSaveChanges();
                     view.Status = "Error";
@@ -209,12 +232,27 @@ namespace BookStore.API.Services
                         list.Add(add);
                     };
                 }
-                rs.IdOrder = order.IdOrder;
-                rs.Address = order.Address;
-                rs.Status = order.Status;
-                rs.Total = order.Total;
-                rs.DateOrder = order.DateOrder;
-                rs.orders = list;
+                var a = _context.Payments.FirstOrDefault(c=>c.IdOrder==order.IdOrder);
+                if (a == null)
+                {
+                    rs.IdOrder = order.IdOrder;
+                    rs.Address = order.Address;
+                    rs.Status = order.Status;
+                    rs.TypePay = null;
+                    rs.Total = order.Total;
+                    rs.DateOrder = order.DateOrder;
+                    rs.orders = list;
+                }else
+                {
+                    var b = _context.MethodPays.FirstOrDefault(c=>c.Id == a.IdPay);
+                    rs.IdOrder = order.IdOrder;
+                    rs.Address = order.Address;
+                    rs.Status = order.Status;
+                    rs.TypePay = b.TypeName;
+                    rs.Total = order.Total;
+                    rs.DateOrder = order.DateOrder;
+                    rs.orders = list;
+                }
             }
             return rs;  
         }
@@ -269,15 +307,28 @@ namespace BookStore.API.Services
                             list.Add(add);
                         };
                     }
-                    var rs = new OrderView
+                    var a = _context.Payments.FirstOrDefault(c=>c.IdOrder==i.IdOrder);
+                    var rs = new OrderView();
+                    if (a == null)
                     {
-                        IdOrder = i.IdOrder,
-                        Address = i.Address,
-                        Status = i.Status,
-                        Total = i.Total,
-                        DateOrder = i.DateOrder,
-                        orders = list
-                    };
+                        rs.IdOrder = i.IdOrder;
+                        rs.Address = i.Address;
+                        rs.Status = i.Status;
+                        rs.TypePay = null;
+                        rs.Total = i.Total;
+                        rs.DateOrder = i.DateOrder;
+                        rs.orders = list;
+                    }else
+                    {
+                        var b = _context.MethodPays.FirstOrDefault(c=>c.Id == a.IdPay);
+                        rs.IdOrder = i.IdOrder;
+                        rs.Address = i.Address;
+                        rs.Status = i.Status;
+                        rs.TypePay = b.TypeName;
+                        rs.Total = i.Total;
+                        rs.DateOrder = i.DateOrder;
+                        rs.orders = list;
+                    }
                     list2.Add(rs);
                 }
             }
@@ -320,15 +371,28 @@ namespace BookStore.API.Services
                             list.Add(add);
                         };
                     }
-                    var rs = new OrderView
+                    var a = _context.Payments.FirstOrDefault(c=>c.IdOrder==i.IdOrder);
+                    var rs = new OrderView();
+                    if (a == null)
                     {
-                        IdOrder = i.IdOrder,
-                        Address = i.Address,
-                        Status = i.Status,
-                        Total = i.Total,
-                        DateOrder = i.DateOrder,
-                        orders = list
-                    };
+                        rs.IdOrder = i.IdOrder;
+                        rs.Address = i.Address;
+                        rs.Status = i.Status;
+                        rs.TypePay = null;
+                        rs.Total = i.Total;
+                        rs.DateOrder = i.DateOrder;
+                        rs.orders = list;
+                    }else
+                    {
+                        var b = _context.MethodPays.FirstOrDefault(c=>c.Id == a.IdPay);
+                        rs.IdOrder = i.IdOrder;
+                        rs.Address = i.Address;
+                        rs.Status = i.Status;
+                        rs.TypePay = b.TypeName;
+                        rs.Total = i.Total;
+                        rs.DateOrder = i.DateOrder;
+                        rs.orders = list;
+                    }
                     list2.Add(rs);
                 }
             }
@@ -430,6 +494,67 @@ namespace BookStore.API.Services
                 orderv1.data = data;
             }            
             return orderv1;
+        }
+
+        public View GetOrderByDate(int date, int page, int size)
+        {
+            var Sta = "Paid";
+            var pay = _context.Orders.Where(s=> s.Status == Sta).ToList();
+            var listpay = new List<Orders>();
+            foreach(Orders a in pay)
+            {
+                TimeSpan time = DateTime.Now - a.DateOrder;
+                int day = time.Days;
+                if(day <= date)
+                {
+                    listpay.Add(a);
+                }
+            }
+            var list = new List<OrderView>();
+            foreach(var i in listpay)
+            { 
+                var a = _context.Payments.FirstOrDefault(c=>c.IdOrder== i.IdOrder);
+                var tem = new OrderView();
+                if(a == null)
+                {
+                    tem.IdOrder = i.IdOrder;
+                    tem.Address = i.Address;
+                    tem.Status = i.Status;
+                    tem.SDT = i.SDT;
+                    tem.TypePay = null;
+                    tem.Total = i.Total;
+                    tem.DateOrder = i.DateOrder;
+                    tem.orders = null;
+                    list.Add(tem);
+                }else
+                {
+                    var b = _context.MethodPays.FirstOrDefault(c=> c.Id == a.IdPay);
+                    tem.IdOrder = i.IdOrder;
+                    tem.Address = i.Address;
+                    tem.Status = i.Status;
+                    tem.SDT = i.SDT;
+                    tem.TypePay = b.TypeName;
+                    tem.Total = i.Total;
+                    tem.DateOrder = i.DateOrder;
+                    tem.orders = null;
+                    list.Add(tem);
+                }
+            }
+            int total = list.Count();
+            int pagecount = total / size;
+            float Page = total % size;
+            if (Page > 0) { pagecount = pagecount + 1; }
+            var orderby = list.OrderByDescending(c=>c.Total);
+            var data = orderby.Skip(((page) - 1) * size).Take(size).ToList();
+            var view = new View();
+            if (data != null)
+            {
+                view.Page = page;
+                view.Size = size;
+                view.TotalPage = pagecount;
+                view.Data = data;
+            }
+            return view;
         }
     }
 }

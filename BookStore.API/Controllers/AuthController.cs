@@ -72,7 +72,6 @@ namespace BookStore.API.Controllers
             return _authService.GetUserAll();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("{username}")]
         public ActionResult<UserDTO> GetUserName(string username)
         {

@@ -27,10 +27,22 @@ namespace BookStore.API.Services
                 {
                     Status = "Error",
                     Message = "Sai Password hoặc Username.",
-                    Title = null
+                    Title = null,
+                    data = null
                 };
                 return view1;
             }
+            var user = new UserDTO
+            {
+                IdUser = currentUser.IdUser,
+                Username = currentUser.Username,
+                UserImage = currentUser.UserImage,
+                Name= currentUser.Name,
+                Address= currentUser.Address,
+                Contact= currentUser.Contact,
+                Email= currentUser.Email,
+                Role = _userReponsitory.GetRoleById(currentUser.RoleId).RoleName,
+            };
             using var hmac = new HMACSHA512(currentUser.PasswordSalt);
             var passwordBytes = hmac.ComputeHash(
                 Encoding.UTF8.GetBytes(authUserLogin.Password)
@@ -43,7 +55,8 @@ namespace BookStore.API.Services
                     {
                         Status = "Error",
                         Message = "Sai Password hoặc Username.",
-                        Title = null
+                        Title = null,
+                        data = null
                     };
                     return view2;
                 }
@@ -52,7 +65,8 @@ namespace BookStore.API.Services
             {
                 Status = "Success",
                 Message = "Thành công",
-                Title = _tokenService.CreateToken(currentUser.Username)
+                Title = _tokenService.CreateToken(currentUser.Username),
+                data = user
             };
             return view;
         }
@@ -70,7 +84,8 @@ namespace BookStore.API.Services
                     {
                         Status = "Error",
                         Message = "Sai mật khẩu",
-                        Title = null
+                        Title = null,
+                        data = null
                     };
                     return view1;
                 }
@@ -85,7 +100,8 @@ namespace BookStore.API.Services
                     {
                         Status = "Success",
                         Message = "Thành công",
-                        Title = _tokenService.CreateToken(pass.Username)
+                        Title = _tokenService.CreateToken(pass.Username),
+                        data = null
                     };
                     return view3;
                 }
@@ -95,7 +111,8 @@ namespace BookStore.API.Services
                     {
                         Status = "Error",
                         Message = "Mật khẩu mới không giống nhau",
-                        Title = null
+                        Title = null,
+                        data = null
                     };
                     return view2;
                 }
@@ -104,7 +121,8 @@ namespace BookStore.API.Services
             {
                 Status = "Success",
                 Message = "Thành công",
-                Title = _tokenService.CreateToken(pass.Username)
+                Title = _tokenService.CreateToken(pass.Username),
+                data = null,
             };
             return view;
         }
@@ -118,7 +136,8 @@ namespace BookStore.API.Services
                 {
                     Status = "Error",
                     Message = "Username đã tồn tại.!",
-                    Title = null
+                    Title = null,
+                    data = null
                 };
                 return view2;
             }
@@ -140,7 +159,8 @@ namespace BookStore.API.Services
             {
                 Status = "Success",
                 Message = "Thành công",
-                Title = _tokenService.CreateToken(user.Username)
+                Title = _tokenService.CreateToken(user.Username),
+                data = null
             };
             return view;
         }
@@ -217,7 +237,8 @@ namespace BookStore.API.Services
             {
                 Status = "Error",
                 Message = "Không tìm thấy User.",
-                Title = null
+                Title = null,
+                data = null
             };
             if (user != null)
             {
@@ -230,6 +251,7 @@ namespace BookStore.API.Services
                 view.Status = "Success";
                 view.Message = "Thành công";
                 view.Title = null;
+                view.data = null;
             };
             return view;
         }
@@ -241,7 +263,8 @@ namespace BookStore.API.Services
             {
                 Status = "Error",
                 Message = "Không tìm thấy User.",
-                Title = null
+                Title = null,
+                data = null
             };
             if (user != null) {
                 user.UserImage = userImage.Userimage;
@@ -250,6 +273,7 @@ namespace BookStore.API.Services
                 view.Status = "Success";
                 view.Message = "Thành công";
                 view.Title = null;
+                view.data = null;
             }
             return view;
         }
@@ -261,7 +285,8 @@ namespace BookStore.API.Services
             {
                 Status = "Error",
                 Message = "Không tìm thấy User.",
-                Title = null
+                Title = null,
+                data = null
             };
             var userpay = new UserPay();
             if (user != null)
@@ -273,6 +298,7 @@ namespace BookStore.API.Services
                 view.Status = "Success";
                 view.Message = "Thành công";
                 view.Title = null;
+                view.data = null;
             }
             return view;
         }

@@ -114,6 +114,15 @@ namespace BookStore.API.Controllers
             return members;
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet("datepay/{date}")]
+        public ActionResult<View> GetOrderDate(int date,int page, int size)
+        {
+            var members = _orderService.GetOrderByDate(date,page,size);
+            if (members == null) return NotFound();
+            return members;
+        }
+
         [Authorize(Roles = "Customer,Admin")]
         [HttpDelete("{id}")]
         public IActionResult DeleteOrder(int id)
@@ -124,10 +133,19 @@ namespace BookStore.API.Controllers
         }
 
         [Authorize(Roles = "Customer,Admin")]
-        [HttpPut("{idorder}")]
-        public ActionResult<ViewOrderDTO> UpdateOrder(int idorder, int vnpay)
+        [HttpPut("vnpay/{idorder}")]
+        public ActionResult<ViewOrderDTO> UpdateOrderVnPay(int idorder, int vnpay)
         {
-            var members = _orderService.UpdateStatus(idorder,vnpay);
+            var members = _orderService.UpdateStatusVnPay(idorder,vnpay);
+            if (members == null) return NotFound();
+            return Ok(members);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{idorder}")]
+        public ActionResult<ViewOrderDTO> UpdateOrder(int idorder, string status)
+        {
+            var members = _orderService.UpdateStatus(idorder,status);
             if (members == null) return NotFound();
             return Ok(members);
         }
