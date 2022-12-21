@@ -326,55 +326,18 @@ namespace BookStore.API.Services
             return list;
         }
 
-        public ProductPage GetProductByCate(int categoryId, int page, int size)
-        {
-            var pros = from s in _context.Products.Where(c =>c.IdCate == categoryId)
-                       orderby s.Name select s;
-            int total = pros.Count();
-            int pagecount = total / size;
-            float Page = total % size;
-            if (Page > 0) { pagecount = pagecount + 1; }
-            var data = pros.Skip(((page) - 1) * size).Take(size).ToList();
-            List<ProductView> list = new List<ProductView>();
-            foreach (Products i in data)
-            {
-                var proview = new ProductView
-                {
-                    IdProduct = i.IdProduct,
-                    Name = i.Name,
-                    Image = i.Image,
-                    Desc = i.Desc,
-                    Feedback = i.Feedback,
-                    Price = i.Price,
-                    Quantity = i.Quantity,
-                    DateCreate = i.DateCreate,
-                    Discount = i.Discount,
-                    Cate = _context.Categories.FirstOrDefault(c => c.Id == i.IdCate).CategoryType
-                };
-                list.Add(proview);
-            }
-            var view = new ProductPage
-            {
-                Size = size,
-                Page = page,
-                TotalPage = pagecount,
-                data = list
-            };
-            return view;
-        }
-
-        public ProductPage GetProductByPrice(int categoryId, int st, int end, int page, int size)
+        public CategoryAPI GetProductByPrice(int categoryId, int st, int end, int page, int size)
         {
             var pros = from s in _context.Products.Where(c => c.IdCate == categoryId)
                        orderby s.Price select s;
             var proprice = pros.Where(c => c.Price > st).Where(c => c.Price < end);
-
             int total = proprice.Count();
             int pagecount = total / size;
             float Page = total % size;
             if (Page > 0) { pagecount = pagecount + 1; }
             var data = proprice.Skip(((page) - 1) * size).Take(size).ToList();
             List<ProductView> list = new List<ProductView>();
+            var catevalue = _context.Categories.FirstOrDefault(c => c.Id ==categoryId);
             foreach (Products i in data)
             {
                 var proview = new ProductView
@@ -388,16 +351,21 @@ namespace BookStore.API.Services
                     Quantity = i.Quantity,
                     DateCreate = i.DateCreate,
                     Discount = i.Discount,
-                    Cate = _context.Categories.FirstOrDefault(c => c.Id == i.IdCate).CategoryType
+                    Cate = catevalue.CategoryType
                 };
                 list.Add(proview);
             }
-            var view = new ProductPage
+            var productPage = new ProductPage
             {
                 Size = size,
                 Page = page,
                 TotalPage = pagecount,
                 data = list
+            };
+            var view = new CategoryAPI
+            {
+                Title = catevalue.CategoryType,
+                data = productPage
             };
             return view;
         }

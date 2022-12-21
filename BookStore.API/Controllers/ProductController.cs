@@ -32,6 +32,21 @@ namespace BookStore.API.Controllers
             return Ok(_productService.AddProductFeed(productFeedDTOs));
         }
 
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        public ActionResult<ViewProductDTO> UpdateBook(int id, [FromForm] ProductDTO productDTOs)
+        {
+            return Ok(_productService.UpdateProduct(id, productDTOs));
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            return Ok(_productService.Delete(id));
+        }
+
         [HttpGet("{name}")]
         public ActionResult<ProductAPI> GetFindBookByName(string name, int page, int size)
         {
@@ -39,7 +54,6 @@ namespace BookStore.API.Controllers
             if (pro == null) return NotFound();
             return pro;
         }
-
 
         [HttpGet("{id:int}")]
         public ActionResult<ProductView> GetFindBookById(int id)
@@ -66,7 +80,7 @@ namespace BookStore.API.Controllers
         }
 
         [HttpGet("orderby/Price/{idcate}")]
-        public ActionResult<ProductPage> GetProductByPrice(int idcate, int star, int end, int page, int size)
+        public ActionResult<CategoryAPI> GetProductByPrice(int idcate, int star, int end, int page, int size)
         {
             var pro = _productService.GetProductByPrice(idcate, star,end, page, size);
             if (pro == null) return NotFound();
@@ -100,19 +114,5 @@ namespace BookStore.API.Controllers
         [HttpGet("categories")]
         public ActionResult<ProductCate> GetAllCate() => Ok(_productService.GetProductCate());
 
-        [Authorize(Roles = "Admin")]
-        [HttpPut("{id}")]
-        public ActionResult<ViewProductDTO> UpdateBook(int id, [FromForm] ProductDTO productDTOs)
-        {
-            return Ok(_productService.UpdateProduct(id, productDTOs));
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            return Ok(_productService.Delete(id));
-
-        }
     }
 }

@@ -53,31 +53,32 @@ namespace BookStore.API.Services
             if (id != null) {
                 var user = _context.Carts.FirstOrDefault(c => c.IdUser == addItemDTO.IdUser);
                 var pro = _context.CartItems.Where(c=>c.IdCart == user.Id).FirstOrDefault(c=>c.IdProduct == addItemDTO.IdProduct);
-                if(pro != null )
+                if(pro == null )
                 {
-                    var view1 = new ViewCartItemDTO
+                    view.Status = "Error";
+                    view.Message = "User không tồn tại.";
+                    view.data = null;
+                    if (user != null)
                     {
-                        Status = "Error",
-                        Message = "Sản phẩm đã có trong giỏ.",
-                        data = null
-                    };
-                    return view1;
+                        cartItem.IdProduct = addItemDTO.IdProduct;
+                        cartItem.IdCart = user.Id;
+                        cartItem.Quantity = addItemDTO.Quantity;
+                        _cartReponsitory.InsertCartItem(cartItem);
+                        _cartReponsitory.IsSaveChanges();
+                        cart.Id = cartItem.Id;
+                        cart.IdProduct = cartItem.IdProduct;
+                        cart.IdCart = cartItem.IdCart;
+                        cart.QuantityCart = cartItem.Quantity;
+                        cart.product = _context.Products.FirstOrDefault(a=>a.IdProduct== cartItem.IdProduct);
+                        view.Status = "Success";
+                        view.Message = "Thành công";
+                        view.data = cart;
+                    }
                 }
-                if (user != null)
-                {
-                    cartItem.IdProduct = addItemDTO.IdProduct;
-                    cartItem.IdCart = user.Id;
-                    cartItem.Quantity = addItemDTO.Quantity;
-                    _cartReponsitory.InsertCartItem(cartItem);
-                    _cartReponsitory.IsSaveChanges();
-                    cart.Id = cartItem.Id;
-                    cart.IdProduct = cartItem.IdProduct;
-                    cart.IdCart = cartItem.IdCart;
-                    cart.QuantityCart = cartItem.Quantity;
-                    cart.product = _context.Products.FirstOrDefault(a=>a.IdProduct== cartItem.IdProduct);
-                    view.Status = "Success";
-                    view.Message = "Thành công";
-                    view.data = cart;
+                else {
+                    view.Status = "Error";
+                    view.Message = "Sản phẩm đã có trong giỏ.";
+                    view.data = null;
                 }
             }
             return view;

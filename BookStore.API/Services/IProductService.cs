@@ -6,9 +6,8 @@ namespace BookStore.API.Services
 {
     public interface IProductService
     {
-        List<ProductView> GetProductByDate( int sl);
-        ProductPage GetProductByCate(int categoryId, int page, int size);
-        ProductPage GetProductByPrice(int categoryId,int st, int end, int page, int size);
+        List<ProductView> GetProductByDate(int sl);
+        CategoryAPI GetProductByPrice(int categoryId,int st, int end, int page, int size);
         ViewProductDTO CreateProduct(ProductDTO productDTOs);
         ViewProductFeedDTO AddProductFeed(ProductFeedDTO productFeedDTOs);
         ProductAPI GetProductsByName(string name, int page, int size);
