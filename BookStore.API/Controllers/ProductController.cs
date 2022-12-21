@@ -22,7 +22,14 @@ namespace BookStore.API.Controllers
         [HttpPost]
         public ActionResult<ViewProductDTO> AddBook([FromForm] ProductDTO productDTO)
         {
-            return Ok(_productService.CreateProduct(productDTO));
+            return Ok(_productService.AddProduct(productDTO));
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("category")]
+        public ActionResult<ViewCategory> AddCate([FromBody] CategoryDTO categoryDTO)
+        {
+            return Ok(_productService.AddCategory(categoryDTO));
         }
 
         [Authorize(Roles = "Customer")]
@@ -39,12 +46,26 @@ namespace BookStore.API.Controllers
         {
             return Ok(_productService.UpdateProduct(id, productDTOs));
         }
+        
+        [Authorize(Roles = "Admin")]
+        [HttpPut("category/{id}")]
+        public ActionResult<ViewCategory> UpdateCate(int id, [FromBody] CategoryDTO categoryDTO)
+        {
+            return Ok(_productService.UpdateCategory(id, categoryDTO));
+        }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public ActionResult<ViewProductDTO> Delete(int id)
         {
             return Ok(_productService.Delete(id));
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("category/{id}")]
+        public ActionResult<ViewCategory> DeleteCate(int id)
+        {
+            return Ok(_productService.DeleteCate(id));
         }
 
         [HttpGet("{name}")]

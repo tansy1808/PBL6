@@ -55,7 +55,7 @@ namespace BookStore.API.Services
             return view;  
         }
 
-        public ViewProductDTO CreateProduct(ProductDTO productDTO)
+        public ViewProductDTO AddProduct(ProductDTO productDTO)
         {
             var pro = _context.Categories.FirstOrDefault(c => c.Id == productDTO.IdCate);
             var products = new Products();
@@ -84,9 +84,13 @@ namespace BookStore.API.Services
             return view;
         }
 
-        public Products Delete(int id)
+        public ViewProductDTO Delete(int id)
         {
             var product = _productReponsitory.GetProductsByIdpro(id);
+            var er = new ViewProductDTO();
+            er.Status = "Error";
+            er.Message = "Không tìm thấy sản phẩm.";
+            er.data = null;
             if (product != null)
             {
                 var feed = _productReponsitory.GetProductFeedById(id);
@@ -99,8 +103,11 @@ namespace BookStore.API.Services
                 }                
                 _productReponsitory.DeteleProduct(product);
                 _productReponsitory.IsSaveChanges();
+                er.Status = "Success";
+                er.Message = "Xóa thành công";
+                er.data = null;
             }
-            return product;
+            return er;
             
         }
 
@@ -368,6 +375,58 @@ namespace BookStore.API.Services
                 data = productPage
             };
             return view;
+        }
+
+        public ViewCategory AddCategory(CategoryDTO categoryDTO)
+        {
+            var er = new ViewCategory();
+            var cate = new ProductCate
+            {
+                CategoryType = categoryDTO.CategoryType
+            };
+            _productReponsitory.InsertCategory(cate);
+            _productReponsitory.IsSaveChanges();
+            er.Status = "Success";
+            er.Message = "Thêm thành công";
+            er.data = cate;
+            return er;
+        }
+
+        public ViewCategory UpdateCategory(int id, CategoryDTO categoryDTO)
+        {
+            var er = new ViewCategory();
+            var cate = _productReponsitory.GetCateById(id);
+            er.Status = "Error/Success";
+            er.Message = "Category không tồn tại.";
+            er.data = null;
+            if(cate != null)
+            {
+                cate.CategoryType = categoryDTO.CategoryType;
+                _productReponsitory.UpdateCategory(cate);
+                _productReponsitory.IsSaveChanges();
+                er.Status = "Success";
+                er.Message = "thành công";
+                er.data = cate;
+            }
+            return er;
+        }
+
+        public ViewCategory DeleteCate(int id)
+        {
+            var er = new ViewCategory();
+            var cate = _productReponsitory.GetCateById(id);
+            er.Status = "Error/Success";
+            er.Message = "Category không tồn tại.";
+            er.data = null;
+            if(cate != null)
+            {
+                _productReponsitory.DeleteCategory(cate);
+                _productReponsitory.IsSaveChanges();
+                er.Status = "Success";
+                er.Message = "Xóa thành công";
+                er.data = cate;
+            }
+            return er;
         }
     }
 }

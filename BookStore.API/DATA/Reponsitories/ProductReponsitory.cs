@@ -11,6 +11,12 @@ namespace BookStore.API.DATA.Reponsitories
         {
             _context = context;
         }
+
+        public void DeleteCategory(ProductCate productCate)
+        {
+            _context.Categories.Remove(productCate);
+        }
+
         public void DeteleFeed(ProductFeed feed)
         {
             _context.ProductFeeds.Remove(feed);
@@ -71,6 +77,11 @@ namespace BookStore.API.DATA.Reponsitories
         public bool IsSaveChanges()
         {
             return _context.SaveChanges() > 0;
+        }
+
+        public void UpdateCategory(ProductCate productCate)
+        {
+            _context.Categories.Update(productCate);
         }
 
         public void UpdateProduct(Products products)

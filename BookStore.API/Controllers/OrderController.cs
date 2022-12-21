@@ -98,9 +98,18 @@ namespace BookStore.API.Controllers
 
         [Authorize(Roles = "Customer,Admin")]
         [HttpGet("{iduser}")]
-        public ActionResult<View> GetOrder(int iduser, int page, int size)
+        public ActionResult<View> GetOrderByUser(int iduser, int page, int size)
         {
             var members = _orderService.GetOrderByUser(iduser,page,size);
+            if (members == null) return NotFound();
+            return members;
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("")]
+        public ActionResult<ViewDTO> GetOrderAll(int page, int size)
+        {
+            var members = _orderService.GetOrder(page,size);
             if (members == null) return NotFound();
             return members;
         }

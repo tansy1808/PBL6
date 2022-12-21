@@ -8,7 +8,9 @@ namespace BookStore.API.DATA.Reponsitories
         void InsertProductFeed(ProductFeed productFeed);
         void InsertCategory(ProductCate productCate);
         void UpdateProduct(Products products);
+        void UpdateCategory(ProductCate productCate);
         void DeteleProduct(Products products);
+        void DeleteCategory(ProductCate productCate);
         void DeteleFeed(ProductFeed feed);
         List<Products> GetProductsbyName(string productName);
         List<Products> GetProductsById(int id);
