@@ -20,7 +20,7 @@ namespace BookStore.API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public ActionResult<ViewProductDTO> AddBook([FromForm] ProductDTO productDTO)
+        public ActionResult<ViewProductDTO> AddBook([FromBody] ProductDTO productDTO)
         {
             return Ok(_productService.AddProduct(productDTO));
         }
@@ -104,6 +104,14 @@ namespace BookStore.API.Controllers
         public ActionResult<CategoryAPI> GetProductByPrice(int idcate, int star, int end, int page, int size)
         {
             var pro = _productService.GetProductByPrice(idcate, star,end, page, size);
+            if (pro == null) return NotFound();
+            return pro;
+        }
+
+        [HttpGet("orderby/name/{name}")]
+        public ActionResult<CategoryAPI> GetProductnameByPrice(string name, int star, int end, int page, int size)
+        {
+            var pro = _productService.GetProductNameByPrice(name, star,end, page, size);
             if (pro == null) return NotFound();
             return pro;
         }

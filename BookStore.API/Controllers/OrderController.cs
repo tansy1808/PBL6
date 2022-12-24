@@ -87,8 +87,8 @@ namespace BookStore.API.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet("Find/{id}")]
+        [Authorize(Roles = "Customer,Admin")]
+        [HttpGet("find/{id}")]
         public ActionResult<OrderView> FindOrderId(int id)
         {
             var members = _orderService.FindOrderById(id);
@@ -115,7 +115,7 @@ namespace BookStore.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("Income/{date}")]
+        [HttpGet("income/{date}")]
         public ActionResult<Income> GetPrice(int date,int page, int size)
         {
             var members = _orderService.GetIncome(date,page,size);

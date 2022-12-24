@@ -114,36 +114,59 @@ namespace BookStore.API.Services
         public ProductPage GetProductAll(int page, int size)
         {
             var query = _context.Products;
-            int total = query.Count();
-            int pagecount = total / size;
-            float Page = total % size;
-            if (Page > 0) { pagecount = pagecount + 1; }
-            var data = query.Skip(((page) - 1) * size).Take(size).ToList();
-            List<ProductView> list = new List<ProductView>();
-            foreach (Products i in data)
+            var view = new ProductPage();
+            var list = new List<ProductView>();
+            if(page != 0 && size != 0)
             {
-                var proview = new ProductView
+                int total = query.Count();
+                int pagecount = total / size;
+                float Page = total % size;
+                if (Page > 0) { pagecount = pagecount + 1; }
+                var data = query.Skip(((page) - 1) * size).Take(size).ToList();
+                foreach (Products i in data)
                 {
-                    IdProduct = i.IdProduct,
-                    Name = i.Name,
-                    Image = i.Image,
-                    Desc = i.Desc,
-                    Feedback = i.Feedback,
-                    Price = i.Price,
-                    Quantity = i.Quantity,
-                    DateCreate = i.DateCreate,
-                    Discount = i.Discount,
-                    Cate = _context.Categories.FirstOrDefault(c => c.Id == i.IdCate).CategoryType
-                };
-                list.Add(proview);
+                    var proview = new ProductView
+                    {
+                        IdProduct = i.IdProduct,
+                        Name = i.Name,
+                        Image = i.Image,
+                        Desc = i.Desc,
+                        Feedback = i.Feedback,
+                        Price = i.Price,
+                        Quantity = i.Quantity,
+                        DateCreate = i.DateCreate,
+                        Discount = i.Discount,
+                        Cate = _context.Categories.FirstOrDefault(c => c.Id == i.IdCate).CategoryType
+                    };
+                    list.Add(proview);
+                }
+                view.Size = size;
+                view.Page = page;
+                view.TotalPage = pagecount;
+                view.data = list;
+            }else{
+                foreach (Products i in query)
+                {
+                    var proview = new ProductView
+                    {
+                        IdProduct = i.IdProduct,
+                        Name = i.Name,
+                        Image = i.Image,
+                        Desc = i.Desc,
+                        Feedback = i.Feedback,
+                        Price = i.Price,
+                        Quantity = i.Quantity,
+                        DateCreate = i.DateCreate,
+                        Discount = i.Discount,
+                        Cate = _context.Categories.FirstOrDefault(c => c.Id == i.IdCate).CategoryType
+                    };
+                    list.Add(proview);
+                }
+                view.Size = 0;
+                view.Page = 0;
+                view.TotalPage = 0;
+                view.data = list;
             }
-            var view = new ProductPage
-            {
-                Size = size,
-                Page = page,
-                TotalPage = pagecount,
-                data = list
-            };
             return view;
         }
 
@@ -170,18 +193,88 @@ namespace BookStore.API.Services
         public ProductAPI GetProductsByName(string name,int page, int size)
         {
             var pro = _productReponsitory.GetProductsbyName(name);
-            ProductAPI rs = new ProductAPI();
+            var rs = new ProductAPI();
+            var list = new List<ProductView>();
+            var product = new ProductPage();
             if (pro != null)
             {
-                int total = pro.Count();
-                List<ProductView> list = new List<ProductView> { };
+                if(page != 0 && size != 0)
+                {
+                    int total = pro.Count();
+                    int pagecount = total / size;
+                    float Page = total % size;
+                    if (Page > 0) { pagecount = pagecount + 1; }
+                    var data = pro.Skip(((page) - 1) * size).Take(size).ToList();
+                    foreach (Products i in data)
+                    {
+                        var add = new ProductView
+                        {
+                            IdProduct = i.IdProduct,
+                            Name = i.Name,
+                            Image = i.Image,
+                            Desc = i.Desc,
+                            Feedback = i.Feedback,
+                            Price = i.Price,
+                            Quantity = i.Quantity,
+                            DateCreate = i.DateCreate,
+                            Discount = i.Discount,
+                            Cate = _productReponsitory.GetCateById(i.IdCate).CategoryType
+                        };
+                        list.Add(add);
+                    };
+                    product.Size = size;
+                    product.Page = page;
+                    product.TotalPage = pagecount;
+                    product.data = list;
+                    rs.keyword = name;
+                    rs.data = product;
+                }else{
+                    foreach (Products i in pro)
+                    {
+                        var add = new ProductView
+                        {
+                            IdProduct = i.IdProduct,
+                            Name = i.Name,
+                            Image = i.Image,
+                            Desc = i.Desc,
+                            Feedback = i.Feedback,
+                            Price = i.Price,
+                            Quantity = i.Quantity,
+                            DateCreate = i.DateCreate,
+                            Discount = i.Discount,
+                            Cate = _productReponsitory.GetCateById(i.IdCate).CategoryType
+                        };
+                        list.Add(add);
+                    };
+                    product.Size = 0;
+                    product.Page = 0;
+                    product.TotalPage = 0;
+                    product.data = list;
+                    rs.keyword = name;
+                    rs.data = product;
+                }
+                
+            }
+            return rs;
+        }
+
+        public CategoryAPI GetProductNameByPrice(string name, int st, int end, int page, int size)
+        {
+            var pros = _productReponsitory.GetProductsbyName(name).OrderBy(c=>c.Price);
+            var proprice = pros.Where(c => c.Price > st).Where(c => c.Price < end);
+            var list = new List<ProductView>();
+            var productPage = new ProductPage();
+            var view = new CategoryAPI();
+            if(page != 0 && size != 0)
+            {
+                int total = proprice.Count();
                 int pagecount = total / size;
                 float Page = total % size;
                 if (Page > 0) { pagecount = pagecount + 1; }
-                var data = pro.Skip(((page) - 1) * size).Take(size).ToList();
+                var data = proprice.Skip(((page) - 1) * size).Take(size).ToList();
                 foreach (Products i in data)
                 {
-                    var add = new ProductView
+                    var proview = new ProductView
                     {
                         IdProduct = i.IdProduct,
                         Name = i.Name,
@@ -192,24 +285,42 @@ namespace BookStore.API.Services
                         Quantity = i.Quantity,
                         DateCreate = i.DateCreate,
                         Discount = i.Discount,
-                        Cate = _productReponsitory.GetCateById(i.IdCate).CategoryType
+                        Cate = _context.Categories.FirstOrDefault(c => c.Id == i.IdCate).CategoryType
                     };
-                    list.Add(add);
-                };
-                var product = new ProductPage
+                    list.Add(proview);
+                    productPage.Size = size;
+                    productPage.Page = page;
+                    productPage.TotalPage = pagecount;
+                    productPage.data = list;
+                    view.Title = name;
+                    view.data = productPage;
+                }
+            }else{
+                foreach (Products i in proprice)
                 {
-                    Size = size,
-                    Page = page,
-                    TotalPage = pagecount,
-                    data = list
-                };
-                rs.keyword = name;
-                rs.data = product;
-                return rs;
+                    var proview = new ProductView
+                    {
+                        IdProduct = i.IdProduct,
+                        Name = i.Name,
+                        Image = i.Image,
+                        Desc = i.Desc,
+                        Feedback = i.Feedback,
+                        Price = i.Price,
+                        Quantity = i.Quantity,
+                        DateCreate = i.DateCreate,
+                        Discount = i.Discount,
+                        Cate = _context.Categories.FirstOrDefault(c => c.Id == i.IdCate).CategoryType
+                    };
+                    list.Add(proview);
+                    productPage.Size = 0;
+                    productPage.Page = 0;
+                    productPage.TotalPage = 0;
+                    productPage.data = list;
+                    view.Title = name;
+                    view.data = productPage;
+                }
             }
-            return rs;
-
-
+            return view;
         }
 
         public List<ProductCate> GetProductCate()
@@ -241,43 +352,67 @@ namespace BookStore.API.Services
 
         public CategoryAPI GetProductsByCategory(int categoryId, int page, int size)
         {
-            var query = _context.Products.Where(c => c.IdCate == categoryId);
-            int total = query.Count();
-            int pagecount = total / size;
-            float Page = total % size;
-            if (Page > 0) { pagecount = pagecount + 1; }
-            var data = query.Skip(((page) - 1) * size).Take(size).ToList();
-            List<ProductView> list = new List<ProductView>();
-            var title = _productReponsitory.GetCateById(categoryId).CategoryType;
-            foreach (Products i in data)
+            var query = _context.Products.Where(c => c.IdCate == categoryId).ToList();
+            var list = new List<ProductView>();
+            var product = new ProductPage();
+            var view = new CategoryAPI();
+            if(page != 0 && size != 0)
             {
-                var proview = new ProductView
+                int total = query.Count();
+                int pagecount = total / size;
+                float Page = total % size;
+                if (Page > 0) { pagecount = pagecount + 1; }
+                var data = query.Skip(((page) - 1) * size).Take(size).ToList();
+                var title = _productReponsitory.GetCateById(categoryId).CategoryType;
+                foreach (Products i in data)
                 {
-                    IdProduct = i.IdProduct,
-                    Name = i.Name,
-                    Image = i.Image,
-                    Desc = i.Desc,
-                    Feedback = i.Feedback,
-                    Price = i.Price,
-                    Quantity = i.Quantity,
-                    DateCreate = i.DateCreate,
-                    Discount = i.Discount,
-                    Cate = title
-                };
-                list.Add(proview);
-            }
-            var product = new ProductPage
-            {
-                Size = size,
-                Page = page,
-                TotalPage = pagecount,
-                data = list
-            };
-            var view = new CategoryAPI
-            {
-                Title = title,
-                data = product
-            };
+                    var proview = new ProductView
+                    {
+                        IdProduct = i.IdProduct,
+                        Name = i.Name,
+                        Image = i.Image,
+                        Desc = i.Desc,
+                        Feedback = i.Feedback,
+                        Price = i.Price,
+                        Quantity = i.Quantity,
+                        DateCreate = i.DateCreate,
+                        Discount = i.Discount,
+                        Cate = title
+                    };
+                    list.Add(proview);
+                }
+                product.Size = size;
+                product.Page = page;
+                product.TotalPage = pagecount;
+                product.data = list;
+                view.Title = title;
+                view.data = product;
+            }else{
+                var title = _productReponsitory.GetCateById(categoryId).CategoryType;
+                foreach (Products i in query)
+                {
+                    var proview = new ProductView
+                    {
+                        IdProduct = i.IdProduct,
+                        Name = i.Name,
+                        Image = i.Image,
+                        Desc = i.Desc,
+                        Feedback = i.Feedback,
+                        Price = i.Price,
+                        Quantity = i.Quantity,
+                        DateCreate = i.DateCreate,
+                        Discount = i.Discount,
+                        Cate = title
+                    };
+                    list.Add(proview);
+                }
+                product.Size = 0;
+                product.Page = 0;
+                product.TotalPage = 0;
+                product.data = list;
+                view.Title = title;
+                view.data = product;
+            }   
             return view;
         }
         public ViewProductDTO UpdateProduct(int id, ProductDTO productDTOs)
@@ -311,25 +446,46 @@ namespace BookStore.API.Services
             var pros = from s in _context.Products
                        orderby s.DateCreate descending
                        select s;
-            var data = pros.Skip(0).Take(size).ToList();
             var list = new List<ProductView>();
-            foreach (Products i in data)
+            if(size != 0)
             {
-                var add = new ProductView
+                var data = pros.Skip(0).Take(size).ToList();
+                foreach (Products i in data)
                 {
-                    IdProduct = i.IdProduct,
-                    Name = i.Name,
-                    Image = i.Image,
-                    Desc = i.Desc,
-                    Feedback = i.Feedback,
-                    Price = i.Price,
-                    Quantity = i.Quantity,
-                    DateCreate = i.DateCreate,
-                    Discount = i.Discount,
-                    Cate = _productReponsitory.GetCateById(i.IdCate).CategoryType
+                    var add = new ProductView
+                    {
+                        IdProduct = i.IdProduct,
+                        Name = i.Name,
+                        Image = i.Image,
+                        Desc = i.Desc,
+                        Feedback = i.Feedback,
+                        Price = i.Price,
+                        Quantity = i.Quantity,
+                        DateCreate = i.DateCreate,
+                        Discount = i.Discount,
+                        Cate = _productReponsitory.GetCateById(i.IdCate).CategoryType
+                    };
+                    list.Add(add);
                 };
-                list.Add(add);
-            };
+            }else{
+                foreach (Products i in pros)
+                {
+                    var add = new ProductView
+                    {
+                        IdProduct = i.IdProduct,
+                        Name = i.Name,
+                        Image = i.Image,
+                        Desc = i.Desc,
+                        Feedback = i.Feedback,
+                        Price = i.Price,
+                        Quantity = i.Quantity,
+                        DateCreate = i.DateCreate,
+                        Discount = i.Discount,
+                        Cate = _productReponsitory.GetCateById(i.IdCate).CategoryType
+                    };
+                    list.Add(add);
+                };
+            }
             return list;
         }
 
@@ -338,42 +494,66 @@ namespace BookStore.API.Services
             var pros = from s in _context.Products.Where(c => c.IdCate == categoryId)
                        orderby s.Price select s;
             var proprice = pros.Where(c => c.Price > st).Where(c => c.Price < end);
-            int total = proprice.Count();
-            int pagecount = total / size;
-            float Page = total % size;
-            if (Page > 0) { pagecount = pagecount + 1; }
-            var data = proprice.Skip(((page) - 1) * size).Take(size).ToList();
-            List<ProductView> list = new List<ProductView>();
-            var catevalue = _context.Categories.FirstOrDefault(c => c.Id ==categoryId);
-            foreach (Products i in data)
+            var list = new List<ProductView>();
+            var productPage = new ProductPage();
+            var view = new CategoryAPI();
+            if(page != 0 && size != 0)
             {
-                var proview = new ProductView
+                int total = proprice.Count();
+                int pagecount = total / size;
+                float Page = total % size;
+                if (Page > 0) { pagecount = pagecount + 1; }
+                var data = proprice.Skip(((page) - 1) * size).Take(size).ToList();
+                var catevalue = _context.Categories.FirstOrDefault(c => c.Id ==categoryId);
+                foreach (Products i in data)
                 {
-                    IdProduct = i.IdProduct,
-                    Name = i.Name,
-                    Image = i.Image,
-                    Desc = i.Desc,
-                    Feedback = i.Feedback,
-                    Price = i.Price,
-                    Quantity = i.Quantity,
-                    DateCreate = i.DateCreate,
-                    Discount = i.Discount,
-                    Cate = catevalue.CategoryType
-                };
-                list.Add(proview);
+                    var proview = new ProductView
+                    {
+                        IdProduct = i.IdProduct,
+                        Name = i.Name,
+                        Image = i.Image,
+                        Desc = i.Desc,
+                        Feedback = i.Feedback,
+                        Price = i.Price,
+                        Quantity = i.Quantity,
+                        DateCreate = i.DateCreate,
+                        Discount = i.Discount,
+                        Cate = catevalue.CategoryType
+                    };
+                    list.Add(proview);
+                    productPage.Size = size;
+                    productPage.Page = page;
+                    productPage.TotalPage = pagecount;
+                    productPage.data = list;
+                    view.Title = catevalue.CategoryType;
+                    view.data = productPage;
+                }
+            }else{
+                var catevalue = _context.Categories.FirstOrDefault(c => c.Id ==categoryId);
+                foreach (Products i in proprice)
+                {
+                    var proview = new ProductView
+                    {
+                        IdProduct = i.IdProduct,
+                        Name = i.Name,
+                        Image = i.Image,
+                        Desc = i.Desc,
+                        Feedback = i.Feedback,
+                        Price = i.Price,
+                        Quantity = i.Quantity,
+                        DateCreate = i.DateCreate,
+                        Discount = i.Discount,
+                        Cate = catevalue.CategoryType
+                    };
+                    list.Add(proview);
+                    productPage.Size = 0;
+                    productPage.Page = 0;
+                    productPage.TotalPage = 0;
+                    productPage.data = list;
+                    view.Title = catevalue.CategoryType;
+                    view.data = productPage;
+                }
             }
-            var productPage = new ProductPage
-            {
-                Size = size,
-                Page = page,
-                TotalPage = pagecount,
-                data = list
-            };
-            var view = new CategoryAPI
-            {
-                Title = catevalue.CategoryType,
-                data = productPage
-            };
             return view;
         }
 

@@ -41,9 +41,9 @@ namespace BookStore.API.Data
             .HasForeignKey(p => p.UserId);
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Products>()
-            .HasOne(p => p.productCates)
-            .WithMany(c => c.products)
+            modelBuilder.Entity<ProductCate>()
+            .HasMany(t => t.products)
+            .WithOne(p => p.productCates)
             .HasForeignKey(p => p.IdCate);
             base.OnModelCreating(modelBuilder);
             
@@ -78,9 +78,9 @@ namespace BookStore.API.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<OrderProduct>()
-            .HasMany(p => p.products)
-            .WithOne(c => c.orderProducts)
-            .HasForeignKey(c => c.IdProduct);
+            .HasOne(p => p.products)
+            .WithMany(c => c.orderProducts)
+            .HasForeignKey(c=>c.IdProduct);
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<CartItem>()
@@ -90,8 +90,8 @@ namespace BookStore.API.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Products>()
-            .HasOne(p => p.cartItems)
-            .WithMany(c => c.products)
+            .HasMany(p => p.cartItems)
+            .WithOne(c => c.products)
             .HasForeignKey(c => c.IdProduct);
             base.OnModelCreating(modelBuilder);
 

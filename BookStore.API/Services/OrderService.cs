@@ -226,6 +226,7 @@ namespace BookStore.API.Services
                         {
                             IdOrder = i.IdOrder,
                             IdProduct = i.IdProduct,
+                            NameProduct = _productReponsitory.GetProductsByIdpro(i.IdProduct).Name,
                             Quantity = i.Quantity,
                             Price = i.Price
                         };
@@ -245,13 +246,24 @@ namespace BookStore.API.Services
                 }else
                 {
                     var b = _context.MethodPays.FirstOrDefault(c=>c.Id == a.IdPay);
-                    rs.IdOrder = order.IdOrder;
-                    rs.Address = order.Address;
-                    rs.Status = order.Status;
-                    rs.TypePay = b.TypeName;
-                    rs.Total = order.Total;
-                    rs.DateOrder = order.DateOrder;
-                    rs.orders = list;
+                    if(b == null)
+                    {
+                        rs.IdOrder = order.IdOrder;
+                        rs.Address = order.Address;
+                        rs.Status = order.Status;
+                        rs.TypePay = null;
+                        rs.Total = order.Total;
+                        rs.DateOrder = order.DateOrder;
+                        rs.orders = list;
+                    }else {
+                        rs.IdOrder = order.IdOrder;
+                        rs.Address = order.Address;
+                        rs.Status = order.Status;
+                        rs.TypePay = b.TypeName;
+                        rs.Total = order.Total;
+                        rs.DateOrder = order.DateOrder;
+                        rs.orders = list;
+                    }                    
                 }
             }
             return rs;  
@@ -269,6 +281,7 @@ namespace BookStore.API.Services
                     {
                         IdOrder = i.IdOrder,
                         IdProduct = i.IdProduct,
+                        NameProduct = _productReponsitory.GetProductsByIdpro(i.IdProduct).Name,
                         Quantity = i.Quantity,
                         Price = i.Price
                     };
@@ -280,133 +293,277 @@ namespace BookStore.API.Services
 
         public View GetOrderByUser(int id, int page, int size)
         {
-            var query = _context.Orders.Where(a=>a.IdUser==id).ToList();
-            int total = query.Count();
-            int pagecount = total / size;
-            float Page = total % size;
-            if (Page > 0) { pagecount = pagecount + 1; }
-            var data = query.Skip(((page) - 1) * size).Take(size).ToList();
+            var query = _context.Orders.Where(a=>a.IdUser==id).OrderByDescending(b=>b.DateOrder).ToList();
+            var view = new View();
             var list2 = new List<OrderView>();
-            if(data != null)
+            if(page != 0 && size != 0)
             {
-                foreach (Orders i in data)
+                int total = query.Count();
+                int pagecount = total / size;
+                float Page = total % size;
+                if (Page > 0) { pagecount = pagecount + 1; }
+                var data = query.Skip(((page) - 1) * size).Take(size).ToList();
+                if(data != null)
                 {
-                    var item = _orderReponsitory.GetOrderProductId(i.IdOrder);
-                    var list = new List<OrderProductAPI>();
-                    if(item != null)
+                    foreach (Orders i in data)
                     {
-                        foreach (OrderProduct j in item)
+                        var item = _orderReponsitory.GetOrderProductId(i.IdOrder);
+                        var list = new List<OrderProductAPI>();
+                        if(item != null)
                         {
-                            var add = new OrderProductAPI
+                            foreach (OrderProduct j in item)
                             {
-                                IdOrder = j.IdOrder,
-                                IdProduct = j.IdProduct,
-                                Quantity = j.Quantity,
-                                Price = j.Price
+                                var add = new OrderProductAPI
+                                {
+                                    IdOrder = j.IdOrder,
+                                    IdProduct = j.IdProduct,
+                                    NameProduct = _productReponsitory.GetProductsByIdpro(j.IdProduct).Name,
+                                    Quantity = j.Quantity,
+                                    Price = j.Price
+                                };
+                                list.Add(add);
                             };
-                            list.Add(add);
-                        };
+                        }
+                        var a = _context.Payments.FirstOrDefault(c=>c.IdOrder==i.IdOrder);
+                        var rs = new OrderView();
+                        if (a == null)
+                        {
+                            rs.IdOrder = i.IdOrder;
+                            rs.Address = i.Address;
+                            rs.Status = i.Status;
+                            rs.TypePay = null;
+                            rs.Total = i.Total;
+                            rs.DateOrder = i.DateOrder;
+                            rs.orders = list;
+                        }else
+                        {
+                            var b = _context.MethodPays.FirstOrDefault(c=>c.Id == a.IdPay);
+                            if(b == null)
+                            {
+                                rs.IdOrder = i.IdOrder;
+                                rs.Address = i.Address;
+                                rs.Status = i.Status;
+                                rs.TypePay = null;
+                                rs.Total = i.Total;
+                                rs.DateOrder = i.DateOrder;
+                                rs.orders = list;
+                            }else {
+                                rs.IdOrder = i.IdOrder;
+                                rs.Address = i.Address;
+                                rs.Status = i.Status;
+                                rs.TypePay = b.TypeName;
+                                rs.Total = i.Total;
+                                rs.DateOrder = i.DateOrder;
+                                rs.orders = list;
+                            }
+                        }
+                        list2.Add(rs);
                     }
-                    var a = _context.Payments.FirstOrDefault(c=>c.IdOrder==i.IdOrder);
-                    var rs = new OrderView();
-                    if (a == null)
-                    {
-                        rs.IdOrder = i.IdOrder;
-                        rs.Address = i.Address;
-                        rs.Status = i.Status;
-                        rs.TypePay = null;
-                        rs.Total = i.Total;
-                        rs.DateOrder = i.DateOrder;
-                        rs.orders = list;
-                    }else
-                    {
-                        var b = _context.MethodPays.FirstOrDefault(c=>c.Id == a.IdPay);
-                        rs.IdOrder = i.IdOrder;
-                        rs.Address = i.Address;
-                        rs.Status = i.Status;
-                        rs.TypePay = b.TypeName;
-                        rs.Total = i.Total;
-                        rs.DateOrder = i.DateOrder;
-                        rs.orders = list;
-                    }
-                    list2.Add(rs);
                 }
+                view.Page = page;
+                view.Size = size;
+                view.TotalPage = pagecount;
+                view.Data = list2;
+            }else{
+                if(query != null)
+                {
+                    foreach (Orders i in query)
+                    {
+                        var item = _orderReponsitory.GetOrderProductId(i.IdOrder);
+                        var list = new List<OrderProductAPI>();
+                        if(item != null)
+                        {
+                            foreach (OrderProduct j in item)
+                            {
+                                var add = new OrderProductAPI
+                                {
+                                    IdOrder = j.IdOrder,
+                                    IdProduct = j.IdProduct,
+                                    NameProduct = _productReponsitory.GetProductsByIdpro(j.IdProduct).Name,
+                                    Quantity = j.Quantity,
+                                    Price = j.Price
+                                };
+                                list.Add(add);
+                            };
+                        }
+                        var a = _context.Payments.FirstOrDefault(c=>c.IdOrder==i.IdOrder);
+                        var rs = new OrderView();
+                        if (a == null)
+                        {
+                            rs.IdOrder = i.IdOrder;
+                            rs.Address = i.Address;
+                            rs.Status = i.Status;
+                            rs.TypePay = null;
+                            rs.Total = i.Total;
+                            rs.DateOrder = i.DateOrder;
+                            rs.orders = list;
+                        }else
+                        {
+                            var b = _context.MethodPays.FirstOrDefault(c=>c.Id == a.IdPay);
+                            if(b == null)
+                            {
+                                rs.IdOrder = i.IdOrder;
+                                rs.Address = i.Address;
+                                rs.Status = i.Status;
+                                rs.TypePay = null;
+                                rs.Total = i.Total;
+                                rs.DateOrder = i.DateOrder;
+                                rs.orders = list;
+                            }else {
+                                rs.IdOrder = i.IdOrder;
+                                rs.Address = i.Address;
+                                rs.Status = i.Status;
+                                rs.TypePay = b.TypeName;
+                                rs.Total = i.Total;
+                                rs.DateOrder = i.DateOrder;
+                                rs.orders = list;
+                            }
+                        }
+                        list2.Add(rs);
+                    }
+                }
+                view.Page = 0;
+                view.Size = 0;
+                view.TotalPage = 0;
+                view.Data = list2;
             }
-            var view = new View() 
-            {
-                Page = page,
-                Size = size,
-                TotalPage = pagecount,
-                Data = list2
-            };
             return view;
         }
 
         public ViewDTO GetOrder(int page , int size)
         {
-            var query = _context.Orders;
-            int total = query.Count();
-            int pagecount = total / size;
-            float Page = total % size;
-            if (Page > 0) { pagecount = pagecount + 1; }
-            var data = query.Skip(((page) - 1) * size).Take(size).ToList();
+            var query = _context.Orders.ToList();
+            var view = new ViewDTO();
             var list = new List<ViewOrderAll>();
-            if(data != null)
+            if(page != 0 && size != 0)
             {
-                foreach (Orders i in data)
+                int total = query.Count();
+                int pagecount = total / size;
+                float Page = total % size;
+                if (Page > 0) { pagecount = pagecount + 1; }
+                var data = query.Skip(((page) - 1) * size).Take(size).ToList();
+                if(data != null)
                 {
-                    var a = _context.Payments.FirstOrDefault(c=>c.IdOrder==i.IdOrder);
-                    var rs = new ViewOrderAll();
-                    if (a == null)
+                    foreach (Orders i in data)
                     {
-                        rs.IdOrder = i.IdOrder;
-                        rs.NameUser =_context.Users.FirstOrDefault(c=>c.IdUser == i.IdUser).Name;
-                        rs.Address = i.Address;
-                        rs.Status = i.Status;
-                        rs.TypePay = null;
-                        rs.Total = i.Total;
-                        rs.DateOrder = i.DateOrder;
-                    }else
-                    {
-                        var b = _context.MethodPays.FirstOrDefault(c=>c.Id == a.IdPay);
-                        rs.IdOrder = i.IdOrder;
-                        rs.NameUser =_context.Users.FirstOrDefault(c=>c.IdUser == i.IdUser).Name;
-                        rs.Address = i.Address;
-                        rs.Status = i.Status;
-                        rs.TypePay = b.TypeName;
-                        rs.Total = i.Total;
-                        rs.DateOrder = i.DateOrder;
+                        var a = _context.Payments.FirstOrDefault(c=>c.IdOrder==i.IdOrder);
+                        var rs = new ViewOrderAll();
+                        if (a == null)
+                        {
+                            rs.IdOrder = i.IdOrder;
+                            rs.NameUser =_context.Users.FirstOrDefault(c=>c.IdUser == i.IdUser).Name;
+                            rs.Address = i.Address;
+                            rs.Status = i.Status;
+                            rs.TypePay = null;
+                            rs.Total = i.Total;
+                            rs.DateOrder = i.DateOrder;
+                        }else
+                        {
+                            var b = _context.MethodPays.FirstOrDefault(c=>c.Id == a.IdPay);
+                            if(b == null)
+                            {
+                                rs.IdOrder = i.IdOrder;
+                                rs.NameUser =_context.Users.FirstOrDefault(c=>c.IdUser == i.IdUser).Name;
+                                rs.Address = i.Address;
+                                rs.Status = i.Status;
+                                rs.TypePay = null;
+                                rs.Total = i.Total;
+                                rs.DateOrder = i.DateOrder;
+                            }else {
+                                rs.IdOrder = i.IdOrder;
+                                rs.NameUser =_context.Users.FirstOrDefault(c=>c.IdUser == i.IdUser).Name;
+                                rs.Address = i.Address;
+                                rs.Status = i.Status;
+                                rs.TypePay = b.TypeName;
+                                rs.Total = i.Total;
+                                rs.DateOrder = i.DateOrder;
+                            }
+                        }
+                        list.Add(rs);
                     }
-                    list.Add(rs);
                 }
+                List<ViewOrderAll> sort = list.OrderByDescending(a=>a.DateOrder).ToList();
+                view.Page = page;
+                view.Size = size;
+                view.TotalPage = pagecount;
+                view.Data = sort;
+            }else{
+                if(query != null)
+                {
+                    foreach (Orders i in query)
+                    {
+                        var a = _context.Payments.FirstOrDefault(c=>c.IdOrder==i.IdOrder);
+                        var rs = new ViewOrderAll();
+                        if (a == null)
+                        {
+                            rs.IdOrder = i.IdOrder;
+                            rs.NameUser =_context.Users.FirstOrDefault(c=>c.IdUser == i.IdUser).Name;
+                            rs.Address = i.Address;
+                            rs.Status = i.Status;
+                            rs.TypePay = null;
+                            rs.Total = i.Total;
+                            rs.DateOrder = i.DateOrder;
+                        }else
+                        {
+                            var b = _context.MethodPays.FirstOrDefault(c=>c.Id == a.IdPay);
+                            if(b == null)
+                            {
+                                rs.IdOrder = i.IdOrder;
+                                rs.NameUser =_context.Users.FirstOrDefault(c=>c.IdUser == i.IdUser).Name;
+                                rs.Address = i.Address;
+                                rs.Status = i.Status;
+                                rs.TypePay = null;
+                                rs.Total = i.Total;
+                                rs.DateOrder = i.DateOrder;
+                            }else {
+                                rs.IdOrder = i.IdOrder;
+                                rs.NameUser =_context.Users.FirstOrDefault(c=>c.IdUser == i.IdUser).Name;
+                                rs.Address = i.Address;
+                                rs.Status = i.Status;
+                                rs.TypePay = b.TypeName;
+                                rs.Total = i.Total;
+                                rs.DateOrder = i.DateOrder;
+                            }
+                        }
+                        list.Add(rs);
+                    }
+                }
+                List<ViewOrderAll> sort = list.OrderByDescending(a=>a.DateOrder).ToList();
+                view.Page = 0;
+                view.Size = 0;
+                view.TotalPage = 0;
+                view.Data = sort;
             }
-            List<ViewOrderAll> sort = list.OrderByDescending(a=>a.DateOrder).ToList();
-            var view = new ViewDTO() 
-            {
-                Page = page,
-                Size = size,
-                TotalPage = pagecount,
-                Data = sort
-            };
             return view;
         }
 
         public Income GetIncome(int date, int page, int size)
         {
             var income = _orderReponsitory.GetIncomeByPrice(date);
-            int total = income.Count();
-            int pagecount = total / size;
-            float Page = total % size;
-            if (Page > 0) { pagecount = pagecount + 1; }
-            var orderby = income.OrderByDescending(c=>c.Total);
-            var data = orderby.Skip(((page) - 1) * size).Take(size).ToList();
             var view = new Income();
-            if (data != null)
+            if(page != 0 && size != 0)
             {
-                view.Page = page;
-                view.Size = size;
-                view.TotalPage = pagecount;
-                view.Data = data;
+                int total = income.Count();
+                int pagecount = total / size;
+                float Page = total % size;
+                if (Page > 0) { pagecount = pagecount + 1; }
+                var orderby = income.OrderByDescending(c=>c.Total);
+                var data = orderby.Skip(((page) - 1) * size).Take(size).ToList();
+                if (data != null)
+                {
+                    view.Page = page;
+                    view.Size = size;
+                    view.TotalPage = pagecount;
+                    view.Data = data;
+                }
+            }else{
+                if (income != null)
+                {
+                    view.Page = 0;
+                    view.Size = 0;
+                    view.TotalPage = 0;
+                    view.Data = income;
+                }
             }
             return view;
         }
@@ -452,6 +609,7 @@ namespace BookStore.API.Services
                     {
                         IdOrder = product.IdOrder,
                         IdProduct = product.IdProduct,
+                        NameProduct = pro.Name,
                         Quantity = product.Quantity,
                         Price = product.Price
                     };
@@ -513,32 +671,55 @@ namespace BookStore.API.Services
                     list.Add(tem);
                 }else
                 {
-                    var b = _context.MethodPays.FirstOrDefault(c=> c.Id == a.IdPay);
-                    tem.IdOrder = i.IdOrder;
-                    tem.Address = i.Address;
-                    tem.Status = i.Status;
-                    tem.SDT = i.SDT;
-                    tem.TypePay = b.TypeName;
-                    tem.Total = i.Total;
-                    tem.DateOrder = i.DateOrder;
-                    tem.orders = null;
-                    list.Add(tem);
+                    var b = _context.MethodPays.FirstOrDefault(c=>c.Id == a.IdPay);
+                    if(b == null)
+                    {
+                        tem.IdOrder = i.IdOrder;
+                        tem.Address = i.Address;
+                        tem.Status = i.Status;
+                        tem.SDT = i.SDT;
+                        tem.TypePay = null;
+                        tem.Total = i.Total;
+                        tem.DateOrder = i.DateOrder;
+                        tem.orders = null;
+                    }else {
+                        tem.IdOrder = i.IdOrder;
+                        tem.Address = i.Address;
+                        tem.Status = i.Status;
+                        tem.SDT = i.SDT;
+                        tem.TypePay = b.TypeName;
+                        tem.Total = i.Total;
+                        tem.DateOrder = i.DateOrder;
+                        tem.orders = null;
+                    }
                 }
             }
-            int total = list.Count();
-            int pagecount = total / size;
-            float Page = total % size;
-            if (Page > 0) { pagecount = pagecount + 1; }
-            var orderby = list.OrderByDescending(c=>c.Total);
-            var data = orderby.Skip(((page) - 1) * size).Take(size).ToList();
             var view = new View();
-            if (data != null)
+            if(page != 0 && size != 0)
             {
-                view.Page = page;
-                view.Size = size;
-                view.TotalPage = pagecount;
-                view.Data = data;
+                int total = list.Count();
+                int pagecount = total / size;
+                float Page = total % size;
+                if (Page > 0) { pagecount = pagecount + 1; }
+                var orderby = list.OrderByDescending(c=>c.DateOrder);
+                var data = orderby.Skip(((page) - 1) * size).Take(size).ToList();
+                if (data != null)
+                {
+                    view.Page = page;
+                    view.Size = size;
+                    view.TotalPage = pagecount;
+                    view.Data = data;
+                }
+            }else{
+                if (list != null)
+                {
+                    view.Page = 0;
+                    view.Size = 0;
+                    view.TotalPage = 0;
+                    view.Data = list;
+                }
             }
+            
             return view;
         }
     }

@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
+var MyAllowSpecificOrigins = "CorsPolicy"/*"_myAllowSpecificOrigins"*/;
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var connectionString = builder.Configuration.GetConnectionString("Default");
@@ -14,8 +15,8 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
 // Add services to the container.
 
 services.AddCors(o =>
-    o.AddPolicy("CorsPolicy", builder =>
-        builder.WithOrigins("http://localhost:3000")
+    o.AddPolicy(name: MyAllowSpecificOrigins, builder =>
+        builder.WithOrigins("https://hikarushop.vercel.app")
             .AllowAnyHeader()
             .AllowAnyMethod()));
 services.AddControllers();
@@ -101,7 +102,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors("CorsPolicy");
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 

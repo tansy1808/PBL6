@@ -12,7 +12,7 @@ namespace BookStore.API.Data.Enities.Order
         public int IdProduct {get; set;}
         public int Quantity {get; set;}
         public decimal Price {get; set;}
-        public List<Products> products {get; set;}
+        public Products products {get; set;}
         public Orders orders {get; set;}
     }
 }
