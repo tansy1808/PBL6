@@ -1,4 +1,5 @@
-﻿using BookStore.API.DTO.Cart;
+﻿using BookStore.API.Data;
+using BookStore.API.DTO.Cart;
 using BookStore.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,12 @@ namespace BookStore.API.Controllers
     public class CartController : Controller
     {
         private readonly ICartService _cartService;
+        private readonly DataContext _context;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, DataContext context)
         {
             _cartService = cartService;
+            _context = context;
         }
 
         [HttpPost]

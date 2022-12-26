@@ -331,6 +331,7 @@ D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net7.0\win-x86\PubTmp\Out\Google.Prot
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net7.0\win-x86\PubTmp\Out\Grpc.AspNetCore.Server.dll
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net7.0\win-x86\PubTmp\Out\Grpc.Core.Api.dll
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net7.0\win-x86\PubTmp\Out\Grpc.Net.Common.dll
+D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net7.0\win-x86\PubTmp\Out\log4net.dll
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net7.0\win-x86\PubTmp\Out\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net7.0\win-x86\PubTmp\Out\Microsoft.AspNetCore.Grpc.JsonTranscoding.dll
 D:\DoAn\PBL\PLB6\BookStore.API\obj\Release\net7.0\win-x86\PubTmp\Out\Microsoft.AspNetCore.Grpc.Swagger.dll

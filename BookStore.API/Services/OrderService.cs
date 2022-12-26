@@ -34,7 +34,7 @@ namespace BookStore.API.Services
             if(order!= null)
             {
                 order.Status = status;
-                order.DateOrder = DateTime.Now;
+                order.DateOrder = DateTime.Now.AddHours(7);
                 _orderReponsitory.UpdateOrder(order);
                 _orderReponsitory.IsSaveChanges();
                 view.Status = "Success";
@@ -54,10 +54,10 @@ namespace BookStore.API.Services
             };
             if(order!= null)
             {
-                if(vnpay == 0 || vnpay == 7 )
+                if(vnpay == 0 )
                 {
                     order.Status = "Paid";
-                    order.DateOrder = DateTime.Now;
+                    order.DateOrder = DateTime.Now.AddHours(7);
                     _orderReponsitory.UpdateOrder(order);
                     _orderReponsitory.IsSaveChanges();
                     view.Status = "Success";
@@ -109,7 +109,7 @@ namespace BookStore.API.Services
                 order.Address = orderDTO.Address;
                 order.SDT = orderDTO.SDT;
                 order.Status = "Wait for pay";
-                order.DateOrder = DateTime.Now; 
+                order.DateOrder = DateTime.Now.AddHours(7); 
                 _orderReponsitory.InsertOrder(order);
                 _orderReponsitory.IsSaveChanges();
                 view.Status = "Success";
@@ -178,7 +178,7 @@ namespace BookStore.API.Services
             {
                 pay.IdOrder = paymentDTO.IdOrder;
                 pay.Amount = order.Total;
-                pay.Date = DateTime.Now;
+                pay.Date = DateTime.Now.AddHours(7);
                 pay.TypePay = paymentDTO.TypePay;
                 _orderReponsitory.InsertPayment(pay);
                 _orderReponsitory.IsSaveChanges();
@@ -537,10 +537,18 @@ namespace BookStore.API.Services
             return view;
         }
 
-        public Income GetIncome(int date, int page, int size)
+        public Income GetIncome(int month, int year, int page, int size)
         {
-            var income = _orderReponsitory.GetIncomeByPrice(date);
+            var income = _orderReponsitory.GetIncomeByPrice(month,year);
             var view = new Income();
+            var Sta = "Paid";
+            var orders = new List<Orders>();
+            if (month == 0)
+            {
+                orders = _context.Orders.Where(s=> s.Status == Sta).Where(c=>c.DateOrder.Year == year).ToList();
+            }else{
+                orders = _context.Orders.Where(s=> s.Status == Sta).Where(c=>c.DateOrder.Month == month).Where(d=>d.DateOrder.Year == year).ToList();
+            }
             if(page != 0 && size != 0)
             {
                 int total = income.Count();
@@ -554,6 +562,7 @@ namespace BookStore.API.Services
                     view.Page = page;
                     view.Size = size;
                     view.TotalPage = pagecount;
+                    view.TotalOrder = orders.Count(); 
                     view.Data = data;
                 }
             }else{
@@ -562,7 +571,14 @@ namespace BookStore.API.Services
                     view.Page = 0;
                     view.Size = 0;
                     view.TotalPage = 0;
+                    view.TotalOrder = orders.Count();
                     view.Data = income;
+                }else{
+                    view.Page = 0;
+                    view.Size = 0;
+                    view.TotalPage = 0;
+                    view.TotalOrder = orders.Count();
+                    view.Data = null;
                 }
             }
             return view;
@@ -585,7 +601,7 @@ namespace BookStore.API.Services
                 order.Address = orderDTO.Address;
                 order.SDT = orderDTO.SDT;
                 order.Status = "Wait for pay";
-                order.DateOrder = DateTime.Now; 
+                order.DateOrder = DateTime.Now.AddHours(7); 
                 _orderReponsitory.InsertOrder(order);
                 _orderReponsitory.IsSaveChanges();
                 var tem = _orderReponsitory.GetOrdersId(order.IdOrder);
@@ -646,7 +662,7 @@ namespace BookStore.API.Services
             var listpay = new List<Orders>();
             foreach(Orders a in pay)
             {
-                TimeSpan time = DateTime.Now - a.DateOrder;
+                TimeSpan time = DateTime.Now.AddHours(7) - a.DateOrder;
                 int day = time.Days;
                 if(day <= date)
                 {

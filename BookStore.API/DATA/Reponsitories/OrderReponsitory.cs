@@ -28,52 +28,54 @@ namespace BookStore.API.DATA.Reponsitories
             return _context.Orders.ToList();
         }
 
-        public List<Thongke> GetIncomeByPrice(int date)
+        public List<Thongke> GetIncomeByPrice(int month, int year )
         {
             var Sta = "Paid";
             var pay = _context.Orders.Where(s=> s.Status == Sta).ToList();
-            var listpay = new List<Orders>();
-            foreach(Orders a in pay)
+            var income = new List<Orders>();
+            if (month == 0)
             {
-                TimeSpan time = DateTime.Now - a.DateOrder;
-                int day = time.Days;
-                if(day <= date)
-                {
-                    listpay.Add(a);
-                }
+                income = pay.Where(c=>c.DateOrder.Year == year).ToList();
+            }else{
+                income = pay.Where(c=>c.DateOrder.Month == month).Where(d=>d.DateOrder.Year == year).ToList();
             }
-            var list1 = new List<OrderProduct>();
-            foreach(Orders a in listpay)
-            {
-                var id = _context.OrderProducts.Where(t=>t.IdOrder == a.IdOrder).ToList();
-                foreach(OrderProduct b in id)
-                {
-                    list1.Add(b);
-                }
-            }
-            var pro = list1.GroupBy(a=>a.IdProduct).ToList();
             var list = new List<Thongke>();
-            foreach(var i in pro)
-            {
-                var n = _context.Products.FirstOrDefault(c=>c.IdProduct == i.Key); 
-                if(n != null)
+            var list1 = new List<OrderProduct>();
+            if (income == null){
+                return list;
+            }else{
+                foreach(Orders a in income)
                 {
-                    var tem = new Thongke();
-                    tem.Id = i.Key;
-                    tem.Name = n.Name;
-                    int q = 0;
-                    decimal t = 0;
-                    foreach(OrderProduct j in i)
+                    var id = _context.OrderProducts.Where(t=>t.IdOrder == a.IdOrder).ToList();
+                    foreach(OrderProduct b in id)
                     {
-                        q = q + j.Quantity;
-                        t = t + j.Price;
+                        list1.Add(b);
                     }
-                    tem.Quantity = q;
-                    tem.Total = t;
-                    list.Add(tem);
                 }
+                var pro = list1.GroupBy(a=>a.IdProduct).ToList();
+                foreach(var i in pro)
+                {
+                    var n = _context.Products.FirstOrDefault(c=>c.IdProduct == i.Key); 
+                    if(n != null)
+                    {
+                        var tem = new Thongke();
+                        tem.Id = i.Key;
+                        tem.Name = n.Name;
+                        int q = 0;
+                        decimal t = 0;
+                        foreach(OrderProduct j in i)
+                        {
+                            q = q + j.Quantity;
+                            t = t + j.Price;
+                        }
+                        tem.Quantity = q;
+                        tem.Total = t;
+                        list.Add(tem);
+                    }
+                }
+                return list;
             }
-            return list;
+            
         }
 
         public List<OrderProduct> GetOrderProductId(int id)

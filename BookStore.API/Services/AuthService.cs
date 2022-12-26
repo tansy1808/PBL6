@@ -26,7 +26,7 @@ namespace BookStore.API.Services
                 var view1 = new ViewBag()
                 {
                     Status = "Error",
-                    Message = "Sai Password hoặc Username.",
+                    Message = "Username không tồn tại.",
                     Title = null,
                     data = null
                 };
@@ -54,7 +54,7 @@ namespace BookStore.API.Services
                     var view2 = new ViewBag()
                     {
                         Status = "Error",
-                        Message = "Sai Password hoặc Username.",
+                        Message = "Sai Password",
                         Title = null,
                         data = null
                     };
@@ -135,7 +135,7 @@ namespace BookStore.API.Services
                 var view2 = new ViewBag()
                 {
                     Status = "Error",
-                    Message = "Username đã tồn tại.!",
+                    Message = "Username đã tồn tại.",
                     Title = null,
                     data = null
                 };

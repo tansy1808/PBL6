@@ -115,10 +115,10 @@ namespace BookStore.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("income/{date}")]
-        public ActionResult<Income> GetPrice(int date,int page, int size)
+        [HttpGet("income/{year}")]
+        public ActionResult<Income> GetPrice(int month,int year,int page, int size)
         {
-            var members = _orderService.GetIncome(date,page,size);
+            var members = _orderService.GetIncome(month,year,page,size);
             if (members == null) return NotFound();
             return members;
         }

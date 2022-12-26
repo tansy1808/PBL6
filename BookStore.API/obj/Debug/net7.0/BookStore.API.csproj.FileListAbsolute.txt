@@ -93,3 +93,4 @@ D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net7.0\Grpc.Net.Common.dll
 D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net7.0\Microsoft.AspNetCore.Grpc.JsonTranscoding.dll
 D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net7.0\Microsoft.AspNetCore.Grpc.Swagger.dll
 D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net7.0\Microsoft.AspNetCore.OpenApi.dll
+D:\DoAn\PBL\PLB6\BookStore.API\bin\Debug\net7.0\log4net.dll

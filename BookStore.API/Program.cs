@@ -15,10 +15,14 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
 // Add services to the container.
 
 services.AddCors(o =>
-    o.AddPolicy(name: MyAllowSpecificOrigins, builder =>
-        builder.WithOrigins("https://hikarushop.vercel.app")
+    {
+        o.AddPolicy(name: MyAllowSpecificOrigins, builder =>
+        {
+            builder.WithOrigins("http://localhost:3000","https://hikarushop.vercel.app")
             .AllowAnyHeader()
-            .AllowAnyMethod()));
+            .AllowAnyMethod();
+        });
+    });
 services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
@@ -91,6 +95,7 @@ services.AddScoped<IAuthService, AuthService>();
 services.AddScoped<IProductService, ProductService>();
 services.AddScoped<ICartService, CartService>();
 services.AddScoped<IOrderService, OrderService>();
+services.AddScoped<IVnpayServices, VnpayServices>();
 
 
 var app = builder.Build();

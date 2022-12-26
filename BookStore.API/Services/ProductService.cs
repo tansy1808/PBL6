@@ -34,7 +34,7 @@ namespace BookStore.API.Services
                 feed.Comment = productFeedDTOs.Comment;
                 feed.ProductID = productFeedDTOs.ProductID;
                 feed.UserID = productFeedDTOs.UserID;
-                feed.FeedDate = DateTime.Now;
+                feed.FeedDate = DateTime.Now.AddHours(7);
                 _productReponsitory.InsertProductFeed(feed);
                 var pro = _productReponsitory.GetProductsByIdpro(productFeedDTOs.ProductID);
                 view.Status = "Error";
@@ -72,7 +72,7 @@ namespace BookStore.API.Services
                 products.Image = productDTO.Image;
                 products.Price = productDTO.Price;
                 products.Quantity = productDTO.Quantity;
-                products.DateCreate = DateTime.Now;
+                products.DateCreate = DateTime.Now.AddHours(7);
                 products.Discount = productDTO.Discount;
                 products.IdCate = productDTO.IdCate;
                 _productReponsitory.InsertProduct(products);
