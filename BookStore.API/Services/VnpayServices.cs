@@ -31,22 +31,21 @@ namespace BookStore.API.Services
             vnpay.AddRequestData("vnp_CurrCode", "VND");
             vnpay.AddRequestData("vnp_IpAddr", "13.160.52.202");
             vnpay.AddRequestData("vnp_Locale", orderVnpay.NgonNgu);
-            vnpay.AddRequestData("vnp_OrderInfo", "Thanh toan don hang:" + orderVnpay.NoiDung);
+            vnpay.AddRequestData("vnp_OrderInfo", orderVnpay.NoiDung);
             vnpay.AddRequestData("vnp_OrderType", orderVnpay.LoaiHH); //default value: other
             vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
             vnpay.AddRequestData("vnp_TxnRef", order.IdOrder.ToString()); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
-            //Add Params of 2.1.0 Version
             vnpay.AddRequestData("vnp_ExpireDate", DateTime.Now.AddHours(48).ToString("yyyyMMddHHmmss"));
             //Billing
             vnpay.AddRequestData("vnp_Bill_Mobile", user.Contact);
             vnpay.AddRequestData("vnp_Bill_Email", user.Email);
-            var fullName = user.Name;
-            if (!String.IsNullOrEmpty(fullName))
-            {
-                var indexof = fullName.IndexOf(' ');
-                vnpay.AddRequestData("vnp_Bill_FirstName", fullName.Substring(0, indexof));
-                vnpay.AddRequestData("vnp_Bill_LastName", fullName.Substring(indexof + 1, fullName.Length - indexof - 1));
-            }
+            // var fullName = user.Name;
+            // if (!String.IsNullOrEmpty(fullName))
+            // {
+            //     var indexof = fullName.IndexOf(' ');
+            //     vnpay.AddRequestData("vnp_Bill_FirstName", fullName.Substring(0, indexof));
+            //     vnpay.AddRequestData("vnp_Bill_LastName", fullName.Substring(indexof + 1, fullName.Length - indexof - 1));
+            // }
             vnpay.AddRequestData("vnp_Bill_Address", user.Address);
             vnpay.AddRequestData("vnp_Bill_City", "vn");
             vnpay.AddRequestData("vnp_Bill_Country", "vn");
