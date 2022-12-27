@@ -2,7 +2,7 @@
 
 namespace BookStoreAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class HomeController : Controller
     {

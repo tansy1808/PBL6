@@ -14,7 +14,7 @@ namespace BookStoreAPI.Services.IServices
         ViewOrderDTO UpdateStatusVnPay(int idorder, int vnpay);
         ViewOrderDTO UpdateStatus(int idorder, string status);
         View GetOrderByDate(int date, int page, int size);
-        ViewDTO GetOrderByStatus(string status, int page, int size);
+        ViewDTO GetOrderByStatus(int page, int size, string? sta);
         OrderView FindOrderById(int id);
         List<OrderProductAPI> FindOrderProductById(int id);
         View GetOrderByUser(int id, int page, int size);

@@ -124,10 +124,10 @@ namespace BookStoreAPI.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("status/{status}")]
-        public ActionResult<ViewDTO> GetStatus(string status, int page, int size)
+        [HttpGet("status")]
+        public ActionResult<ViewDTO> GetStatus(string? status, int page, int size)
         {
-            var members = _orderService.GetOrderByStatus(status, page, size);
+            var members = _orderService.GetOrderByStatus(page, size, status);
             if (members == null) return NotFound();
             return members;
         }

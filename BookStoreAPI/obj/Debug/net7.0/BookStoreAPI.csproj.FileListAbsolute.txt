@@ -86,5 +86,10 @@ D:\DoAn\PBL\PBL6\BookStoreAPI\obj\Debug\net7.0\refint\BookStoreAPI.dll
 D:\DoAn\PBL\PBL6\BookStoreAPI\obj\Debug\net7.0\BookStoreAPI.pdb
 D:\DoAn\PBL\PBL6\BookStoreAPI\obj\Debug\net7.0\BookStoreAPI.genruntimeconfig.cache
 D:\DoAn\PBL\PBL6\BookStoreAPI\obj\Debug\net7.0\ref\BookStoreAPI.dll
-D:\DoAn\PBL\PBL6\BookStoreAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll
 D:\DoAn\PBL\PBL6\BookStoreAPI\bin\Debug\net7.0\Swashbuckle.AspNetCore.Newtonsoft.dll
+D:\DoAn\PBL\PBL6\BookStoreAPI\bin\Debug\net7.0\MailKit.dll
+D:\DoAn\PBL\PBL6\BookStoreAPI\bin\Debug\net7.0\MimeKit.dll
+D:\DoAn\PBL\PBL6\BookStoreAPI\bin\Debug\net7.0\NETCore.MailKit.dll
+D:\DoAn\PBL\PBL6\BookStoreAPI\bin\Debug\net7.0\BouncyCastle.Crypto.dll
+D:\DoAn\PBL\PBL6\BookStoreAPI\bin\Debug\net7.0\AutoMapper.dll
+D:\DoAn\PBL\PBL6\BookStoreAPI\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

@@ -8,11 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using BookStoreAPI.DTO.Email;
 
 var MyAllowSpecificOrigins = "CorsPolicy";
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var connectionString = builder.Configuration.GetConnectionString("Default");
+var emailConfig = builder.Configuration
+        .GetSection("EmailConfiguration")
+        .Get<EmailConfiguration>();
 
 // Add services to the container.
 services.AddCors(o =>
@@ -24,6 +28,7 @@ services.AddCors(o =>
         .AllowAnyMethod();
     });
 });
+services.AddSingleton(emailConfig);
 services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();

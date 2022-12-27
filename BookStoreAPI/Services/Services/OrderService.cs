@@ -770,17 +770,30 @@ namespace BookStoreAPI.Services.Services
             return view;
         }
 
-        public ViewDTO GetOrderByStatus(string status, int page, int size)
+        public ViewDTO GetOrderByStatus(int page, int size, string? sta)
         {
-            var pay = _context.Orders.Where(s => s.Status == status).ToList();
-            int total = pay.Count();
-            int pagecount = total / size;
-            float Page = total % size;
-            if (Page > 0) { pagecount = pagecount + 1; }
-            var orderby = pay.OrderByDescending(c => c.DateOrder).ToList();
-            var data = orderby.Skip((page - 1) * size).Take(size).ToList();
+            List<Orders> ord = new List<Orders>();
+            List<Orders> data = new List<Orders>();
+            int pagecount = 0;
+            if (sta == null)
+            {
+                ord = _context.Orders.ToList();
+            }else{
+                ord = _context.Orders.Where(s => s.Status == sta).ToList();
+            }
+            if (page != 0 && size != 0)
+            {
+                int total = ord.Count();
+                pagecount = total / size;
+                float Page = total % size;
+                if (Page > 0) { pagecount = pagecount + 1; }
+                var orderby = ord.OrderByDescending(c => c.DateOrder).ToList();
+                data = orderby.Skip((page - 1) * size).Take(size).ToList();
+            }else{
+                data = ord.OrderByDescending(c => c.DateOrder).ToList();
+            }
             var view = new ViewDTO();
-            if(pay != null)
+            if(ord != null)
             {
                 var list = new List<ViewOrderAll>();
                 foreach (var i in data)

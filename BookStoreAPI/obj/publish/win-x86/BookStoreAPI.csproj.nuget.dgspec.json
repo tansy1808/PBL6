@@ -43,11 +43,23 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.0, )"
+            },
+            "Microsoft.AspNetCore.Antiforgery": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Microsoft.AspNetCore.Authentication": {
               "target": "Package",
               "version": "[2.2.0, )"
             },
             "Microsoft.AspNetCore.Authentication.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.Cookies": {
               "target": "Package",
               "version": "[2.2.0, )"
             },
@@ -63,17 +75,9 @@
               "target": "Package",
               "version": "[7.0.1, )"
             },
-            "Microsoft.AspNetCore.Diagnostics": {
+            "Microsoft.AspNetCore.Http": {
               "target": "Package",
-              "version": "[2.2.0, )"
-            },
-            "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[7.0.1, )"
-            },
-            "Microsoft.AspNetCore.Http.Abstractions": {
-              "target": "Package",
-              "version": "[2.2.0, )"
+              "version": "[2.2.2, )"
             },
             "Microsoft.AspNetCore.Http.Extensions": {
               "target": "Package",
@@ -109,9 +113,33 @@
               "target": "Package",
               "version": "[7.0.1, )"
             },
-            "Swashbuckle.AspNetCore": {
+            "Microsoft.Extensions.Configuration": {
               "target": "Package",
-              "version": "[6.4.0, )"
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.IdentityModel.Abstractions": {
+              "target": "Package",
+              "version": "[6.25.1, )"
+            },
+            "Microsoft.IdentityModel.JsonWebTokens": {
+              "target": "Package",
+              "version": "[6.25.1, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[6.25.1, )"
+            },
+            "Microsoft.OpenApi": {
+              "target": "Package",
+              "version": "[1.4.5, )"
+            },
+            "NETCore.MailKit": {
+              "target": "Package",
+              "version": "[2.1.0, )"
             },
             "Swashbuckle.AspNetCore.Newtonsoft": {
               "target": "Package",
@@ -128,6 +156,10 @@
             "Swashbuckle.AspNetCore.SwaggerUI": {
               "target": "Package",
               "version": "[6.4.0, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.25.1, )"
             }
           },
           "imports": [

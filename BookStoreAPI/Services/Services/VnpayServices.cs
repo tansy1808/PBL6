@@ -1,16 +1,21 @@
 using BookStoreAPI.DATA;
 using BookStoreAPI.DTO;
+using BookStoreAPI.DTO.Email;
 using BookStoreAPI.Services.IServices;
+using MailKit.Net.Smtp;
+using MimeKit;
 
 namespace BookStoreAPI.Services.Services
 {
     public class VnpayServices : IVnpayServices
     {
         private readonly DataContext _context;
+        private readonly EmailConfiguration _emailConfig;
 
-        public VnpayServices(DataContext context)
+        public VnpayServices(DataContext context, EmailConfiguration emailConfig)
         {
             _context = context;
+            _emailConfig = emailConfig;
         }
 
         public string CreateOrder(int idorder, OrderVnpay orderVnpay, string returnUrl)
@@ -64,6 +69,35 @@ namespace BookStoreAPI.Services.Services
 
             string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
             return paymentUrl;
+        }
+
+        public void SendEmail(Message message)
+        {
+            var emailMessage = new MimeMessage();
+            emailMessage.From.Add(new MailboxAddress("HikaruShop",_emailConfig.From));
+            emailMessage.To.AddRange(message.To);
+            emailMessage.Subject = message.Subject;
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text) { Text = message.Content };
+            using (var client = new SmtpClient())
+            {
+                try
+                {
+                    client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, true);
+                    client.AuthenticationMechanisms.Remove("XOAUTH2");
+                    client.Authenticate(_emailConfig.UserName, _emailConfig.Password);
+                    client.Send(emailMessage);
+                }
+                catch
+                {
+                    //log an error message or throw an exception or both.
+                    throw;
+                }
+                finally
+                {
+                    client.Disconnect(true);
+                    client.Dispose();
+                }
+            }
         }
     }
 }
